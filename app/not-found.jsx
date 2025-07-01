@@ -1,7 +1,8 @@
 "use client";
-import { Text, VStack } from "@chakra-ui/react";
+import { Button, Text, VStack } from "@chakra-ui/react";
 import img from "assets/images/not-found.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function notFoundPage() {
   return (
@@ -31,19 +32,33 @@ export default function notFoundPage() {
           maxW="400px"
           gap={{
             base: 10,
-            md: 20,
+            md: 14,
           }}
         >
           <Image src={img} alt="" priority />
-          <Text
-            fontWeight="bold"
-            fontSize={{
-              base: "16px",
-              md: "30px",
-            }}
-          >
-            Page Not Found!
-          </Text>
+          <VStack gap="4">
+            <Text
+              fontWeight="bold"
+              fontSize={{
+                base: "16px",
+                md: "30px",
+              }}
+            >
+              Page Not Found!
+            </Text>
+            <Link href="/">
+              <Button
+                variant="solid"
+                colorScheme="primary"
+                size={{
+                  lg: "lg",
+                  base: "sm",
+                }}
+              >
+                Back to Home
+              </Button>
+            </Link>
+          </VStack>
         </VStack>
       </VStack>
     </VStack>
