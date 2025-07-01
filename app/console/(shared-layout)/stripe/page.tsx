@@ -39,7 +39,7 @@ export default function StripePage() {
         if (data.chargesEnabled)
           toast({
             status: "success",
-            title: "Successfully connected to stripe",
+            title: "Successfully connected to Stripe",
           });
       },
       onError() {
@@ -101,13 +101,13 @@ export default function StripePage() {
           }
           btnText={
             isDesktop
-              ? "Connect your stripe account to collect money"
-              : "Connect to stripe to collect money"
+              ? "Connect your Stripe account to collect money"
+              : "Connect to Stripe to collect money"
           }
           link={"#"}
           disabled={loading}
           onClick={connectToStripe}
-          mobileButtonText="Connect to stripe"
+          mobileButtonText="Connect to Stripe"
           title="Start planting seeds"
         />
       ) : (

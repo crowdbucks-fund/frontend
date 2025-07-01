@@ -70,13 +70,13 @@ export default function DashboardPage() {
       <OnboardingState passedSteps={passedSteps} steps={steps} />
       <VStack gap={6}>
         <OnboardingStep
-          heading="Connect your stripe account"
+          heading="Connect your Stripe account"
           headingIcon={<StripeIcon />}
           description="Link your Stripe account to securely manage payments and subscriptions. This ensures seamless financial transactions and easy revenue tracking."
           handleOpenAccordion={handleOpenAccordion(0)}
           inCompleteButtonText="Let's go"
           inCompleteIcon={<LinkIcon width="38px" height="38px" />}
-          completeButtonText="Go to my stripe"
+          completeButtonText="Go to my Stripe"
           completedHref="https://dashboard.stripe.com"
           isCompleted={!!userState.stripe}
           inCompleteButtonProps={{
