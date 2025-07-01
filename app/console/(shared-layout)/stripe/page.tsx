@@ -2,7 +2,7 @@
 import { Button, CircularProgress, VStack } from "@chakra-ui/react";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import LinkIcon from "assets/icons//link-2.svg?react";
-import StripeLogo from "assets/images/Stripe.svg?react";
+import StripeLogo from "assets/images/Stripe.svg";
 import { CreateFirstEntity } from "components/FirstEntity";
 import { StripeCard } from "components/StripeCard";
 import { toast } from "components/Toast";
