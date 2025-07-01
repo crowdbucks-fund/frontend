@@ -1,0 +1,298 @@
+"use client";
+import {
+  Box,
+  Button,
+  ButtonProps,
+  HStack,
+  IconButton,
+  Progress,
+  StackProps,
+  Text,
+  VStack,
+  chakra,
+} from "@chakra-ui/react";
+import { DraggableAttributes } from "@dnd-kit/core";
+import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import { UserGoal } from "@xeronith/granola/core/objects";
+import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
+import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
+import AddIcon from "assets/icons/add-square.svg?react";
+import MaximizeIcon from "assets/icons/maximize.svg?react";
+import TrashIcon from "assets/icons/trash.svg?react";
+import { format as dateFormat } from "date-fns";
+import { useDesktop } from "hooks/useDesktop";
+import NextLink from "next/link";
+import { useRouter } from "next/navigation";
+import { FC } from "react";
+
+const DeleteIcon = chakra(TrashIcon);
+const DragIcon = chakra(MaximizeIcon);
+const ZERO_PROGRESS_GOAL_PROGRESS = 5;
+
+export type GoalCardProps = {
+  goal: UserGoal;
+  href?: string;
+  onDelete?: () => void;
+  community: GetCommunityByUserResult;
+  editable?: boolean;
+  format?: "preview";
+  btnText?: string;
+  draggable?: boolean;
+  attributes?: DraggableAttributes;
+  listeners?: SyntheticListenerMap | undefined;
+  dragRef?: (node: HTMLElement | null) => void;
+  buttonProps?: ButtonProps & { href?: string };
+} & StackProps;
+
+export const GoalCard: FC<GoalCardProps> = ({
+  attributes,
+  listeners,
+  dragRef,
+  goal,
+  draggable,
+  href,
+  onDelete,
+  community,
+  format,
+  editable = true,
+  btnText = "Edit goal",
+  buttonProps = {},
+  ...props
+}) => {
+  const router = useRouter();
+  const isDesktop = useDesktop();
+  const handleOnClick = () => {
+    if (href) router.push(href);
+  };
+
+  return (
+    <VStack
+      role="group"
+      gap={{ base: 4, md: 7 }}
+      color="brand.black.1"
+      p={{ md: 8, base: 4 }}
+      bg="white"
+      borderRadius="xl"
+      w="full"
+      align="start"
+      onClick={handleOnClick}
+      cursor={href && "pointer"}
+      overflow="hidden"
+      position="relative"
+      {...props}
+      {...(!isDesktop
+        ? {
+            ...attributes,
+            ...listeners,
+            ref: dragRef,
+          }
+        : {})}
+    >
+      <HStack
+        justify="space-between"
+        w="full"
+        overflow="hidden"
+        gap={8}
+        alignItems="center"
+      >
+        <HStack align="start" overflow="hidden" alignItems="center">
+          <Text
+            fontSize={{ md: "20px", base: "14px" }}
+            fontWeight="bold"
+            isTruncated
+            maxW="100%"
+          >
+            <Text as="span" mr="3" color="primary.500">
+              #{goal.priority}
+            </Text>
+            {goal.name}
+          </Text>
+          <Text fontSize="16px">
+            <Text
+              fontSize={{
+                md: "md",
+                base: "10px",
+              }}
+              whiteSpace="nowrap"
+              as="span"
+              ml={{ md: "3", base: 2 }}
+              pl={{ md: "3", base: 2 }}
+              borderLeft="2px solid"
+              borderLeftColor="primary.500"
+              textTransform="lowercase"
+            >
+              ${goal.amount} {goal.goalFrequency?.name}
+            </Text>
+            <Text
+              fontSize={{
+                md: "md",
+                base: "10px",
+              }}
+              whiteSpace="nowrap"
+              as="span"
+              ml={{ md: "3", base: 2 }}
+              pl={{ md: "3", base: 2 }}
+              borderLeft="2px solid"
+              borderLeftColor="primary.500"
+              color="brand.black.3"
+              textTransform="lowercase"
+            >
+              {dateFormat(goal.timestamp, "yy/MM/dd")}
+            </Text>
+          </Text>
+        </HStack>
+        <HStack>
+          {draggable && isDesktop && (
+            <IconButton
+              aria-label="Drag the goal to change its priority"
+              variant="ghost"
+              size="sm"
+              colorScheme="blackAlpha"
+              {...attributes}
+              {...listeners}
+              ref={dragRef}
+            >
+              <DragIcon width={{ base: "18px", md: "24px" }} />
+            </IconButton>
+          )}
+          {onDelete && (
+            <IconButton
+              aria-label="Delete Payment Method"
+              variant="ghost"
+              size="sm"
+              colorScheme="blackAlpha"
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete && onDelete();
+              }}
+            >
+              <DeleteIcon width={{ base: "18px", md: "24px" }} />
+            </IconButton>
+          )}
+        </HStack>
+      </HStack>
+      <Box position="relative" w="full">
+        <Progress
+          value={Math.max(
+            Math.min((goal.accumulatedFunds / (goal.amount || 0)) * 100, 100),
+            ZERO_PROGRESS_GOAL_PROGRESS
+          )}
+        />
+        <Text
+          fontSize={{ base: "12px", md: "16px" }}
+          color="#343333"
+          position="absolute"
+          top="50%"
+          right="2"
+          transform="translateY(-50%)"
+        >
+          $ {goal.accumulatedFunds || 0} / $ {goal.amount}
+        </Text>
+      </Box>
+      <Text
+        isTruncated
+        noOfLines={3}
+        fontSize={{
+          md: "md",
+          base: "14px",
+        }}
+        whiteSpace="normal"
+        wordBreak="break-word"
+        maxW="100%"
+      >
+        {goal.caption}
+      </Text>
+      {editable && (
+        <HStack gap={4} justify="space-between" w="full" color={"primary.500"}>
+          <Button
+            pointerEvents={format === "preview" ? "none" : "unset"}
+            as={format !== "preview" ? NextLink : undefined}
+            w="full"
+            colorScheme={format === "preview" ? "primary-glass" : "gray"}
+            cursor={format === "preview" ? "default" : "pointer"}
+            color={format === "preview" ? "primary.500" : "primary.500"}
+            border={format !== "preview" ? "2px solid" : undefined}
+            borderColor={format !== "preview" ? "gray.200" : undefined}
+            size="lg"
+            variant="solid"
+            href={
+              format !== "preview"
+                ? `/console/communities/${community.id}/goals/${goal.id}/edit`
+                : undefined
+            }
+            onClick={(e) => e.stopPropagation()}
+            {...buttonProps}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+          >
+            {btnText}
+          </Button>
+        </HStack>
+      )}
+    </VStack>
+  );
+};
+
+export const CreateGoalCard: FC = () => {
+  const community = useCurrentCommunity();
+  return (
+    <VStack
+      display={{ base: "none", md: "flex" }}
+      as={NextLink}
+      href={`/console/communities/${community.id}/goals/create`}
+      overflow="hidden"
+      role="group"
+      gap={7}
+      color="brand.black.4"
+      p={8}
+      bg="white"
+      borderRadius="xl"
+      w="full"
+      align="start"
+      border="dashed 2px"
+      borderColor="primary.500"
+    >
+      <HStack overflow="hidden" justify="space-between" w="full" opacity="0.8">
+        <VStack align="start">
+          <Text fontSize="20px" fontWeight="bold" isTruncated maxW="100%">
+            New goal
+          </Text>
+        </VStack>
+      </HStack>
+      <Box position="relative" w="full">
+        <Progress value={ZERO_PROGRESS_GOAL_PROGRESS} />
+        <Text
+          fontSize={{ base: "14px", md: "16px" }}
+          color="brand.black.4"
+          position="absolute"
+          top="50%"
+          right="2"
+          transform="translateY(-50%)"
+        >
+          $ 0 / $ 0
+        </Text>
+      </Box>
+      <Text
+        overflow="hidden"
+        noOfLines={3}
+        whiteSpace="normal"
+        wordBreak="break-word"
+        maxW="100%"
+      >
+        Set a new goal to outline your vision and motivate your community to
+        help you achieve it.
+      </Text>
+      <HStack gap={4} justify="end" w="full">
+        <IconButton
+          aria-label="create new goal"
+          color="primary.500"
+          variant="ghost"
+        >
+          <AddIcon width="38px" />
+        </IconButton>
+      </HStack>
+    </VStack>
+  );
+};

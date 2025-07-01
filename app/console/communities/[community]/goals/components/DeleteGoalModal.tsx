@@ -1,0 +1,73 @@
+"use client";
+import { Button, Text, VStack } from "@chakra-ui/react";
+import { UserGoal } from "@xeronith/granola/core/objects";
+import WarningIcon from "assets/icons/warning.svg?react";
+import { GoalCard } from "components/GoalCard";
+import { ResponsiveDialog } from "components/ResponsiveDialog";
+import { toast } from "components/Toast";
+import { api } from "lib/api";
+import { queryClient } from "lib/reactQuery";
+import { FC } from "react";
+import { useMutation } from "react-query";
+import { useCurrentCommunity } from "../../components/community-validator-layout";
+
+export type DeleteGoalModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  deletingGoal: UserGoal | null;
+  onDeleted?: () => void;
+};
+
+export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
+  isOpen,
+  onClose,
+  deletingGoal,
+  onDeleted,
+}) => {
+  const community = useCurrentCommunity();
+  const { mutate: deleteGoal, isLoading } = useMutation({
+    mutationFn: async () =>
+      deletingGoal ? api.removeGoalByUser({ id: deletingGoal.id }) : null,
+    onSuccess() {
+      toast.closeAll();
+      toast({
+        status: "success",
+        title: deletingGoal && `The goal was successfully deleted`,
+      });
+      queryClient.invalidateQueries(["findGoalsByUser"]);
+      onDeleted && onDeleted();
+      onClose();
+    },
+  });
+  return (
+    <ResponsiveDialog isOpen={isOpen} onClose={onClose} title="Delete Goal">
+      <VStack gap={{ base: 4, md: 6 }} w="full">
+        <VStack w="full" justify="center" textAlign="center">
+          <WarningIcon />
+          <Text fontWeight="bold" fontSize="24px">
+            This goal is about to be deleted
+          </Text>
+        </VStack>
+        {deletingGoal && (
+          <GoalCard
+            editable={false}
+            community={community}
+            goal={deletingGoal}
+            border="2px solid"
+            borderColor={"brand.gray.1"}
+          />
+        )}
+        <Button
+          onClick={() => deleteGoal()}
+          isLoading={isLoading}
+          colorScheme="brand.red"
+          variant="outline"
+          w="full"
+          size="lg"
+        >
+          Delete anyways
+        </Button>
+      </VStack>
+    </ResponsiveDialog>
+  );
+};

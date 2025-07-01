@@ -1,0 +1,13 @@
+.cropper-crop,
+.cropper-wrap-box {
+	border-radius: 12px;
+}
+
+.cropper-view-box {
+	outline-color: white;
+}
+
+.cropper-line,
+.cropper-point {
+	background-color: white;
+}
