@@ -345,7 +345,10 @@ const Step2: FC<StepProps> = ({
     isSuccess,
   } = useMutation({
     onError(error: ApiError) {
-      form.setError("code", { message: error.message });
+      if (error.message) {
+        form.setError("code", { message: error.message });
+        setTimeout(() => firstInputRef.current?.focus());
+      }
     },
     mutationFn() {
       return form.trigger("code", { shouldFocus: true }).then((isValid) => {
@@ -357,14 +360,14 @@ const Step2: FC<StepProps> = ({
               token: form.getValues("token"),
             })
             .then((data) => {
-              if (data) {
+              if (data && data.token) {
                 form.setValue("token", data.token);
                 if (data.newUser) {
                   onChangeStep(INFORMATION_STEP);
                 } else {
                   onComplete && onComplete(data.token);
                 }
-              }
+              } else throw new Error();
             })
             .catch((error) => {
               setShowResendCode(true);
@@ -373,6 +376,7 @@ const Step2: FC<StepProps> = ({
               form.setError("code", { message: error.message });
               throw error;
             });
+        throw new Error();
       });
     },
   });
@@ -439,6 +443,7 @@ const Step2: FC<StepProps> = ({
                         form.clearErrors("code");
                       field.onChange(e);
                     }}
+                    isDisabled={isLoading || isSuccess}
                     autoFocus
                     isInvalid={!!form.formState.errors.code?.message}
                   >
