@@ -205,7 +205,7 @@ export default function CreateUpdateCommunityPage({
           ],
           title: "Edit community",
           back: {
-            title: "Console",
+            title: "Communities",
             link: "/console/communities",
           },
         }
@@ -222,7 +222,7 @@ export default function CreateUpdateCommunityPage({
           ],
           title: "Create community",
           back: {
-            title: "Console",
+            title: "Communities",
             link: "/console/communities",
           },
         }
