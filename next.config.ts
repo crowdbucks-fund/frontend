@@ -23,7 +23,21 @@ const nextConfig: NextConfig = {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
         resourceQuery: /react/,
-        use: ['@svgr/webpack'],
+        use: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: "removeViewBox",
+                    active: false,
+                  },
+                ],
+              },
+            },
+          },
+        ],
       },
     )
 
