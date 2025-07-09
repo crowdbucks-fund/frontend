@@ -100,8 +100,14 @@ export const OnboardingStep: FC<{
           variant="ghost"
           onClick={toggleOpen}
           position="absolute"
-          top="8"
-          right="8"
+          top={{
+            base: 4,
+            md: 8,
+          }}
+          right={{
+            base: 4,
+            md: 8,
+          }}
         >
           <AccordionIcon
             transition=".2s all ease-out"
