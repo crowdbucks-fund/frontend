@@ -20,8 +20,8 @@ export default function GoalsPage() {
     ],
     title: `${community.name}`,
     back: {
-      link: "/console",
-      title: "Console",
+      link: "/console/communities",
+      title: "Communities",
     },
     showConsoleMenu: false,
   });

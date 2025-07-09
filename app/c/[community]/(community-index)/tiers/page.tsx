@@ -29,8 +29,8 @@ export default function TierPage() {
     ],
     title: `${community.name}`,
     back: {
-      link: "/console",
-      title: "Console",
+      link: "/console/communities",
+      title: "Communities",
     },
     showConsoleMenu: false,
   });
