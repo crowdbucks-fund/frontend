@@ -8,6 +8,9 @@ export const setAuthCookie = async (token: string) => {
 
   (await cookies()).set(AUTH_TOKEN_KEY, token, {
     httpOnly: true,
+    maxAge: 60 * 60 * 24 * 14, // 14 days
+    sameSite: "none", // Use 'none' for cross-site cookies
+    secure: process.env.NODE_ENV === "production", // must be HTTPS with SameSite=None
   });
 };
 
