@@ -65,7 +65,7 @@ export default function CommunityHome() {
         headingIcon: <FundIcon />,
         description:
           "Create your first funding tier to start receiving support and contributions from your contributors.",
-        inCompleteButtonText: "Plant my first seed",
+        inCompleteButtonText: "Create first funding tier",
         inCompleteHref: `/console/communities/${community.id}/tiers`,
         inCompleteIcon: <PlusIcon width="38px" height="38px" />,
       },

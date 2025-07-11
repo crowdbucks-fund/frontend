@@ -82,7 +82,7 @@ export default function GoalsPage() {
       <CreateFirstEntity
         mobileButtonText={
           <HStack>
-            <GoalIcon />
+            <GoalIcon width="20px" />
             <span>Create a goal</span>
           </HStack>
         }
