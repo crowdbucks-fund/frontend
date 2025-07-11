@@ -12,9 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Ellipsis } from "app/(public-pages)/_components/Shapes";
-import StarIcon from "assets/icons/star.svg?react";
 import Coin from "assets/images/coin.png";
 import { scrollAnimate } from "lib/framerMotion";
+import NextImage from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -110,7 +110,7 @@ export const Comment: FC<CommentProps> = (props) => {
         </Text>
         <HStack gap={1}>
           {[...Array(props.stars).keys()].map((i) => {
-            return <StarIcon key={i} />;
+            return <NextImage alt="coin icon" src={Coin} key={i} />;
           })}
         </HStack>
       </VStack>
