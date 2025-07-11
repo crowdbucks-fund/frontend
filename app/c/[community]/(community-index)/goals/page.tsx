@@ -35,7 +35,7 @@ export default function GoalsPage() {
               key={goal.id}
               community={community}
               goal={goal}
-              btnText={`Help grow a seed`}
+              btnText={`Help achieve the goal`}
               buttonProps={{
                 as: NextLink,
                 href: getCommunityTiersLink(community),

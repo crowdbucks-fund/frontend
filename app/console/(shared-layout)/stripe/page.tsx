@@ -108,7 +108,7 @@ export default function StripePage() {
           disabled={loading}
           onClick={connectToStripe}
           mobileButtonText="Connect to Stripe"
-          title="Start planting seeds"
+          title=""
         />
       ) : (
         <VStack
