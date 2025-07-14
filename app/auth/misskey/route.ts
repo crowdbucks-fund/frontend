@@ -50,6 +50,6 @@ export async function GET(request: NextRequest) {
         status: 400
       });
     }
-    return redirect(withQuery('/auth', { error: error.message }))
+    return redirect(withQuery('/auth', { error: error.message, step: 'misskey' }))
   }
 }

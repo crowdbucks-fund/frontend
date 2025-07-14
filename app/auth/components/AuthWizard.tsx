@@ -14,6 +14,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FediverseOauth } from "app/auth/components/FediverseOauth";
 import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
+import MisskeyIconBase from "assets/icons/Misskey-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
 import Earth from "assets/images/earth.svg?react";
 import LadyImage from "assets/images/sitting-lady.svg?react";
@@ -37,6 +38,7 @@ import { maskEmail } from "utils/strings";
 import { z } from "zod";
 
 const MastodonIcon = chakra(MastodonIconBase);
+const MisskeyIcon = chakra(MisskeyIconBase);
 const Envelope = chakra(EnvelopeIcon);
 const EarthIcon = chakra(Earth);
 const LadyImageIcon = chakra(LadyImage);
@@ -55,12 +57,14 @@ export type AuthWizardProps = {
 const DEFAULT_STEP = "";
 const EMAIL_STEP = "email";
 const MASTODON_STEP = "mastodon";
+const MISSKEY_STEP = "misskey";
 const VERIFICATION_STEP = "verify";
 const INFORMATION_STEP = "info";
-const oauthSteps = [MASTODON_STEP];
+const oauthSteps = [MASTODON_STEP, MISSKEY_STEP];
 const steps = [
   DEFAULT_STEP,
   MASTODON_STEP,
+  MISSKEY_STEP,
   EMAIL_STEP,
   VERIFICATION_STEP,
   INFORMATION_STEP,
@@ -236,6 +240,17 @@ const SigninList: FC<StepProps> = ({ onChangeStep }) => {
           >
             <MastodonIcon />
             Sign in with Mastodon
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            onClick={onChangeStep.bind(null, MISSKEY_STEP)}
+          >
+            <MisskeyIcon />
+            Sign in with Misskey
           </Button>
         </VStack>
       </VStack>

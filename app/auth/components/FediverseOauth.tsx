@@ -22,6 +22,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import FilledCheckMark from "assets/icons/filled-check.svg?react";
 import MastodonIconBase from "assets/icons/Mastodon.svg?react";
+import MisskeyIconBase from "assets/icons/Misskey.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
 import { upperFirst } from "lodash";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
@@ -45,6 +46,16 @@ const instances = {
     ],
     name: "Mastodon",
     Icon: MastodonIcon,
+  },
+  misskey: {
+    defaultInstances: [
+      "misskey.io",
+      "misskey.gamelore.fun",
+      "takusuki.com",
+      "voskey.icalo.net",
+    ],
+    name: "Misskey",
+    Icon: MisskeyIconBase,
   },
 };
 
@@ -116,7 +127,7 @@ export const FediverseOauth: FC<{ onBack: () => void }> = ({ onBack }) => {
           }
           throw res;
         }),
-    enabled: !!searchParams.get("code"),
+    enabled: !!searchParams.get("code") || !!searchParams.get("session"),
   });
   const form = useForm({
     resolver: zodResolver(schema),
