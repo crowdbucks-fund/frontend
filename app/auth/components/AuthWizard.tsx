@@ -14,6 +14,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FediverseOauth } from "app/auth/components/FediverseOauth";
 import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
+import PixelfedIconBase from "assets/icons/Pixelfed-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
 import Earth from "assets/images/earth.svg?react";
 import LadyImage from "assets/images/sitting-lady.svg?react";
@@ -37,6 +38,7 @@ import { maskEmail } from "utils/strings";
 import { z } from "zod";
 
 const MastodonIcon = chakra(MastodonIconBase);
+const PixelfedIcon = chakra(PixelfedIconBase);
 const Envelope = chakra(EnvelopeIcon);
 const EarthIcon = chakra(Earth);
 const LadyImageIcon = chakra(LadyImage);
@@ -55,11 +57,13 @@ export type AuthWizardProps = {
 const DEFAULT_STEP = "";
 const EMAIL_STEP = "email";
 const MASTODON_STEP = "mastodon";
+const PIXELFED_STEP = "pixelfed";
 const VERIFICATION_STEP = "verify";
 const INFORMATION_STEP = "info";
 const steps = [
   DEFAULT_STEP,
   MASTODON_STEP,
+  PIXELFED_STEP,
   EMAIL_STEP,
   VERIFICATION_STEP,
   INFORMATION_STEP,
@@ -175,7 +179,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
           changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
         />
       )}
-      {step === MASTODON_STEP && (
+      {(step === MASTODON_STEP || step === PIXELFED_STEP) && (
         <FediverseOauth onBack={handleStepChange.bind(null, DEFAULT_STEP)} />
       )}
     </FormProvider>
@@ -235,6 +239,17 @@ const SigninList: FC<StepProps> = ({ onChangeStep }) => {
           >
             <MastodonIcon />
             Sign in with Mastodon
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            onClick={onChangeStep.bind(null, PIXELFED_STEP)}
+          >
+            <PixelfedIcon />
+            Sign in with Pixelfed
           </Button>
         </VStack>
       </VStack>

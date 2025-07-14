@@ -46,7 +46,6 @@ export async function GET(request: NextRequest, res: NextResponse) {
       console.error(error)
       throw new Error('Something went wrong, please try again later.')
     });
-    console.log(clientId, clientSecret)
     invariant(!!clientId && !!clientSecret, "Something went wrong, please try again later.");
 
     // redirect to the OAuth URL

@@ -22,6 +22,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import FilledCheckMark from "assets/icons/filled-check.svg?react";
 import MastodonIconBase from "assets/icons/Mastodon.svg?react";
+import PixelfedIconBase from "assets/icons/Pixelfed.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
 import { upperFirst } from "lodash";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
@@ -35,6 +36,7 @@ import { z } from "zod";
 
 const CheckIcon = chakra(FilledCheckMark);
 const MastodonIcon = chakra(MastodonIconBase);
+const PixelfedIcon = chakra(PixelfedIconBase);
 const instances = {
   mastodon: {
     defaultInstances: [
@@ -45,6 +47,16 @@ const instances = {
     ],
     name: "Mastodon",
     Icon: MastodonIcon,
+  },
+  pixelfed: {
+    defaultInstances: [
+      "pixelfed.social",
+      "pixelfed.de",
+      "pxlmo.com",
+      "photos.social",
+    ],
+    name: "Pixelfed",
+    Icon: PixelfedIcon,
   },
 };
 

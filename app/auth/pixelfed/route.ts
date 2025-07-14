@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { platformInfo } from "platform";
 import invariant from "tiny-invariant";
 import { joinURL, stringifyParsedURL, withQuery } from "ufo";
-import { getRedirectUrl } from "../utils";
+import { deleteOauthStateCookie, getRedirectUrl } from "../utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
       },
     }).then((res) => res.json()).catch(() => { throw new Error('Something went wrong, please try again later.') });
     invariant(!!clientId && !!clientSecret, "Something went wrong, please try again later.");
+    await deleteOauthStateCookie()
 
     // redirect to the OAuth URL
     const oauthUrl = withQuery(joinURL(instanceUrl, "oauth/authorize"), {
@@ -65,6 +66,6 @@ export async function GET(request: NextRequest) {
         status: 400
       });
     }
-    return redirect(withQuery('/auth', { error: error.message }))
+    return redirect(withQuery('/auth', { error: error.message, step: 'mastodon' }))
   }
 }
