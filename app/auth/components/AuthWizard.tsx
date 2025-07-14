@@ -12,6 +12,9 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FediverseOauth } from "app/auth/components/FediverseOauth";
+import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
+import EnvelopeIcon from "assets/icons/sms.svg?react";
 import Earth from "assets/images/earth.svg?react";
 import LadyImage from "assets/images/sitting-lady.svg?react";
 import { toast } from "components/Toast";
@@ -33,6 +36,8 @@ import { handleSubmit } from "utils/formHandler";
 import { maskEmail } from "utils/strings";
 import { z } from "zod";
 
+const MastodonIcon = chakra(MastodonIconBase);
+const Envelope = chakra(EnvelopeIcon);
 const EarthIcon = chakra(Earth);
 const LadyImageIcon = chakra(LadyImage);
 
@@ -47,11 +52,18 @@ export type AuthWizardProps = {
     };
   };
 };
-
+const DEFAULT_STEP = "";
 const EMAIL_STEP = "email";
+const MASTODON_STEP = "mastodon";
 const VERIFICATION_STEP = "verify";
 const INFORMATION_STEP = "info";
-const steps = [EMAIL_STEP, VERIFICATION_STEP, INFORMATION_STEP];
+const steps = [
+  DEFAULT_STEP,
+  MASTODON_STEP,
+  EMAIL_STEP,
+  VERIFICATION_STEP,
+  INFORMATION_STEP,
+];
 
 const schema = z
   .object({
@@ -81,30 +93,33 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
   };
 
   return (
-    <HStack
+    <VStack
       justify="center"
       px="4"
       minH="var(--app-height)"
       align="center"
       bg="brand.gray.3"
+      w="full"
     >
       <VStack
         maxW="100%"
-        w={{ md: "400px", base: "450px" }}
+        w={{ md: "full", base: "450px" }}
+        alignItems="center"
         gap="5"
-        minH="min-content"
+        h="full"
+        flexGrow="1"
+        minH="full"
         py="6"
       >
         <AuthWizardContent {...props} onSignIn={onComplete} />
       </VStack>
-    </HStack>
+    </VStack>
   );
 };
 
 export const AuthWizardContent: FC<AuthWizardProps> = ({
   content,
   onSignIn,
-  step: defaultStep,
   changeRouteOnCompleteSteps = true,
 }) => {
   const form = useForm<FormType>({
@@ -116,19 +131,17 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   });
   const searchParams = useSearchParams();
   const [step, setStep] = useState(
-    defaultStep ||
-      find(
-        steps,
-        (step) => step === (searchParams.get("step") || EMAIL_STEP)
-      ) ||
-      EMAIL_STEP
+    find(
+      steps,
+      (step) => step === (searchParams.get("step") || DEFAULT_STEP)
+    ) || DEFAULT_STEP
   );
 
   const router = useRouter();
 
   const handleStepChange = (step: string) => {
     if (changeRouteOnCompleteSteps)
-      router.replace(`/auth?${new URLSearchParams({ step }).toString()}`);
+      router.push(`/auth?${new URLSearchParams({ step }).toString()}`);
     else setStep(step);
   };
 
@@ -137,26 +150,21 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
       setStep(
         find(
           steps,
-          (step) => step === (searchParams.get("step") || EMAIL_STEP)
-        ) || EMAIL_STEP
+          (step) => step === (searchParams.get("step") || DEFAULT_STEP)
+        ) || DEFAULT_STEP
       );
   }, [searchParams]);
 
   return (
     <FormProvider {...form}>
-      {step === EMAIL_STEP && (
-        <Step1
+      {step === DEFAULT_STEP && <SigninList onChangeStep={handleStepChange} />}
+      {[EMAIL_STEP, VERIFICATION_STEP].includes(step) && (
+        <Email
           content={content}
+          step={step}
           onChangeStep={handleStepChange}
           changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
-        />
-      )}
-      {step === VERIFICATION_STEP && (
-        <Step2
-          content={content}
-          onChangeStep={handleStepChange}
           onComplete={onSignIn}
-          changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
         />
       )}
       {step === INFORMATION_STEP && (
@@ -167,11 +175,75 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
           changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
         />
       )}
+      {step === MASTODON_STEP && (
+        <FediverseOauth onBack={handleStepChange.bind(null, DEFAULT_STEP)} />
+      )}
     </FormProvider>
   );
 };
 
+const SigninList: FC<StepProps> = ({ onChangeStep }) => {
+  return (
+    <HStack gap={6} w="full" px={1} h="100vh" justifyContent="center">
+      <LadyImageIcon
+        display={{ base: "none", md: "block" }}
+        h={{
+          lg: "100%",
+          base: "70%",
+        }}
+        minW={{
+          lg: "450px",
+          base: "full",
+        }}
+      />
+      <VStack
+        gap={4}
+        textAlign="center"
+        minW={{
+          base: "full",
+          md: "400px",
+        }}
+      >
+        <Text
+          fontWeight="bold"
+          fontSize={{
+            md: "28px",
+            base: "24px",
+          }}
+          color="brand.black.1"
+        >
+          Welcome to CrowdBucks
+        </Text>
+        <VStack gap={3} w="full">
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            onClick={onChangeStep.bind(null, EMAIL_STEP)}
+          >
+            <Envelope />
+            Sign in with Email
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            onClick={onChangeStep.bind(null, MASTODON_STEP)}
+          >
+            <MastodonIcon />
+            Sign in with Mastodon
+          </Button>
+        </VStack>
+      </VStack>
+    </HStack>
+  );
+};
+
 type StepProps = {
+  step?: string;
   active?: boolean;
   onComplete?: (token: string) => Promise<void>;
   changeRouteOnCompleteSteps?: boolean;
@@ -183,10 +255,12 @@ type StepProps = {
     };
   };
 };
-const Step1: FC<StepProps> = ({
+const Email: FC<StepProps> = ({
   onChangeStep,
   changeRouteOnCompleteSteps,
   content,
+  step,
+  onComplete,
 }) => {
   const form = useFormContext<FormType>();
 
@@ -224,78 +298,102 @@ const Step1: FC<StepProps> = ({
       });
     },
   });
-
-  return (
-    <VStack gap={6} w="full" px={1} as="form" onSubmit={handleSubmit(onSubmit)}>
-      <LadyImageIcon
-        w={{
-          lg: changeRouteOnCompleteSteps ? "100%" : "80%",
-          base: "70%",
-        }}
-      />
-      <VStack gap={0} textAlign="center">
-        <Text
-          fontWeight="bold"
-          fontSize={{
-            md: "28px",
-            base: "24px",
-          }}
-          color="brand.black.1"
-        >
-          {content?.email.title || `Welcome to CrowdBucks`}
-        </Text>
-        <Text
-          fontWeight="normal"
-          fontSize={{
-            md: "24px",
-            base: "16px",
-          }}
-          color="brand.black.1"
-        >
-          {content?.email.description || `Place your email address down below`}
-        </Text>
-      </VStack>
-      <VStack
-        gap={{ md: 6, base: 3 }}
-        maxW={{ md: "370px", base: "450px" }}
+  if (step === EMAIL_STEP)
+    return (
+      <HStack
+        gap={6}
         w="full"
+        px={1}
+        h="100vh"
+        justifyContent="center"
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <FormControl isInvalid={!!form.formState.errors.email?.message}>
-          <Controller
-            control={form.control}
-            name="email"
-            render={({ field }) => {
-              return (
-                <Input
-                  autoFocus
-                  placeholder="Email"
-                  {...field}
-                  onChange={(e) => {
-                    if (!!form.formState.errors.email)
-                      form.clearErrors("email");
-                    field.onChange(e);
-                  }}
-                />
-              );
-            }}
-          />
-          <FormErrorMessage>
-            {form.formState.errors.email?.message}
-          </FormErrorMessage>
-        </FormControl>
-        <Button
-          loadingText="Sending Code..."
-          isLoading={isLoading || isSuccess}
-          type="submit"
-          colorScheme="primary"
-          w="full"
-          size="lg"
+        <LadyImageIcon
+          display={{ base: "none", md: "block" }}
+          h={{
+            lg: "100%",
+            base: "70%",
+          }}
+          minW={{
+            lg: "450px",
+            base: "full",
+          }}
+        />
+        <VStack
+          gap={4}
+          textAlign="center"
+          minW={{
+            base: "full",
+            md: "400px",
+          }}
         >
-          Send Code
-        </Button>
-      </VStack>
-    </VStack>
-  );
+          <Text
+            fontWeight="bold"
+            fontSize={{
+              md: "28px",
+              base: "24px",
+            }}
+            color="brand.black.1"
+          >
+            {content?.email.title || `Welcome to CrowdBucks`}
+          </Text>
+          <Text
+            fontWeight="normal"
+            fontSize={{
+              md: "24px",
+              base: "16px",
+            }}
+            color="brand.black.1"
+          >
+            {content?.email.description ||
+              `Place your email address down below`}
+          </Text>
+          <FormControl isInvalid={!!form.formState.errors.email?.message}>
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field }) => {
+                return (
+                  <Input
+                    autoFocus
+                    placeholder="Email"
+                    {...field}
+                    onChange={(e) => {
+                      if (!!form.formState.errors.email)
+                        form.clearErrors("email");
+                      field.onChange(e);
+                    }}
+                  />
+                );
+              }}
+            />
+            <FormErrorMessage>
+              {form.formState.errors.email?.message}
+            </FormErrorMessage>
+          </FormControl>
+          <Button
+            loadingText="Sending Code..."
+            isLoading={isLoading || isSuccess}
+            type="submit"
+            colorScheme="primary"
+            w="full"
+            size="lg"
+          >
+            Send Code
+          </Button>
+        </VStack>
+      </HStack>
+    );
+  if (step === VERIFICATION_STEP)
+    return (
+      <Step2
+        content={content}
+        onChangeStep={onChangeStep}
+        onComplete={onComplete}
+        changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
+      />
+    );
 };
 
 const Step2: FC<StepProps> = ({
