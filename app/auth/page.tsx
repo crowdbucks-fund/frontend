@@ -5,7 +5,6 @@ import { AuthWizard } from "./components/AuthWizard";
 
 export const setAuthCookie = async (token: string) => {
   "use server";
-
   (await cookies()).set(AUTH_TOKEN_KEY, token, {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 14, // 14 days

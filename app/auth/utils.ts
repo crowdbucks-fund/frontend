@@ -4,14 +4,14 @@ import { cookies } from "next/headers";
 import invariant from "tiny-invariant";
 import { stringifyParsedURL, withQuery } from "ufo";
 
-export const getRedirectUrl = (headers: ReadonlyHeaders, oauthCallbackPath: string, state?: string) => {
+export const getRedirectUrl = (headers: ReadonlyHeaders, oauthCallbackPath: string, step?: string) => {
   const host = headers.get("host")!
   return withQuery(stringifyParsedURL({
     host,
     pathname: oauthCallbackPath,
     protocol: (headers.get("x-forwarded-proto") || "https") + ":",
   }), {
-    state,
+    step,
   })
 };
 
@@ -21,4 +21,9 @@ export const serializeOauthStateCookie = async () => {
   const oauthStateCookie = cookie.get("oauth_state")?.value;
   invariant(!!oauthStateCookie, "Invalid state");
   return await decryptCookie(oauthStateCookie)
+}
+
+export const deleteOauthStateCookie = async () => {
+  const cookie = await cookies()
+  await cookie.delete("oauth_state");
 }
