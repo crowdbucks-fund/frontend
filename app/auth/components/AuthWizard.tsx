@@ -60,6 +60,7 @@ const MASTODON_STEP = "mastodon";
 const PIXELFED_STEP = "pixelfed";
 const VERIFICATION_STEP = "verify";
 const INFORMATION_STEP = "info";
+const oauthSteps = [MASTODON_STEP, PIXELFED_STEP];
 const steps = [
   DEFAULT_STEP,
   MASTODON_STEP,
@@ -179,7 +180,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
           changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
         />
       )}
-      {(step === MASTODON_STEP || step === PIXELFED_STEP) && (
+      {oauthSteps.includes(step) && (
         <FediverseOauth onBack={handleStepChange.bind(null, DEFAULT_STEP)} />
       )}
     </FormProvider>
