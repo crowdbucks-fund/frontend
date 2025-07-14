@@ -38,7 +38,15 @@ export async function GET(request: NextRequest, res: NextResponse) {
         "Content-Type": "application/json",
         accept: 'application/json',
       },
-    }).then((res) => res.json()).catch(() => { throw new Error('Something went wrong, please try again later.') });
+    }).then(async (res) => {
+      if (res.ok)
+        return await res.json();
+      throw await res.json();
+    }).catch((error) => {
+      console.error(error)
+      throw new Error('Something went wrong, please try again later.')
+    });
+    console.log(clientId, clientSecret)
     invariant(!!clientId && !!clientSecret, "Something went wrong, please try again later.");
 
     // redirect to the OAuth URL
@@ -70,6 +78,6 @@ export async function GET(request: NextRequest, res: NextResponse) {
         status: 400
       });
     }
-    return redirect(withQuery('/auth', { error: error.message }))
+    return redirect(withQuery('/auth', { error: error.message, step: 'mastodon' }))
   }
 }
