@@ -57,6 +57,7 @@ const EMAIL_STEP = "email";
 const MASTODON_STEP = "mastodon";
 const VERIFICATION_STEP = "verify";
 const INFORMATION_STEP = "info";
+const oauthSteps = [MASTODON_STEP];
 const steps = [
   DEFAULT_STEP,
   MASTODON_STEP,
@@ -175,7 +176,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
           changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
         />
       )}
-      {step === MASTODON_STEP && (
+      {oauthSteps.includes(step) && (
         <FediverseOauth onBack={handleStepChange.bind(null, DEFAULT_STEP)} />
       )}
     </FormProvider>
