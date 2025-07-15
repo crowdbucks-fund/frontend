@@ -20,6 +20,7 @@ import LadyImage from "assets/images/sitting-lady.svg?react";
 import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { ApiError, api } from "lib/api";
+import { queryClient } from "lib/reactQuery";
 import { find } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
@@ -85,6 +86,7 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
   const onComplete = async (token: string) => {
     if (props.onSignIn) {
       props.onSignIn(token).then(async () => {
+        queryClient.clear();
         // await queryClient.invalidateQueries();
         // await queryClient.refetchQueries();
         router.replace("/console");
