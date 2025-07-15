@@ -21,7 +21,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
     // get instance from the request body
     const callbackUrl = getRedirectUrl(
       await headers(),
-      process.env.OAUTH_REDIRECT!,
+      '/auth',
       "mastodon"
     );
 

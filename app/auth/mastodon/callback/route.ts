@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const data = await req.json() as { code: string };
     const callbackUrl = getRedirectUrl(
       await headers(),
-      process.env.OAUTH_REDIRECT!,
+      '/auth',
       "mastodon"
     );
     const { instance, } = await serializeOauthStateCookie()
