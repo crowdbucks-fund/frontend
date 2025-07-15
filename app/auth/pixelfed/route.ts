@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { platformInfo } from "platform";
 import invariant from "tiny-invariant";
 import { joinURL, stringifyParsedURL, withQuery } from "ufo";
-import { deleteOauthStateCookie, getRedirectUrl } from "../utils";
+import { getRedirectUrl } from "../utils";
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
       "pixelfed"
     );
     // register app
-    const { client_id: clientId, client_secret: clientSecret } = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
+    const { client_id: clientId, client_secret: clientSecret, ...rest } = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
       method: "POST",
       body: JSON.stringify({
         client_name: `${platformInfo.name}`,
@@ -38,7 +38,6 @@ export async function GET(request: NextRequest) {
       },
     }).then((res) => res.json()).catch(() => { throw new Error('Something went wrong, please try again later.') });
     invariant(!!clientId && !!clientSecret, "Something went wrong, please try again later.");
-    await deleteOauthStateCookie()
 
     // redirect to the OAuth URL
     const oauthUrl = withQuery(joinURL(instanceUrl, "oauth/authorize"), {

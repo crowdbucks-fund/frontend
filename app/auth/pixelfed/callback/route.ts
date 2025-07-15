@@ -1,4 +1,4 @@
-import { getRedirectUrl, serializeOauthStateCookie } from "app/auth/utils";
+import { deleteOauthStateCookie, getRedirectUrl, serializeOauthStateCookie } from "app/auth/utils";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import invariant from "tiny-invariant";
@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     );
     const { instance, clientId, clientSecret } = await serializeOauthStateCookie()
     invariant(!!instance && !!clientId && !!clientSecret, "Invalid oauth state");
+    await deleteOauthStateCookie()
 
     const instanceUrl = stringifyParsedURL({
       protocol: "https:",
