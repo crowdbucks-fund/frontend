@@ -31,20 +31,24 @@ export const Header = () => {
         <Flex
           justify="space-between"
           w="full"
-          py="8"
+          py={{ base: 8, md: 0 }}
           flexDirection={{
             base: "column",
             md: "row",
           }}
-          gap={{ base: "50px", md: 0 }}
+          gap={{ base: "50px", lg: 0 }}
         >
-          <VStack maxW={{ md: "650px" }} gap="10" w="full" justify={"center"}>
-            <VStack gap="5" {...scrollAnimate("fadeInBottom", "reset")}>
+          <VStack maxW={{ lg: "650px" }} gap="10" w="full" justify="center">
+            <VStack
+              gap="5"
+              {...scrollAnimate("fadeInBottom", "reset")}
+              alignItems={{ base: "center", md: "start" }}
+            >
               <Text
                 as="h2"
                 textStyle={{
                   base: "bold30",
-                  md: "bold72",
+                  lg: "bold72",
                 }}
                 lineHeight="normal"
                 textAlign={{ base: "center", md: "left" }}
@@ -108,6 +112,15 @@ export const Header = () => {
             display="flex"
             justifyContent="center"
             {...scrollAnimate("fadeInRight", "reset")}
+            __css={{
+              "&>img": {
+                maxWidth: {
+                  base: "500px",
+                  lg: "full",
+                },
+                width: "100%",
+              },
+            }}
           >
             <Image
               alt="CrowdBucks"

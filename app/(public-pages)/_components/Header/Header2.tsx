@@ -31,7 +31,6 @@ export const Header2 = () => {
         <Flex
           justify="space-between"
           w="full"
-          py="8"
           flexDirection={{
             base: "column-reverse",
             md: "row",
@@ -45,6 +44,15 @@ export const Header2 = () => {
             justifyContent="center"
             {...scrollAnimate("fadeInRight", "reset")}
             maxH="575px"
+            __css={{
+              "&>img": {
+                maxWidth: {
+                  base: "500px",
+                  lg: "full",
+                },
+                width: "100%",
+              },
+            }}
           >
             <Image
               alt="CrowdBucks"
@@ -53,13 +61,17 @@ export const Header2 = () => {
               style={{ objectFit: "contain" }}
             />
           </Box>
-          <VStack maxW={{ md: "650px" }} gap="10" w="full">
-            <VStack gap="5" {...scrollAnimate("fadeInBottom", "reset")}>
+          <VStack maxW={{ md: "650px" }} gap="10" w="full" justify="center">
+            <VStack
+              gap="5"
+              {...scrollAnimate("fadeInBottom", "reset")}
+              alignItems={{ base: "center", md: "start" }}
+            >
               <Text
                 as="h2"
                 textStyle={{
                   base: "bold30",
-                  md: "bold72",
+                  lg: "bold72",
                 }}
                 lineHeight="normal"
                 textAlign={{ base: "center", md: "left" }}
