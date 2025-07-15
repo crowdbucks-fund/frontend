@@ -30,7 +30,7 @@ import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import Link from "next/link";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { withoutProtocol, withQuery } from "ufo";
 import { z } from "zod";
@@ -90,12 +90,13 @@ export const FediverseOauth: FC<{
       setIsLoading(false);
     }
   }, [searchParams.get("error"), isLoading]);
+  const formContext = useFormContext();
   const { isLoading: isAuthorizing, error: verificationError } = useQuery<
     AuthenticateResult,
     string
   >({
     queryKey: ["oauth-callback", platformKey],
-    queryFn: ({ queryKey }) => {
+    queryFn: () => {
       const code = searchParams.get("code");
       const session = searchParams.get("session");
       window.history.replaceState(
@@ -124,6 +125,8 @@ export const FediverseOauth: FC<{
               // instance: instance
             });
             if (credentials.newUser) {
+              formContext.setValue("email", "mastodon");
+              formContext.setValue("token", token);
               onChangeStep("info");
               return credentials;
             } else {
@@ -164,112 +167,145 @@ export const FediverseOauth: FC<{
   };
   if (!currentPlatform) redirect("/auth");
   return (
-    <VStack justifyContent="start" minH="full" gap="6">
+    <VStack
+      justifyContent="start"
+      minH="full"
+      flexGrow={{ base: 1, md: 0 }}
+      gap="6"
+      bg={{ base: "white", md: "transparent" }}
+      py="6"
+      px={{ base: 4, md: 4 }}
+      w="full"
+    >
       <Logo />
-      <VStack bg="white" rounded="xl" py="10" px="14" minW="600px" gap="8">
-        <VStack alignItems="start" w="full">
-          <Text color="blackAlpha.600">Login With...</Text>
-          <Text
-            fontWeight="bold"
-            display="flex"
-            fontSize="30px"
-            alignItems="center"
-            gap="1"
-          >
-            <currentPlatform.Icon />
-            {upperFirst(currentPlatform.name)}
-          </Text>
-          <Text color="blackAlpha.600">
-            Click next to join <b>“{upperFirst(selectedInstance)}”</b>. Or
-            choose one from the list below.
-          </Text>
-        </VStack>
-        <VStack w="full">
-          {[
-            ...currentPlatformInstances,
-            ...(!currentPlatformInstances.includes(selectedInstance)
-              ? [selectedInstance]
-              : []),
-          ].map((instance) => {
-            return (
-              <Button
-                variant="outline"
-                colorScheme={instance === selectedInstance ? "black" : "gray"}
-                color={instance === selectedInstance ? "black" : "gray.500"}
-                rounded="xl"
-                px="4"
-                py="6"
-                justifyContent="space-between"
-                onClick={setSelectedInstance.bind(null, instance)}
-                key={instance}
-                width="full"
-                disabled={isLoading || isAuthorizing}
-              >
-                {upperFirst(instance)}
-                {instance === selectedInstance && <CheckIcon width="24px" />}
-              </Button>
-            );
-          })}
-        </VStack>
-        <HStack justifyContent="center" w="full">
-          <Button
-            onClick={onOpen}
-            variant="ghost"
-            disabled={isLoading || isAuthorizing}
-          >
-            Sign-in with a different server?
-          </Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent
-              rounded="xl"
-              p="3"
-              as="form"
-              onSubmit={form.handleSubmit(addServer)}
+      <VStack
+        flexGrow={{ base: 1, md: 0 }}
+        h={{ base: "full", md: "auto" }}
+        bg="white"
+        rounded="xl"
+        minW={{ base: "full", md: "600px" }}
+        gap="8"
+        justify="space-between"
+        py={{ base: 0, md: 10 }}
+        px={{ base: 0, md: 10 }}
+      >
+        <VStack gap="8" w="full">
+          <VStack alignItems="start" w="full">
+            <Text color="blackAlpha.600" fontSize="12px">
+              Login With...
+            </Text>
+            <Text
+              fontWeight="bold"
+              display="flex"
+              fontSize="30px"
+              alignItems="center"
+              gap="1"
             >
-              <ModalHeader
-                fontWeight="normal"
-                fontSize="18px"
-                color={"blackAlpha.500"}
+              <currentPlatform.Icon />
+              {upperFirst(currentPlatform.name)}
+            </Text>
+            <Text color="blackAlpha.600" fontSize="14px">
+              Click next to join <b>“{upperFirst(selectedInstance)}”</b>. Or
+              choose one from the list below.
+            </Text>
+          </VStack>
+          <VStack w="full">
+            {[
+              ...currentPlatformInstances,
+              ...(!currentPlatformInstances.includes(selectedInstance)
+                ? [selectedInstance]
+                : []),
+            ].map((instance) => {
+              return (
+                <Button
+                  variant="outline"
+                  colorScheme={instance === selectedInstance ? "black" : "gray"}
+                  color={instance === selectedInstance ? "black" : "gray.500"}
+                  rounded="xl"
+                  px="4"
+                  py="6"
+                  justifyContent="space-between"
+                  onClick={setSelectedInstance.bind(null, instance)}
+                  key={instance}
+                  width="full"
+                  disabled={isLoading || isAuthorizing}
+                >
+                  {upperFirst(instance)}
+                  {instance === selectedInstance && <CheckIcon width="24px" />}
+                </Button>
+              );
+            })}
+          </VStack>
+          <HStack justifyContent="center" w="full">
+            <Button
+              onClick={onOpen}
+              variant="ghost"
+              disabled={isLoading || isAuthorizing}
+            >
+              Sign-in with a different server?
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent
+                rounded="xl"
+                p="3"
+                as="form"
+                onSubmit={form.handleSubmit(addServer)}
               >
-                Add Server
-              </ModalHeader>
-              <ModalCloseButton top="6" right="6" color={"blackAlpha.500"} />
-              <ModalBody>
-                <Controller
-                  control={form.control}
-                  name="url"
-                  render={({ field }) => (
-                    <FormControl
-                      isInvalid={!!form.formState.errors.url?.message}
-                    >
-                      <FormLabel marginBottom={0}>Server URl</FormLabel>
-                      <Input placeholder="Server URL" {...field} autoFocus />
-                      <FormErrorMessage>
-                        {form.formState.errors.url?.message}
-                      </FormErrorMessage>
-                    </FormControl>
-                  )}
-                />
-              </ModalBody>
-              <ModalFooter gap="2" flexDirection="row-reverse">
-                <Button w="full" size="lg" colorScheme="primary" type="submit">
-                  Next
-                </Button>
-                <Button w="full" size="lg" colorScheme="gray" onClick={onClose}>
-                  Back
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-        </HStack>
-        {(serverError || verificationError) && (
-          <Alert status="error" borderColor="red.200">
-            <AlertDescription textColor="red.900" fontSize="md">
-              {serverError || (verificationError as string)}
-            </AlertDescription>
-          </Alert>
-        )}
+                <ModalHeader
+                  fontWeight="normal"
+                  fontSize="18px"
+                  color={"blackAlpha.500"}
+                >
+                  Add Server
+                </ModalHeader>
+                <ModalCloseButton top="6" right="6" color={"blackAlpha.500"} />
+                <ModalBody>
+                  <Controller
+                    control={form.control}
+                    name="url"
+                    render={({ field }) => (
+                      <FormControl
+                        isInvalid={!!form.formState.errors.url?.message}
+                      >
+                        <FormLabel marginBottom={0}>Server URl</FormLabel>
+                        <Input placeholder="Server URL" {...field} autoFocus />
+                        <FormErrorMessage>
+                          {form.formState.errors.url?.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  />
+                </ModalBody>
+                <ModalFooter gap="2" flexDirection="row-reverse">
+                  <Button
+                    w="full"
+                    size="lg"
+                    colorScheme="primary"
+                    type="submit"
+                  >
+                    Next
+                  </Button>
+                  <Button
+                    w="full"
+                    size="lg"
+                    colorScheme="gray"
+                    onClick={onClose}
+                  >
+                    Back
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </HStack>
+          {(serverError || verificationError) && (
+            <Alert status="error" borderColor="red.200">
+              <AlertDescription textColor="red.900" fontSize="md">
+                {serverError || (verificationError as string)}
+              </AlertDescription>
+            </Alert>
+          )}
+        </VStack>
         <HStack w="full" flexDir="row-reverse">
           <Button
             colorScheme="primary"

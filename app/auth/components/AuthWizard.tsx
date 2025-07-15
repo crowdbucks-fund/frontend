@@ -95,7 +95,6 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
   return (
     <VStack
       justify="center"
-      px="4"
       minH="var(--app-height)"
       align="center"
       bg="brand.gray.3"
@@ -103,13 +102,13 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
     >
       <VStack
         maxW="100%"
-        w={{ md: "full", base: "450px" }}
+        w={{ base: "full" }}
         alignItems="center"
         gap="5"
         h="full"
         flexGrow="1"
         minH="full"
-        py="6"
+        overflow="hidden"
       >
         <AuthWizardContent {...props} onSignIn={onComplete} />
       </VStack>
@@ -188,16 +187,33 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
 
 const SigninList: FC<StepProps> = ({ onChangeStep }) => {
   return (
-    <HStack gap={6} w="full" px={1} h="100vh" justifyContent="center">
+    <HStack
+      gap={6}
+      w="full"
+      px={4}
+      h={{
+        base: "full",
+        md: "full",
+      }}
+      flexGrow="1"
+      justifyContent="center"
+      flexDir={{
+        base: "column",
+        md: "row",
+      }}
+      maxWidth={{
+        base: "400px",
+        md: "auto",
+      }}
+    >
       <LadyImageIcon
-        display={{ base: "none", md: "block" }}
-        h={{
-          lg: "100%",
-          base: "70%",
+        maxH={{
+          base: "50%",
+          md: "full",
         }}
         minW={{
-          lg: "450px",
-          base: "full",
+          md: "450px",
+          base: "auto",
         }}
       />
       <VStack
@@ -307,21 +323,28 @@ const Email: FC<StepProps> = ({
       <HStack
         gap={6}
         w="full"
-        px={1}
+        px={4}
         h="100vh"
         justifyContent="center"
         as="form"
         onSubmit={handleSubmit(onSubmit)}
+        maxWidth={{
+          base: "400px",
+          md: "auto",
+        }}
+        flexDir={{
+          base: "column",
+          md: "row",
+        }}
       >
         <LadyImageIcon
-          display={{ base: "none", md: "block" }}
-          h={{
-            lg: "100%",
-            base: "70%",
+          maxH={{
+            base: "50%",
+            md: "full",
           }}
           minW={{
-            lg: "450px",
-            base: "full",
+            md: "450px",
+            base: "auto",
           }}
         />
         <VStack
@@ -376,16 +399,28 @@ const Email: FC<StepProps> = ({
               {form.formState.errors.email?.message}
             </FormErrorMessage>
           </FormControl>
-          <Button
-            loadingText="Sending Code..."
-            isLoading={isLoading || isSuccess}
-            type="submit"
-            colorScheme="primary"
-            w="full"
-            size="lg"
-          >
-            Send Code
-          </Button>
+          <VStack w="full">
+            <Button
+              loadingText="Sending Code..."
+              isLoading={isLoading || isSuccess}
+              type="submit"
+              colorScheme="primary"
+              w="full"
+              size="lg"
+            >
+              Send Code
+            </Button>
+            <Button
+              onClick={() => onChangeStep(DEFAULT_STEP)}
+              loadingText="Back"
+              isLoading={isLoading || isSuccess}
+              colorScheme="gray"
+              w="full"
+              size="lg"
+            >
+              Back
+            </Button>
+          </VStack>
         </VStack>
       </HStack>
     );
@@ -484,7 +519,7 @@ const Step2: FC<StepProps> = ({
   });
 
   return (
-    <VStack gap={6} px={1} w="full" as="form" onSubmit={handleSubmit(onSubmit)}>
+    <VStack gap={6} px={4} w="full" as="form" onSubmit={handleSubmit(onSubmit)}>
       <EarthIcon
         w={{
           lg: changeRouteOnCompleteSteps ? "100%" : "80%",
@@ -652,7 +687,7 @@ const Step3: FC<StepProps> = ({ onComplete, onChangeStep }) => {
   });
 
   return (
-    <VStack gap={6} px={1} w="full" as="form" onSubmit={handleSubmit(onSubmit)}>
+    <VStack gap={6} px={4} w="full" as="form" onSubmit={handleSubmit(onSubmit)}>
       <VStack gap={2} textAlign="center">
         <Text
           fontWeight="normal"
