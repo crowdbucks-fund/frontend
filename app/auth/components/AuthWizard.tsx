@@ -87,8 +87,6 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
     if (props.onSignIn) {
       props.onSignIn(token).then(async () => {
         queryClient.clear();
-        // await queryClient.invalidateQueries();
-        // await queryClient.refetchQueries();
         router.replace("/console");
       });
     }
@@ -155,7 +153,6 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
         ) || DEFAULT_STEP
       );
   }, [searchParams]);
-
   return (
     <FormProvider {...form}>
       {step === DEFAULT_STEP && <SigninList onChangeStep={handleStepChange} />}
@@ -414,8 +411,7 @@ const Email: FC<StepProps> = ({
             </Button>
             <Button
               onClick={() => onChangeStep(DEFAULT_STEP)}
-              loadingText="Back"
-              isLoading={isLoading || isSuccess}
+              isDisabled={isLoading || isSuccess}
               colorScheme="gray"
               w="full"
               size="lg"
@@ -521,8 +517,26 @@ const Step2: FC<StepProps> = ({
   });
 
   return (
-    <VStack gap={6} px={4} w="full" as="form" onSubmit={handleSubmit(onSubmit)}>
+    <VStack
+      gap={6}
+      px={4}
+      w="full"
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+      maxWidth={{
+        base: "400px",
+        md: "auto",
+      }}
+    >
       <EarthIcon
+        maxH={{
+          base: "50%",
+          md: "full",
+        }}
+        minW={{
+          md: "450px",
+          base: "auto",
+        }}
         w={{
           lg: changeRouteOnCompleteSteps ? "100%" : "80%",
           base: "70%",
@@ -652,7 +666,7 @@ const Step3: FC<StepProps> = ({ onComplete, onChangeStep }) => {
   useEffect(() => {
     const email = form.getValues("email");
     if (!email) {
-      onChangeStep(EMAIL_STEP);
+      onChangeStep(DEFAULT_STEP);
     }
   }, []);
 
@@ -689,7 +703,22 @@ const Step3: FC<StepProps> = ({ onComplete, onChangeStep }) => {
   });
 
   return (
-    <VStack gap={6} px={4} w="full" as="form" onSubmit={handleSubmit(onSubmit)}>
+    <VStack
+      gap={6}
+      px={4}
+      flexGrow={1}
+      h={{
+        base: "full",
+      }}
+      maxWidth={{
+        base: "400px",
+        md: "auto",
+      }}
+      justifyContent="center"
+      w="full"
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <VStack gap={2} textAlign="center">
         <Text
           fontWeight="normal"

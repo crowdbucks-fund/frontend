@@ -38,7 +38,7 @@ export const Header = () => {
           }}
           gap={{ base: "50px", md: 0 }}
         >
-          <VStack maxW={{ md: "650px" }} gap="10" w="full">
+          <VStack maxW={{ md: "650px" }} gap="10" w="full" justify={"center"}>
             <VStack gap="5" {...scrollAnimate("fadeInBottom", "reset")}>
               <Text
                 as="h2"

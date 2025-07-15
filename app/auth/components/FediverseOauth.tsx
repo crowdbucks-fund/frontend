@@ -28,7 +28,7 @@ import { api } from "lib/api";
 import { upperFirst } from "lodash";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import Link from "next/link";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
 import { Controller, useForm, useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
@@ -165,7 +165,8 @@ export const FediverseOauth: FC<{
     setIsLoading(true);
     setServerError(null);
   };
-  if (!currentPlatform) redirect("/auth");
+  if (!currentPlatform) return null;
+
   return (
     <VStack
       justifyContent="start"
