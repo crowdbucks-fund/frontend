@@ -20,9 +20,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthenticateResult } from "@xeronith/granola/core/spi";
 import FilledCheckMark from "assets/icons/filled-check.svg?react";
 import MastodonIconBase from "assets/icons/Mastodon.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
+import { api } from "lib/api";
 import { upperFirst } from "lodash";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import Link from "next/link";
@@ -60,7 +62,11 @@ const schema = z.object({
     }),
 });
 
-export const FediverseOauth: FC<{ onBack: () => void }> = ({ onBack }) => {
+export const FediverseOauth: FC<{
+  onBack: () => void;
+  onSignIn: (token: string) => Promise<void>;
+  onChangeStep: (step: string) => void;
+}> = ({ onBack, onSignIn, onChangeStep }) => {
   const searchParams = useSearchParams();
   const platformKey = searchParams.get("step")! as keyof typeof instances;
   const currentPlatform = instances[platformKey];
@@ -84,39 +90,59 @@ export const FediverseOauth: FC<{ onBack: () => void }> = ({ onBack }) => {
       setIsLoading(false);
     }
   }, [searchParams.get("error"), isLoading]);
-  const {
-    isLoading: isAuthorizing,
-    data: verificationData,
-    error: verificationError,
-  } = useQuery({
-    queryFn: () =>
-      fetch(`/auth/${platformKey}/callback`, {
+  const { isLoading: isAuthorizing, error: verificationError } = useQuery<
+    AuthenticateResult,
+    string
+  >({
+    queryKey: ["oauth-callback", platformKey],
+    queryFn: ({ queryKey }) => {
+      const code = searchParams.get("code");
+      const session = searchParams.get("session");
+      window.history.replaceState(
+        {},
+        "",
+        withQuery(parseUrl(window.location.href).pathname, {
+          step: platformKey,
+        })
+      );
+      return fetch(`/auth/${platformKey}/callback`, {
         method: "POST",
         body: JSON.stringify({
-          code: searchParams.get("code"),
-          session: searchParams.get("session"),
+          code,
+          session,
         }),
       })
-        .then((res) => {
-          router.replace(
-            withQuery(parseUrl(window.location.href).pathname, {
-              step: platformKey,
-            })
-          );
+        .then(async (res) => {
           if (res.ok) {
-            return res.json();
+            const { token, instance } = (await res.json()) as {
+              token: string;
+              instance: string;
+            };
+            const credentials = await api.authenticate({
+              token,
+              provider: "mastodon",
+              // instance: instance
+            });
+            if (credentials.newUser) {
+              onChangeStep("info");
+              return credentials;
+            } else {
+              await onSignIn(credentials.token);
+              return credentials;
+            }
           }
           throw res;
         })
         .catch((res) => {
           if (res instanceof Response) {
-            return res.json().then((data) => {
+            return res.json().then((data: any) => {
               throw data.error || "Something went wrong";
             });
           }
           throw res;
-        }),
-    enabled: !!searchParams.get("code"),
+        });
+    },
+    enabled: !!searchParams.get("code") || !!searchParams.get("session"),
   });
   const form = useForm({
     resolver: zodResolver(schema),
@@ -244,15 +270,12 @@ export const FediverseOauth: FC<{ onBack: () => void }> = ({ onBack }) => {
             </AlertDescription>
           </Alert>
         )}
-        {verificationData && (
-          <pre>{JSON.stringify(verificationData, null, 2)}</pre>
-        )}
         <HStack w="full" flexDir="row-reverse">
           <Button
             colorScheme="primary"
             size="lg"
             w="full"
-            as={Link}
+            as={"a"}
             href={`/auth/${platformKey}?instance=${selectedInstance}`}
             ref={nextButtonRef}
             isLoading={isLoading || isAuthorizing}

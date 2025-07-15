@@ -1,4 +1,4 @@
-import { getRedirectUrl } from 'app/auth/utils';
+import { getInstanceCredentials, getRedirectUrl, storeInstanceCredentials } from 'app/auth/utils';
 import { serialize } from 'cookie-es';
 import { encryptCookie } from "lib/cookies";
 import { headers } from "next/headers";
@@ -25,28 +25,38 @@ export async function GET(request: NextRequest, res: NextResponse) {
       "mastodon"
     );
 
-    // register app
-    const { client_id: clientId, client_secret: clientSecret } = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
-      method: "POST",
-      body: JSON.stringify({
-        client_name: `${platformInfo.name} (${platformInfo.url})`,
-        redirect_uris: [callbackUrl],
-        scopes: 'profile',
-        website: platformInfo.url,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        accept: 'application/json',
-      },
-    }).then(async (res) => {
-      if (res.ok)
-        return await res.json();
-      throw await res.json();
-    }).catch((error) => {
-      console.error(error)
-      throw new Error('Something went wrong, please try again later.')
-    });
-    console.log(clientId, clientSecret)
+    const credentials = await getInstanceCredentials(instance);
+    let clientId, clientSecret;
+    if (!credentials) {
+      // register app
+      const credentials = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
+        method: "POST",
+        body: JSON.stringify({
+          client_name: `${platformInfo.name} (${platformInfo.url})`,
+          redirect_uris: [callbackUrl],
+          scopes: 'profile',
+          website: platformInfo.url,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          accept: 'application/json',
+        },
+      }).then(async (res) => {
+        if (res.ok)
+          return await res.json() as { client_id: string, client_secret: string };
+        throw await res.json();
+      }).catch((error) => {
+        throw new Error('Something went wrong, please try again later.')
+      });
+      invariant(!!credentials.client_id && !!credentials.client_secret, "Something went wrong, please try again later.");
+      await storeInstanceCredentials(instance, { client_id: credentials.client_id, client_secret: credentials.client_secret })
+      clientId = credentials.client_id;
+      clientSecret = credentials.client_secret;
+    } else {
+      clientId = credentials.client_id;
+      clientSecret = credentials.client_secret;
+    }
+
     invariant(!!clientId && !!clientSecret, "Something went wrong, please try again later.");
 
     // redirect to the OAuth URL

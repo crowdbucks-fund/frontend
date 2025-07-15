@@ -1,3 +1,4 @@
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { decryptCookie } from "lib/cookies";
 import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
 import { cookies } from "next/headers";
@@ -26,4 +27,15 @@ export const serializeOauthStateCookie = async () => {
 export const deleteOauthStateCookie = async () => {
   const cookie = await cookies()
   await cookie.delete("oauth_state");
+}
+
+export const getInstanceCredentials = async (instance: string) => {
+  const kv = getCloudflareContext().env.OAUTH_KV;
+  const credentials = await kv.get<{ client_id: string, client_secret: string }>(`instance_${instance}`.toLowerCase(), "json");
+  return credentials;
+}
+
+export const storeInstanceCredentials = async (instance: string, credentials: { client_id: string, client_secret: string }) => {
+  const kv = getCloudflareContext().env.OAUTH_KV;
+  await kv.put(`instance_${instance}`, JSON.stringify(credentials));
 }
