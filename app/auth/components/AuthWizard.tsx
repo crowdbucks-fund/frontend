@@ -21,7 +21,7 @@ import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { ApiError, api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
-import { find } from "lodash";
+import { find, lowerCase, upperFirst } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
 import {
@@ -628,7 +628,7 @@ const Step2: FC<StepProps> = ({
               }}
             />
             <FormErrorMessage>
-              {form.formState.errors.code?.message}
+              {upperFirst(lowerCase(form.formState.errors.code?.message))}
             </FormErrorMessage>
           </FormControl>
           <Button
