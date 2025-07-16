@@ -36,7 +36,7 @@ export const MoreOptionsBottomDrawer = () => {
         <DrawerBody>
           <VStack py={6} gap={4}>
             <HStack w="full">
-              <VStack w="full" gap={0}>
+              <VStack w="full" gap={2}>
                 <Avatar
                   as={NextLink}
                   href="/console/edit-profile"
@@ -61,38 +61,40 @@ export const MoreOptionsBottomDrawer = () => {
                 </HStack>
               </VStack>
             </HStack>
-            <VStack w="full" gap={3}>
-              {mobileSidebarMenu.map((menuItem) => {
-                const Icon = menuItem.icon;
-                return (
-                  <Button
-                    as={NextLink}
-                    fontWeight="medium"
-                    fontSize="14px"
-                    bg="brand.gray.3"
-                    colorScheme="blackAlpha"
-                    color="brand.black.2"
-                    w="full"
-                    py="6"
-                    justifyContent="start"
-                    variant="ghost"
-                    rounded="10px"
-                    leftIcon={<Icon width="18px" />}
-                    rightIcon={
-                      <Box position="absolute" right="13px" top="13px">
-                        <ChevronRightIcon width="18px" />
-                      </Box>
-                    }
-                    title={menuItem.title}
-                    aria-label={menuItem.title}
-                    key={menuItem.title}
-                    href={menuItem.link}
-                  >
-                    {menuItem.title}
-                  </Button>
-                );
-              })}
-            </VStack>
+            {mobileSidebarMenu.length > 0 && (
+              <VStack w="full" gap={3}>
+                {mobileSidebarMenu.map((menuItem) => {
+                  const Icon = menuItem.icon;
+                  return (
+                    <Button
+                      as={NextLink}
+                      fontWeight="medium"
+                      fontSize="14px"
+                      bg="brand.gray.3"
+                      colorScheme="blackAlpha"
+                      color="brand.black.2"
+                      w="full"
+                      py="6"
+                      justifyContent="start"
+                      variant="ghost"
+                      rounded="10px"
+                      leftIcon={<Icon width="18px" />}
+                      rightIcon={
+                        <Box position="absolute" right="13px" top="13px">
+                          <ChevronRightIcon width="18px" />
+                        </Box>
+                      }
+                      title={menuItem.title}
+                      aria-label={menuItem.title}
+                      key={menuItem.title}
+                      href={menuItem.link}
+                    >
+                      {menuItem.title}
+                    </Button>
+                  );
+                })}
+              </VStack>
+            )}
           </VStack>
         </DrawerBody>
       </DrawerContent>
