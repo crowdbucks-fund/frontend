@@ -201,7 +201,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep }) => {
         md: "row",
       }}
       maxWidth={{
-        base: "400px",
+        base: "full",
         md: "auto",
       }}
     >
@@ -211,7 +211,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep }) => {
           md: "full",
         }}
         minW={{
-          md: "450px",
+          lg: "450px",
           base: "auto",
         }}
       />
@@ -320,17 +320,17 @@ const Email: FC<StepProps> = ({
   if (step === EMAIL_STEP)
     return (
       <HStack
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
         gap={6}
         w="full"
         px={4}
-        h="100vh"
-        justifyContent="center"
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        maxWidth={{
-          base: "400px",
-          md: "auto",
+        h={{
+          base: "full",
+          md: "full",
         }}
+        flexGrow="1"
+        justifyContent="center"
         flexDir={{
           base: "column",
           md: "row",
@@ -342,7 +342,7 @@ const Email: FC<StepProps> = ({
             md: "full",
           }}
           minW={{
-            md: "450px",
+            lg: "450px",
             base: "auto",
           }}
         />
@@ -517,14 +517,24 @@ const Step2: FC<StepProps> = ({
   });
 
   return (
-    <VStack
-      gap={6}
-      px={4}
-      w="full"
+    <HStack
       as="form"
       onSubmit={handleSubmit(onSubmit)}
+      gap={6}
+      w="full"
+      px={4}
+      h={{
+        base: "full",
+        md: "full",
+      }}
+      flexGrow="1"
+      justifyContent="center"
+      flexDir={{
+        base: "column",
+        md: "row",
+      }}
       maxWidth={{
-        base: "400px",
+        base: "full",
         md: "auto",
       }}
     >
@@ -534,129 +544,137 @@ const Step2: FC<StepProps> = ({
           md: "full",
         }}
         minW={{
-          md: "450px",
+          lg: "450px",
           base: "auto",
         }}
-        w={{
-          lg: changeRouteOnCompleteSteps ? "100%" : "80%",
-          base: "70%",
-        }}
       />
-      <VStack gap={2} textAlign="center">
-        <Text
-          fontWeight="bold"
-          fontSize={{
-            md: "28px",
-            base: "24px",
-          }}
-          color="brand.black.1"
-        >
-          We sent a code to
-        </Text>
-        <Text
-          fontWeight="normal"
-          fontSize={{
-            md: "24px",
-            base: "16px",
-          }}
-          color="brand.black.1"
-        >
-          {maskEmail(email)}
-        </Text>
-      </VStack>
       <VStack
-        gap={{ md: 6, base: 3 }}
-        maxW={{ md: "370px", base: "450px" }}
-        w="full"
+        gap={4}
+        textAlign="center"
+        minW={{
+          base: "full",
+          md: "400px",
+        }}
       >
-        <FormControl isInvalid={!!form.formState.errors.code?.message} w="auto">
-          <Controller
-            control={form.control}
-            name="code"
-            render={({ field: { ref, ...field } }) => {
-              return (
-                <HStack
-                  width="full"
-                  mx="auto"
-                  gap={{
-                    md: 4,
-                    base: 3,
-                  }}
-                  justify={{
-                    base: "center",
-                    md: "space-between",
-                  }}
-                >
-                  <PinInput
-                    {...field}
-                    placeholder="_"
-                    onComplete={() => onSubmit()}
-                    onChange={(e) => {
-                      if (!!form.formState.errors.code)
-                        form.clearErrors("code");
-                      field.onChange(e);
-                    }}
-                    isDisabled={isLoading || isSuccess}
-                    autoFocus
-                    isInvalid={!!form.formState.errors.code?.message}
-                  >
-                    <PinInputField ref={firstInputRef} />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                    <PinInputField />
-                  </PinInput>
-                </HStack>
-              );
-            }}
-          />
-          <FormErrorMessage>
-            {form.formState.errors.code?.message}
-          </FormErrorMessage>
-        </FormControl>
-        <Button
-          isDisabled={form.watch("code").length !== 5}
-          type="submit"
-          colorScheme="primary"
-          w="full"
-          size="lg"
-          loadingText="Verifying..."
-          isLoading={isLoading || isSuccess}
-        >
-          Next
-        </Button>
-        <HStack mt={{ base: 0, md: -3 }} w="full" justify="space-between">
+        <VStack gap={2} textAlign="center">
           <Text
+            fontWeight="bold"
+            fontSize={{
+              md: "28px",
+              base: "24px",
+            }}
             color="brand.black.1"
-            fontWeight="medium"
-            fontSize={{ base: "16px", md: "20px" }}
           >
-            {timer.minutes > 9 ? timer.minutes : "0" + timer.minutes}:
-            {timer.seconds > 9 ? timer.seconds : "0" + timer.seconds}
+            We sent a code to
           </Text>
-          <Button
-            isDisabled={!timer.isEnded && !showResendCode}
-            variant="link"
-            textDecoration="underline"
-            textUnderlineOffset="2px"
-            isLoading={resendCodeLoading}
-            onClick={() => resendCode()}
-            loadingText="Sending the code..."
-            colorScheme="primary"
-            fontWeight="medium"
-            fontSize={{ base: "16px", md: "20px" }}
-            _hover={{
-              textDecoration: "underline",
+          <Text
+            fontWeight="normal"
+            fontSize={{
+              md: "24px",
+              base: "16px",
             }}
-            _active={{
-              colorScheme: "primary",
-            }}
+            color="brand.black.1"
           >
-            Send the code again
+            {maskEmail(email)}
+          </Text>
+        </VStack>
+        <VStack
+          gap={{ md: 6, base: 3 }}
+          maxW={{ md: "370px", base: "450px" }}
+          w="full"
+        >
+          <FormControl
+            isInvalid={!!form.formState.errors.code?.message}
+            w="auto"
+          >
+            <Controller
+              control={form.control}
+              name="code"
+              render={({ field: { ref, ...field } }) => {
+                return (
+                  <HStack
+                    width="full"
+                    mx="auto"
+                    gap={{
+                      md: 4,
+                      base: 3,
+                    }}
+                    justify={{
+                      base: "center",
+                      md: "space-between",
+                    }}
+                  >
+                    <PinInput
+                      {...field}
+                      placeholder="_"
+                      onComplete={() => onSubmit()}
+                      onChange={(e) => {
+                        if (!!form.formState.errors.code)
+                          form.clearErrors("code");
+                        field.onChange(e);
+                      }}
+                      isDisabled={isLoading || isSuccess}
+                      autoFocus
+                      isInvalid={!!form.formState.errors.code?.message}
+                    >
+                      <PinInputField ref={firstInputRef} />
+                      <PinInputField />
+                      <PinInputField />
+                      <PinInputField />
+                      <PinInputField />
+                    </PinInput>
+                  </HStack>
+                );
+              }}
+            />
+            <FormErrorMessage>
+              {form.formState.errors.code?.message}
+            </FormErrorMessage>
+          </FormControl>
+          <Button
+            isDisabled={form.watch("code").length !== 5}
+            type="submit"
+            colorScheme="primary"
+            w="full"
+            size="lg"
+            loadingText="Verifying..."
+            isLoading={isLoading || isSuccess}
+          >
+            Next
           </Button>
-        </HStack>
+          <HStack mt={{ base: 0, md: -3 }} w="full" justify="space-between">
+            <Text
+              color="brand.black.1"
+              fontWeight="medium"
+              fontSize={{ base: "16px", md: "20px" }}
+            >
+              {timer.minutes > 9 ? timer.minutes : "0" + timer.minutes}:
+              {timer.seconds > 9 ? timer.seconds : "0" + timer.seconds}
+            </Text>
+            <Button
+              isDisabled={!timer.isEnded && !showResendCode}
+              variant="link"
+              textDecoration="underline"
+              textUnderlineOffset="2px"
+              isLoading={resendCodeLoading}
+              onClick={() => resendCode()}
+              loadingText="Sending the code..."
+              colorScheme="primary"
+              fontWeight="medium"
+              fontSize={{ base: "16px", md: "20px" }}
+              _hover={{
+                textDecoration: "underline",
+              }}
+              _active={{
+                colorScheme: "primary",
+              }}
+            >
+              Send the code again
+            </Button>
+          </HStack>
+        </VStack>
       </VStack>
-    </VStack>
+    </HStack>
   );
 };
 
