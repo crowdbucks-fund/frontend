@@ -5,15 +5,19 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return new Uint8Array([...binary].map(c => c.charCodeAt(0)));
 }
 
+let _keyPromise: Promise<CryptoKey> | null = null
 const getKey = async () => {
+  if (_keyPromise)
+    return _keyPromise;
   const rawKey = base64ToUint8Array(process.env.APP_KEY!);
-  return crypto.subtle.importKey(
+  _keyPromise = crypto.subtle.importKey(
     'raw',
     rawKey,
     { name: 'AES-GCM' },
     false,
     ['encrypt', 'decrypt']
   );
+  return _keyPromise;
 }
 
 export async function encryptCookie(data: object) {
