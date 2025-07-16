@@ -21,7 +21,6 @@ import { GetProfileResult } from "@xeronith/granola/core/spi";
 import LogoutIcon from "assets/icons/logout.svg?react";
 import MenuIcon from "assets/icons/menu M.svg?react";
 import MoreIcon from "assets/icons/more-circle.svg?react";
-import SettingsIcon from "assets/icons/setting.svg?react";
 import UserEditIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
@@ -153,21 +152,21 @@ export default function ConsoleLayout({
               </Box>
               {backButton.title}
             </Button>
-          ) : (
-            user && (
-              <IconButton
-                as={ActiveLink}
-                href="/console/settings"
-                colorScheme="blackAlpha"
-                color="black"
-                display={{ base: "flex", md: "none" }}
-                aria-label="Settings Menu"
-                variant="ghost"
-              >
-                <SettingsIcon />
-              </IconButton>
-            )
-          )}
+          ) : null
+          // user && (
+          //   <IconButton
+          //     as={ActiveLink}
+          //     href="/console/settings"
+          //     colorScheme="blackAlpha"
+          //     color="black"
+          //     display={{ base: "flex", md: "none" }}
+          //     aria-label="Settings Menu"
+          //     variant="ghost"
+          //   >
+          //     <SettingsIcon />
+          //   </IconButton>
+          // )
+          }
         </Box>
 
         <Box
