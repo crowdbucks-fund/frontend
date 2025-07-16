@@ -1,38 +1,61 @@
-import { Alert, AlertDescription, AlertIcon, Button, CircularProgress, Collapse, HStack, VStack } from '@chakra-ui/react'
-import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
-import { loadStripe } from '@stripe/stripe-js'
-import { FC, FormEvent, useState } from 'react'
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Button,
+  CircularProgress,
+  Collapse,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
+import {
+  Elements,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { FC, FormEvent, useMemo, useState } from "react";
 
 export type PaymentFormProps = {
-  clientSecret: string
-  publishableKey: string
-  returnUrl: string
-}
+  clientSecret: string;
+  publishableKey: string;
+  returnUrl: string;
+};
 
-export const PaymentForm: FC<PaymentFormProps> = ({ clientSecret, publishableKey, returnUrl }) => {
-  const [stripePromise] = useState(loadStripe(publishableKey))
+export const PaymentForm: FC<PaymentFormProps> = ({
+  clientSecret,
+  publishableKey,
+  returnUrl,
+}) => {
+  const stripePromise = useMemo(
+    () => loadStripe(publishableKey),
+    [publishableKey]
+  );
   return (
     <Elements stripe={stripePromise} options={{ clientSecret }}>
       <PaymentFormElements returnUrl={returnUrl} />
     </Elements>
-  )
-}
+  );
+};
 
-const PaymentFormElements: FC<{ returnUrl: PaymentFormProps['returnUrl'] }> = ({ returnUrl: return_url }) => {
-  const stripe = useStripe()
-  const elements = useElements()
-  const [loading, setLoading] = useState(true)
-  const [postLoading, setPostLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+const PaymentFormElements: FC<{ returnUrl: PaymentFormProps["returnUrl"] }> = ({
+  returnUrl: return_url,
+}) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!stripe || !elements) {
-      return
+      return;
     }
-    setError(null)
-    setPostLoading(true)
+    setError(null);
+    setPostLoading(true);
     const result = await stripe
       .confirmPayment({
         elements,
@@ -40,22 +63,22 @@ const PaymentFormElements: FC<{ returnUrl: PaymentFormProps['returnUrl'] }> = ({
           return_url,
         },
       })
-      .finally(setPostLoading.bind(null, false))
+      .finally(setPostLoading.bind(null, false));
 
     if (result.error) {
-      setError(result.error.message || null)
+      setError(result.error.message || null);
     } else {
-      console.log('everything is fine')
+      console.log("everything is fine");
     }
-  }
+  };
   return (
     <VStack
       as="form"
       w="full"
       gap="6"
       __css={{
-        '& > div': {
-          width: 'full',
+        "& > div": {
+          width: "full",
         },
       }}
       onSubmit={handleSubmit}
@@ -66,14 +89,24 @@ const PaymentFormElements: FC<{ returnUrl: PaymentFormProps['returnUrl'] }> = ({
         </HStack>
       )}
       <PaymentElement onReady={setLoading.bind(null, false)} />
-      <VStack gap={0} w="full" __css={{ '&>.chakra-collapse': { width: 'full' } }}>
+      <VStack
+        gap={0}
+        w="full"
+        __css={{ "&>.chakra-collapse": { width: "full" } }}
+      >
         <Collapse in={!!error}>
-          <Alert status="error" border="0" p={{ base: 2, md: 4 }} mb={4} w="full">
+          <Alert
+            status="error"
+            border="0"
+            p={{ base: 2, md: 4 }}
+            mb={4}
+            w="full"
+          >
             <AlertIcon />
             <AlertDescription
               fontSize={{
-                base: '14px',
-                md: '16px',
+                base: "14px",
+                md: "16px",
               }}
             >
               {error}
@@ -81,11 +114,18 @@ const PaymentFormElements: FC<{ returnUrl: PaymentFormProps['returnUrl'] }> = ({
           </Alert>
         </Collapse>
         {!loading && (
-          <Button type="submit" size="lg" colorScheme="primary" w="full" isLoading={postLoading} loadingText="Verifying...">
+          <Button
+            type="submit"
+            size="lg"
+            colorScheme="primary"
+            w="full"
+            isLoading={postLoading}
+            loadingText="Verifying..."
+          >
             Submit
           </Button>
         )}
       </VStack>
     </VStack>
-  )
-}
+  );
+};
