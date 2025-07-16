@@ -122,7 +122,7 @@ export const FediverseOauth: FC<{
             const credentials = await api.authenticate({
               token,
               provider: "mastodon",
-              // instance: instance
+              server: instance,
             });
             if (credentials.newUser) {
               formContext.setValue("email", "mastodon");
