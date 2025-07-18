@@ -55,7 +55,7 @@ export const DemoCTA = () => {
               textStyle={{ base: "bold30", md: "bold58" }}
               textAlign={{ base: "center", md: "left" }}
             >
-              Get a demo now
+              Sign up today!
             </Text>
             <Text
               textStyle="regular20"
