@@ -91,6 +91,7 @@ export const MainProps: FC<{ showShapes?: boolean }> = ({
               base: "bold30",
               md: "bold38",
             }}
+            textAlign="center"
           >
             Built by the Fediverse, for the Fediverse
           </Text>
