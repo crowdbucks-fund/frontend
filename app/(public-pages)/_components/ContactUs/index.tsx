@@ -63,15 +63,7 @@ const data = [
 
   {
     icon: <EnvelopeIcon />,
-    data: (
-      <>
-        crowdbucks
-        <Text as="span" color="primary.400">
-          @
-        </Text>
-        gmail.com
-      </>
-    ),
+    data: <>{platformInfo.contact.email}</>,
   },
 ];
 
@@ -275,11 +267,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                   as="a"
                   href={`mailto:${platformInfo.contact.email}`}
                 >
-                  Support.CrowdBucks
-                  <Text as="span" color="primary.500">
-                    @
-                  </Text>
-                  gmail.com
+                  {platformInfo.contact.email}
                 </Text>
               </HStack>
               {/* <Text

@@ -17,11 +17,11 @@ export const Footer = () => {
       <Container color="brand.gray.4">
         <HStack w="full" justify="space-between">
           <Text
-            textStyle={{ base: "regular10", md: "regular14" }}
+            textStyle={{ base: "medium16", md: "regular14" }}
             color="brand.gray.4"
           >
             {/* © {new Date().getFullYear()} CrowdBucks All rights&rsquo; Reserved */}
-            CrowdBucks
+            {platformInfo.footerInfo}
           </Text>
           <HStack gap="4">
             {/* <Location
