@@ -26,6 +26,7 @@ const SignInModal: FC<{
         }}
         onSignIn={onSignin}
         changeRouteOnCompleteSteps={false}
+        oAuthInstance={null}
       />
     </ResponsiveDialog>
   );

@@ -1,9 +1,13 @@
+'use client'
 import { toast } from "components/Toast";
 import { platformInfo } from "platform";
 import { Community } from "types/Community";
-import { joinURL } from "ufo";
+import { joinURL, withoutProtocol } from "ufo";
 
-export const generateCommunityLink = (communityUsername: string, withHttps: boolean = true) => `${withHttps ? `${window.location.protocol}//` : ''}${window.location.host}/c/${communityUsername}`
+export const generateCommunityLink = (communityUsername: string, withProtocol: boolean = true) => {
+  const baseUrl = !withProtocol ? withoutProtocol(platformInfo.url) : platformInfo.url;
+  return joinURL(baseUrl, communityUsername);
+}
 
 export const linkCoppiedCallback = (community: Community) => {
   toast({

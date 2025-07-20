@@ -74,7 +74,6 @@ export default function ConsoleLayout({
   );
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);
   const pathname = usePathname();
-
   useHydrateAtoms([[breadcrumbLinks, breadcrumbs[pathname] || {}]]);
   const [
     { breadcrumb, title: routeTitle, back: backButton, showConsoleMenu = true },
@@ -103,7 +102,6 @@ export default function ConsoleLayout({
   const isWithPreviewRoute =
     segments.includes("(with-preview)") ||
     segments.includes("(community-index)");
-
   if (loading) return <SplashLoading />;
   return (
     <VStack
@@ -135,37 +133,38 @@ export default function ConsoleLayout({
         )}
 
         <Box display={{ base: "flex", md: "none" }}>
-          {backButton && user ? (
-            <Button
-              variant="unstyled"
-              display="flex"
-              alignItems="center"
-              color="primary.500"
-              fontWeight="normal"
-              fontSize="14px"
-              textTransform="capitalize"
-              as={NextLink}
-              href={backButton.link}
-            >
-              <Box mr="1">
-                <ChevronLeftIcon width="22px" />
-              </Box>
-              {backButton.title}
-            </Button>
-          ) : null
-          // user && (
-          //   <IconButton
-          //     as={ActiveLink}
-          //     href="/console/settings"
-          //     colorScheme="blackAlpha"
-          //     color="black"
-          //     display={{ base: "flex", md: "none" }}
-          //     aria-label="Settings Menu"
-          //     variant="ghost"
-          //   >
-          //     <SettingsIcon />
-          //   </IconButton>
-          // )
+          {
+            backButton && user ? (
+              <Button
+                variant="unstyled"
+                display="flex"
+                alignItems="center"
+                color="primary.500"
+                fontWeight="normal"
+                fontSize="14px"
+                textTransform="capitalize"
+                as={NextLink}
+                href={backButton.link}
+              >
+                <Box mr="1">
+                  <ChevronLeftIcon width="22px" />
+                </Box>
+                {backButton.title}
+              </Button>
+            ) : null
+            // user && (
+            //   <IconButton
+            //     as={ActiveLink}
+            //     href="/console/settings"
+            //     colorScheme="blackAlpha"
+            //     color="black"
+            //     display={{ base: "flex", md: "none" }}
+            //     aria-label="Settings Menu"
+            //     variant="ghost"
+            //   >
+            //     <SettingsIcon />
+            //   </IconButton>
+            // )
           }
         </Box>
 

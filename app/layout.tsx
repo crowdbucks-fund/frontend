@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./global.css";
 
+import { AUTH_TOKEN_KEY } from "lib/auth";
+import { cookies } from "next/headers";
 import { platformInfo } from "platform";
 import { Providers } from "./providers";
 
@@ -14,15 +16,21 @@ export const metadata: Metadata = {
   title: "CrowdBucks",
 };
 
-export default function RootLayout({
+export const getAuthTokenFromCookie = async () => {
+  "use server";
+  return (await cookies()).get(AUTH_TOKEN_KEY)?.value;
+};
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const currentAuthToken = await getAuthTokenFromCookie();
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers authToken={currentAuthToken}>{children}</Providers>
       </body>
     </html>
   );
