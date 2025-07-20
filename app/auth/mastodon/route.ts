@@ -25,7 +25,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
       "mastodon"
     );
 
-    const credentials = await getInstanceCredentials(instance);
+    const credentials = await getInstanceCredentials(instance, callbackUrl);
     let clientId, clientSecret;
     if (!credentials) {
       // register app
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
         throw new Error('Something went wrong, please try again later.')
       });
       invariant(!!credentials.client_id && !!credentials.client_secret, "Something went wrong, please try again later.");
-      await storeInstanceCredentials(instance, { client_id: credentials.client_id, client_secret: credentials.client_secret })
+      await storeInstanceCredentials(instance, callbackUrl, { client_id: credentials.client_id, client_secret: credentials.client_secret })
       clientId = credentials.client_id;
       clientSecret = credentials.client_secret;
     } else {

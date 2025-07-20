@@ -75,6 +75,9 @@ importers:
       next:
         specifier: 15.3.4
         version: 15.3.4(@babel/core@7.27.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      ohash:
+        specifier: ^2.0.11
+        version: 2.0.11
       react:
         specifier: 19.1.0
         version: 19.1.0
