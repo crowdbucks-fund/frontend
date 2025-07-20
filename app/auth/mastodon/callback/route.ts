@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     invariant(!!instance, "Invalid oauth state");
     await deleteOauthStateCookie()
 
-    const credentials = await getInstanceCredentials(instance);
+    const credentials = await getInstanceCredentials(instance, callbackUrl);
     invariant(credentials, "Something went wrong, please try again later.");
 
     const { client_id: clientId, client_secret: clientSecret } = credentials;
