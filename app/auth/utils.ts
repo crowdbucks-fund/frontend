@@ -31,19 +31,19 @@ export const deleteOauthStateCookie = async () => {
 
 export const getInstanceCredentials = async (instance: string, callbackUrl: string) => {
   const kv = getCloudflareContext().env.OAUTH_KV;
-  const key = `instance_${hash({
+  const key = hash({
     instance,
     callbackUrl
-  })}`
-  const credentials = await kv.get<{ client_id: string, client_secret: string }>(key.toLowerCase(), "json");
+  })
+  const credentials = await kv.get<{ client_id: string, client_secret: string }>(key, "json");
   return credentials;
 }
 
 export const storeInstanceCredentials = async (instance: string, callbackUrl: string, credentials: { client_id: string, client_secret: string }) => {
   const kv = getCloudflareContext().env.OAUTH_KV;
-  const key = `instance_${hash({
+  const key = hash({
     instance,
     callbackUrl
-  })}`
+  })
   await kv.put(key, JSON.stringify(credentials));
 }
