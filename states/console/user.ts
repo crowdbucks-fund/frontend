@@ -22,7 +22,7 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     },
     queryKey: [useUserQueryKey],
     retry: (count, error: unknown) => {
-      if ((error as Error)?.message.includes('unauthorized'))
+      if ((error as Error)?.message?.includes?.('unauthorized'))
         return false;
       if (count >= 3)
         return false;
