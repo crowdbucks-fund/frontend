@@ -66,7 +66,8 @@ export const FediverseOauth: FC<{
   onBack: () => void;
   onSignIn: (token: string) => Promise<void>;
   onChangeStep: (step: string) => void;
-}> = ({ onBack, onSignIn, onChangeStep }) => {
+  defaultOauthInstance?: string | null;
+}> = ({ onBack, onSignIn, onChangeStep, defaultOauthInstance }) => {
   const searchParams = useSearchParams();
   const platformKey = searchParams.get("step")! as keyof typeof instances;
   const currentPlatform = instances[platformKey];
@@ -74,7 +75,7 @@ export const FediverseOauth: FC<{
   const currentPlatformInstances =
     instances[platformKey]?.defaultInstances || [];
   const [selectedInstance, setSelectedInstance] = useState(
-    () => currentPlatformInstances[0]
+    () => defaultOauthInstance || currentPlatformInstances[0]
   );
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -119,11 +120,17 @@ export const FediverseOauth: FC<{
               token: string;
               instance: string;
             };
-            const credentials = await api.authenticate({
-              token,
-              provider: "mastodon",
-              server: instance,
-            });
+            setSelectedInstance(instance);
+            const credentials = await api
+              .authenticate({
+                token,
+                provider: "mastodon",
+                server: instance,
+              })
+              .catch((e: Error) => {
+                // throw e.message || "Something went wrong";
+                throw "Something went wrong, please try again later.";
+              });
             if (credentials.newUser) {
               formContext.setValue("email", "mastodon");
               formContext.setValue("token", token);

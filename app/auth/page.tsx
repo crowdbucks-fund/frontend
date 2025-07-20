@@ -1,3 +1,4 @@
+import { serializeOauthStateCookie } from "app/auth/utils";
 import { AUTH_TOKEN_KEY } from "lib/auth";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
@@ -14,9 +15,12 @@ export const setAuthCookie = async (token: string) => {
 };
 
 export default async function Auth() {
+  const { instance } = (await serializeOauthStateCookie().catch((e) => ({
+    instance: null,
+  }))) as { instance: string | null };
   return (
     <Suspense>
-      <AuthWizard onSignIn={setAuthCookie} />
+      <AuthWizard onSignIn={setAuthCookie} oAuthInstance={instance} />
     </Suspense>
   );
 }

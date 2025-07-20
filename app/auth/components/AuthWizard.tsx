@@ -45,6 +45,7 @@ export type AuthWizardProps = {
   step?: typeof EMAIL_STEP | typeof VERIFICATION_STEP | typeof INFORMATION_STEP;
   onSignIn?: (token: string) => Promise<void>;
   changeRouteOnCompleteSteps?: boolean;
+  oAuthInstance: string | null;
   content?: {
     [key: string]: {
       title?: string;
@@ -110,7 +111,11 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
         minH="full"
         overflow="hidden"
       >
-        <AuthWizardContent {...props} onSignIn={onComplete} />
+        <AuthWizardContent
+          {...props}
+          onSignIn={onComplete}
+          oAuthInstance={props.oAuthInstance}
+        />
       </VStack>
     </VStack>
   );
@@ -120,6 +125,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   content,
   onSignIn,
   changeRouteOnCompleteSteps = true,
+  oAuthInstance,
 }) => {
   const form = useForm<FormType>({
     defaultValues: {
@@ -178,6 +184,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
           onBack={handleStepChange.bind(null, DEFAULT_STEP)}
           onSignIn={onSignIn!}
           onChangeStep={handleStepChange}
+          defaultOauthInstance={oAuthInstance}
         />
       )}
     </FormProvider>
