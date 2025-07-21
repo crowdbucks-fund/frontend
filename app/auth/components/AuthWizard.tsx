@@ -1,5 +1,7 @@
 "use client";
+import { Image } from "@chakra-ui/next-js";
 import {
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -15,8 +17,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FediverseOauth } from "app/auth/components/FediverseOauth";
 import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
+import CoinGlassJar from "assets/images/coins-glass-jar.webp";
 import Earth from "assets/images/earth.svg?react";
-import LadyImage from "assets/images/sitting-lady.svg?react";
+import Logo from "assets/images/logo-xl.svg?react";
 import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { useSetAtom } from "jotai";
@@ -41,7 +44,6 @@ import { z } from "zod";
 const MastodonIcon = chakra(MastodonIconBase);
 const Envelope = chakra(EnvelopeIcon);
 const EarthIcon = chakra(Earth);
-const LadyImageIcon = chakra(LadyImage);
 
 export type AuthWizardProps = {
   step?: typeof EMAIL_STEP | typeof VERIFICATION_STEP | typeof INFORMATION_STEP;
@@ -151,7 +153,6 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
 
   const handleStepChange = (step: string) => {
     if (changeRouteOnCompleteSteps) {
-      console.log("xyzxyz");
       router.push(`/auth?${new URLSearchParams({ step }).toString()}`);
     } else setStep(step);
   };
@@ -171,6 +172,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
         <SigninList
           onChangeStep={handleStepChange}
           compact={props.compact || false}
+          content={content}
         />
       )}
       {[EMAIL_STEP, VERIFICATION_STEP].includes(step) && (
@@ -207,18 +209,21 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   );
 };
 
-const SigninList: FC<StepProps> = ({ onChangeStep, compact }) => {
+const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
   return (
     <HStack
       gap={6}
       w="full"
-      px={4}
+      px={compact ? 0 : 4}
       h={{
         base: "full",
         md: "full",
       }}
       flexGrow="1"
-      justifyContent="center"
+      justifyContent={{
+        base: "start",
+        md: "center",
+      }}
       flexDir={{
         base: "column",
         md: compact ? "column" : "row",
@@ -228,18 +233,49 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact }) => {
         md: "auto",
       }}
     >
-      <LadyImageIcon
+      <Box
         maxH={{
-          base: "50%",
-          md: "full",
+          base: compact ? "230px" : "full",
+          md: compact ? "230px" : "full",
+        }}
+        h={{
+          base: "calc(100vw / 1.4)",
+          md: compact ? "calc(100vw / 5.5)" : "auto",
         }}
         minW={{
           lg: "450px",
-          base: "auto",
+          base: "calc(100% - 460px)",
         }}
-      />
+      >
+        <Image
+          alt=""
+          src={CoinGlassJar}
+          position="absolute"
+          left={{
+            base: "50%",
+            md: compact ? "50%" : "0",
+          }}
+          top={{
+            base: 0,
+            md: compact ? "30px" : "50%",
+          }}
+          w={compact ? "auto" : "full"}
+          maxH={{
+            base: compact ? "230px" : "full",
+          }}
+          maxW={{
+            base: "85%",
+            md: "42%",
+            lg: "50%",
+          }}
+          transform={{
+            md: compact ? "translateX(-50%) rotate(90deg)" : "translateY(-50%)",
+            base: "translateX(-50%) rotate(90deg)",
+          }}
+        />
+      </Box>
       <VStack
-        gap={4}
+        gap={8}
         textAlign="center"
         minW={{
           base: "full",
@@ -253,8 +289,17 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact }) => {
             base: "24px",
           }}
           color="brand.black.1"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          gap={2}
+          flexWrap="wrap"
         >
-          Welcome to CrowdBucks
+          {content?.default.title || (
+            <>
+              Welcome to <Logo height="35px" width="150px" />
+            </>
+          )}
         </Text>
         <VStack gap={3} w="full">
           <Button
@@ -349,28 +394,68 @@ const Email: FC<StepProps> = ({
         onSubmit={handleSubmit(onSubmit)}
         gap={6}
         w="full"
-        px={4}
+        px={props.compact ? 0 : 4}
         h={{
           base: "full",
           md: "full",
         }}
         flexGrow="1"
-        justifyContent="center"
+        justifyContent={{
+          base: "start",
+          md: "center",
+        }}
         flexDir={{
           base: "column",
           md: props.compact ? "column" : "row",
         }}
+        maxWidth={{
+          base: "full",
+          md: "auto",
+        }}
       >
-        <LadyImageIcon
+        <Box
           maxH={{
-            base: "50%",
-            md: "full",
+            base: props.compact ? "230px" : "full",
+            md: props.compact ? "230px" : "full",
+          }}
+          h={{
+            base: "calc(100vw / 1.4)",
+            md: props.compact ? "calc(100vw / 5.5)" : "auto",
           }}
           minW={{
             lg: "450px",
-            base: "auto",
+            base: "calc(100% - 460px)",
           }}
-        />
+        >
+          <Image
+            alt=""
+            src={CoinGlassJar}
+            position="absolute"
+            left={{
+              base: "50%",
+              md: props.compact ? "50%" : "0",
+            }}
+            top={{
+              base: 0,
+              md: props.compact ? "30px" : "50%",
+            }}
+            w={props.compact ? "auto" : "full"}
+            maxH={{
+              base: props.compact ? "230px" : "full",
+            }}
+            maxW={{
+              base: "85%",
+              md: "42%",
+              lg: "50%",
+            }}
+            transform={{
+              md: props.compact
+                ? "translateX(-50%) rotate(90deg)"
+                : "translateY(-50%)",
+              base: "translateX(-50%) rotate(90deg)",
+            }}
+          />
+        </Box>
         <VStack
           gap={4}
           textAlign="center"
@@ -386,9 +471,19 @@ const Email: FC<StepProps> = ({
               base: "24px",
             }}
             color="brand.black.1"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            gap={2}
+            flexWrap="wrap"
           >
-            {content?.email.title || `Welcome to CrowdBucks`}
+            {content?.email.title || (
+              <>
+                Welcome to <Logo height="32px" width="150px" />
+              </>
+            )}
           </Text>
+
           <Text
             fontWeight="normal"
             fontSize={{

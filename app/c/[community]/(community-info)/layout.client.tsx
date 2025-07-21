@@ -25,6 +25,9 @@ const SignInModal: FC<{
             title: "Let us know your email",
             // description: 'Let us know your email',
           },
+          default: {
+            title: "Please sign in to continue",
+          },
         }}
         compact
         onSignIn={onSignin}
