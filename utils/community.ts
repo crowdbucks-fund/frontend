@@ -6,7 +6,7 @@ import { joinURL, withoutProtocol } from "ufo";
 
 export const generateCommunityLink = (communityUsername: string, withProtocol: boolean = true) => {
   const baseUrl = !withProtocol ? withoutProtocol(platformInfo.url) : platformInfo.url;
-  return joinURL(baseUrl, communityUsername);
+  return joinURL(baseUrl, platformInfo.communityPrefix, communityUsername);
 }
 
 export const linkCoppiedCallback = (community: Community) => {
