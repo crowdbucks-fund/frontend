@@ -3,6 +3,7 @@
 import { GetProfileResult } from '@xeronith/granola/core/spi'
 import { atom, useAtom } from 'jotai'
 import { api } from 'lib/api'
+import { usePathname } from 'next/navigation'
 import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
 export const useUserQueryKey = 'getProfile'
@@ -10,7 +11,7 @@ export const authTokenAtom = atom<string | undefined>(undefined)
 
 export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey> = {}) => {
   const [token] = useAtom(authTokenAtom);
-
+  const pathName = usePathname();
   const {
     data: user,
     isLoading: loading,
@@ -34,7 +35,7 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     retryOnMount: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    enabled: !!token
+    enabled: !!token || pathName.startsWith('/console')
   })
 
   return { user, loading, isFetching }

@@ -219,11 +219,18 @@ export const FediverseOauth: FC<{
             <Text
               fontWeight="bold"
               display="flex"
-              fontSize="30px"
+              fontSize={{
+                base: "22px",
+                md: "30px",
+              }}
               alignItems="center"
               gap="1"
             >
-              <currentPlatform.Icon />
+              <currentPlatform.Icon
+                w={{
+                  base: "25px",
+                }}
+              />
               {upperFirst(currentPlatform.name)}
             </Text>
             <Text color="blackAlpha.600" fontSize="14px">
