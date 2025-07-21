@@ -1,9 +1,10 @@
 "use client";
 import { AuthWizardContent } from "app/auth/components/AuthWizard";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
+import { useSetAtom } from "jotai";
 import { queryClient } from "lib/reactQuery";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { useAuth } from "states/console/user";
+import { authTokenAtom, useAuth } from "states/console/user";
 
 const SignInModal: FC<{
   isOpen: boolean;
@@ -41,12 +42,13 @@ export default function CommunityInfoLayoutClient({
   });
 
   const [isAuthorized, setIsAuthorized] = useState(true);
-
+  const setAuthToken = useSetAtom(authTokenAtom);
   useEffect(() => {
     if (!user && !isFetching) setIsAuthorized(false);
   }, [user, isFetching]);
 
   const onAuthorized = async (token: string) => {
+    setAuthToken(token);
     setIsAuthorized(true);
     await onAuthorize(token);
     queryClient.invalidateQueries();
