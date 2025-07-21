@@ -17,9 +17,7 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     isFetching,
   } = useQuery<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey>({
     ...options,
-    queryFn: () => {
-      return api.getProfile({})
-    },
+    queryFn: () => api.getProfile({}),
     queryKey: [useUserQueryKey],
     retry: (count, error: unknown) => {
       if ((error as Error)?.message?.includes?.('unauthorized'))
