@@ -9,10 +9,7 @@ import { ActiveLink } from "components/Link";
 import { useDesktop } from "hooks/useDesktop";
 import { FC, PropsWithChildren, ReactNode } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
-import {
-  CommunityPreview,
-  CommunityPreviewSlim,
-} from "../../components/CommunityPreview";
+import { CommunityPreview } from "../../components/CommunityPreview";
 import CommunityValidatorLayout, {
   useCurrentCommunity,
 } from "./community-validator-layout";
@@ -63,7 +60,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
         {communityPreview && (
           <>
             <Box display={{ base: "none", md: "block" }} w="full" pb="6">
-              <CommunityPreviewSlim community={community} />
+              <CommunityPreview community={community} />
             </Box>
             <Box
               pt={{ md: "7" }}
