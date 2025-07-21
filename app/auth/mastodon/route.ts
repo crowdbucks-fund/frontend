@@ -13,6 +13,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
 
     const instance = request.nextUrl.searchParams.get('instance');
     invariant(!!instance, "Instance is not provided");
+    const redirectUrlAfterLogin = request.nextUrl.searchParams.get('redirect_url');
 
     const instanceUrl = stringifyParsedURL({
       protocol: "https:",
@@ -71,8 +72,16 @@ export async function GET(request: NextRequest, res: NextResponse) {
     response.headers.append("Set-Cookie",
       serialize('oauth_state', await encryptCookie({
         instance,
-        clientId,
-        clientSecret,
+      }), {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      }),
+    );
+    response.headers.append("Set-Cookie",
+      serialize('redirect_url', await encryptCookie({
+        redirectUrl: redirectUrlAfterLogin
       }), {
         path: '/',
         httpOnly: true,
@@ -82,7 +91,6 @@ export async function GET(request: NextRequest, res: NextResponse) {
     );
     return response;
   } catch (error: any) {
-    console.error(error);
     if (request.headers.get('accept')?.includes('application/json')) {
       return NextResponse.json({ error: error.message }, {
         status: 400

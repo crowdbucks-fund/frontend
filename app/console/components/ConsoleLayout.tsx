@@ -362,7 +362,7 @@ export default function ConsoleLayout({
             },
           }}
           initial="closed"
-          animate={isSidebarOpen && isDesktop ? "open" : "closed"}
+          animate={isSidebarOpen && !!user && isDesktop ? "open" : "closed"}
           display={{ md: "block", base: "none" }}
           position="absolute"
           h="calc(100% - 25px)"
@@ -494,7 +494,7 @@ export default function ConsoleLayout({
           }}
           transition={{}}
           initial="closed"
-          animate={isSidebarOpen && isDesktop ? "open" : "closed"}
+          animate={isSidebarOpen && !!user && isDesktop ? "open" : "closed"}
           flexGrow={1}
           rounded="20px"
           border={{ md: !isWithPreviewRoute ? "2px solid" : "0" }}

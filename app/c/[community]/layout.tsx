@@ -11,7 +11,6 @@ const fetchCommunity = async (handle: string) => {
       handle,
     });
   } catch (e) {
-    console.error(e);
     return null;
   }
 };
