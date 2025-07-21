@@ -57,7 +57,11 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
           bg="gray.50"
           width="100%"
           w="full"
-          aspectRatio={171 / 82}
+          aspectRatio={{
+            base: 171 / 82,
+            lg: 171 / 62,
+            xl: 171 / 52,
+          }}
           rounded="12px"
           border="1px solid"
           borderColor="brand.gray.2"
