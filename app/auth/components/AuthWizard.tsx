@@ -54,6 +54,7 @@ export type AuthWizardProps = {
       description?: string;
     };
   };
+  compact?: boolean;
 };
 const DEFAULT_STEP = "";
 const EMAIL_STEP = "email";
@@ -129,6 +130,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   onSignIn,
   changeRouteOnCompleteSteps = true,
   oAuthInstance,
+  ...props
 }) => {
   const form = useForm<FormType>({
     defaultValues: {
@@ -148,9 +150,10 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   const router = useRouter();
 
   const handleStepChange = (step: string) => {
-    if (changeRouteOnCompleteSteps)
+    if (changeRouteOnCompleteSteps) {
+      console.log("xyzxyz");
       router.push(`/auth?${new URLSearchParams({ step }).toString()}`);
-    else setStep(step);
+    } else setStep(step);
   };
 
   useEffect(() => {
@@ -164,9 +167,15 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   }, [searchParams]);
   return (
     <FormProvider {...form}>
-      {step === DEFAULT_STEP && <SigninList onChangeStep={handleStepChange} />}
+      {step === DEFAULT_STEP && (
+        <SigninList
+          onChangeStep={handleStepChange}
+          compact={props.compact || false}
+        />
+      )}
       {[EMAIL_STEP, VERIFICATION_STEP].includes(step) && (
         <Email
+          compact={props.compact || false}
           content={content}
           step={step}
           onChangeStep={handleStepChange}
@@ -176,6 +185,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
       )}
       {step === INFORMATION_STEP && (
         <Step3
+          compact={props.compact || false}
           content={content}
           onChangeStep={handleStepChange}
           onComplete={onSignIn}
@@ -184,17 +194,20 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
       )}
       {oauthSteps.includes(step) && (
         <FediverseOauth
+          step={step}
           onBack={handleStepChange.bind(null, DEFAULT_STEP)}
           onSignIn={onSignIn!}
+          changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
           onChangeStep={handleStepChange}
           defaultOauthInstance={oAuthInstance}
+          compact={props.compact || false}
         />
       )}
     </FormProvider>
   );
 };
 
-const SigninList: FC<StepProps> = ({ onChangeStep }) => {
+const SigninList: FC<StepProps> = ({ onChangeStep, compact }) => {
   return (
     <HStack
       gap={6}
@@ -208,7 +221,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep }) => {
       justifyContent="center"
       flexDir={{
         base: "column",
-        md: "row",
+        md: compact ? "column" : "row",
       }}
       maxWidth={{
         base: "full",
@@ -273,6 +286,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep }) => {
 
 type StepProps = {
   step?: string;
+  compact: boolean;
   active?: boolean;
   onComplete?: (token: string) => Promise<void>;
   changeRouteOnCompleteSteps?: boolean;
@@ -290,6 +304,7 @@ const Email: FC<StepProps> = ({
   content,
   step,
   onComplete,
+  ...props
 }) => {
   const form = useFormContext<FormType>();
 
@@ -343,7 +358,7 @@ const Email: FC<StepProps> = ({
         justifyContent="center"
         flexDir={{
           base: "column",
-          md: "row",
+          md: props.compact ? "column" : "row",
         }}
       >
         <LadyImageIcon
@@ -438,6 +453,7 @@ const Email: FC<StepProps> = ({
         content={content}
         onChangeStep={onChangeStep}
         onComplete={onComplete}
+        compact={props.compact || false}
         changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
       />
     );

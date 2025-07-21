@@ -28,7 +28,7 @@ import { api } from "lib/api";
 import { upperFirst } from "lodash";
 import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
 import { Controller, useForm, useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
@@ -63,13 +63,26 @@ const schema = z.object({
 });
 
 export const FediverseOauth: FC<{
+  step: string;
   onBack: () => void;
   onSignIn: (token: string) => Promise<void>;
   onChangeStep: (step: string) => void;
   defaultOauthInstance?: string | null;
-}> = ({ onBack, onSignIn, onChangeStep, defaultOauthInstance }) => {
+  compact: boolean;
+  changeRouteOnCompleteSteps?: boolean;
+}> = ({
+  onBack,
+  onSignIn,
+  onChangeStep,
+  defaultOauthInstance,
+  step,
+  compact,
+  changeRouteOnCompleteSteps = true,
+}) => {
+  const currentPathname = usePathname();
   const searchParams = useSearchParams();
-  const platformKey = searchParams.get("step")! as keyof typeof instances;
+  const platformKey = (step ||
+    searchParams.get("step")!) as keyof typeof instances;
   const currentPlatform = instances[platformKey];
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentPlatformInstances =
@@ -85,7 +98,7 @@ export const FediverseOauth: FC<{
       setServerError(searchParams.get("error") || null);
       router.replace(
         withQuery(parseUrl(window.location.href).pathname, {
-          step: platformKey,
+          step: changeRouteOnCompleteSteps ? platformKey : undefined,
         })
       );
       setIsLoading(false);
@@ -104,7 +117,7 @@ export const FediverseOauth: FC<{
         {},
         "",
         withQuery(parseUrl(window.location.href).pathname, {
-          step: platformKey,
+          step: changeRouteOnCompleteSteps ? platformKey : undefined,
         })
       );
       return fetch(`/auth/${platformKey}/callback`, {
@@ -181,8 +194,8 @@ export const FediverseOauth: FC<{
       flexGrow={{ base: 1, md: 0 }}
       gap="6"
       bg={{ base: "white", md: "transparent" }}
-      py="6"
-      px={{ base: 4, md: 4 }}
+      py={compact ? 0 : 6}
+      px={compact ? {} : { base: 4, md: 4 }}
       w="full"
     >
       <Logo />
@@ -191,11 +204,12 @@ export const FediverseOauth: FC<{
         h={{ base: "full", md: "auto" }}
         bg="white"
         rounded="xl"
-        minW={{ base: "full", md: "600px" }}
+        w="full"
+        maxW={{ base: "full", md: "600px" }}
         gap="8"
         justify="space-between"
-        py={{ base: 0, md: 10 }}
-        px={{ base: 0, md: 10 }}
+        py={compact ? {} : { base: 0, md: 10 }}
+        px={compact ? {} : { base: 0, md: 10 }}
       >
         <VStack gap="8" w="full">
           <VStack alignItems="start" w="full">
@@ -320,7 +334,7 @@ export const FediverseOauth: FC<{
             size="lg"
             w="full"
             as={"a"}
-            href={`/auth/${platformKey}?instance=${selectedInstance}`}
+            href={`/auth/${platformKey}?instance=${selectedInstance}&redirect_url=${currentPathname}`}
             ref={nextButtonRef}
             isLoading={isLoading || isAuthorizing}
             onClick={onStartAuth}
@@ -332,8 +346,8 @@ export const FediverseOauth: FC<{
             size="lg"
             w="full"
             onClick={onBack}
-            as={Link}
-            href="/auth"
+            as={changeRouteOnCompleteSteps ? Link : undefined}
+            href={changeRouteOnCompleteSteps ? "/auth" : undefined}
             disabled={isLoading || isAuthorizing}
           >
             Back

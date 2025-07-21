@@ -20,11 +20,16 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     queryFn: () => api.getProfile({}),
     queryKey: [useUserQueryKey],
     retry: (count, error: unknown) => {
-      if ((error as Error)?.message?.includes?.('unauthorized'))
-        return false;
-      if (count >= 3)
-        return false;
-      return true;
+      const errorMessage = ((error as Error)?.message)
+      if (errorMessage) {
+        const networkErrorTerms = ['network', 'failed to fetch', 'offline', 'connection', 'timeout'];
+        if (networkErrorTerms.some(term => errorMessage.toLowerCase().includes(term))) {
+          return true; // Always retry for network-related errors
+        }
+      }
+      // if ((error as Error)?.message?.includes?.('unauthorized'))
+      return false;
+      // return false;
     },
     retryOnMount: false,
     refetchOnMount: false,

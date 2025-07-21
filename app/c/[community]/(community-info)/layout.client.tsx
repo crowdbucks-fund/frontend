@@ -9,7 +9,8 @@ import { authTokenAtom, useAuth } from "states/console/user";
 const SignInModal: FC<{
   isOpen: boolean;
   onSignin: (token: string) => Promise<void>;
-}> = ({ isOpen, onSignin }) => {
+  oauthInstance: string | null;
+}> = ({ isOpen, onSignin, oauthInstance }) => {
   return (
     <ResponsiveDialog
       showCloseButton={false}
@@ -25,9 +26,10 @@ const SignInModal: FC<{
             // description: 'Let us know your email',
           },
         }}
+        compact
         onSignIn={onSignin}
         changeRouteOnCompleteSteps={false}
-        oAuthInstance={null}
+        oAuthInstance={oauthInstance}
       />
     </ResponsiveDialog>
   );
@@ -36,11 +38,14 @@ const SignInModal: FC<{
 export default function CommunityInfoLayoutClient({
   children,
   onAuthorize,
-}: PropsWithChildren<{ onAuthorize: (token: string) => Promise<void> }>) {
+  oauthInstance,
+}: PropsWithChildren<{
+  onAuthorize: (token: string) => Promise<void>;
+  oauthInstance: string | null;
+}>) {
   const { user, isFetching } = useAuth({
     onError(err) {},
   });
-
   const [isAuthorized, setIsAuthorized] = useState(true);
   const setAuthToken = useSetAtom(authTokenAtom);
   useEffect(() => {
@@ -57,7 +62,11 @@ export default function CommunityInfoLayoutClient({
   return (
     <>
       {children}
-      <SignInModal isOpen={!isAuthorized} onSignin={onAuthorized} />
+      <SignInModal
+        isOpen={!isAuthorized}
+        onSignin={onAuthorized}
+        oauthInstance={oauthInstance}
+      />
     </>
   );
 }
