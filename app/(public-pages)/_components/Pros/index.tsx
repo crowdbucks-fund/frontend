@@ -33,7 +33,7 @@ const props = [
     icon: <HappyIcon />,
     title: "From people you know",
     description:
-      "CrowdBucks is created by individual people you know, and not a large faceless corporation",
+      "CrowdBucks is created by individual people you know, and not a large face-less corporation",
   },
 ];
 
