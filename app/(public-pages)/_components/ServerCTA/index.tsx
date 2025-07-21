@@ -92,9 +92,9 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
               }}
               textAlign="center"
             >
-              contact us any time to get CrowdBucks as a fundraiser
+              We’re here to help! Leave your email and we’ll reach out if you
+              have any questions or need support.
             </Text>
-            V
           </VStack>
           <Box
             {...scrollAnimate("fadeInBottom", "resetDelayed1")}

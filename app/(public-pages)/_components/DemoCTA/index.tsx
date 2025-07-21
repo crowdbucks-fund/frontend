@@ -50,7 +50,7 @@ export const DemoCTA = () => {
           position="relative"
           zIndex={99}
         >
-          <VStack gap="2">
+          <VStack gap="2" alignItems="start">
             <Text
               textStyle={{ base: "bold30", md: "bold58" }}
               textAlign={{ base: "center", md: "left" }}
