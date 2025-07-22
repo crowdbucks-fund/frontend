@@ -26,7 +26,7 @@ import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
 import { motion } from "framer-motion";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
 import NextLink from "next/link";
@@ -86,7 +86,7 @@ export default function ConsoleLayout({
     }
   }, [pathname]);
 
-  const [_, setIsMoreDrawerOpen] = useAtom(moreDrawerState);
+  const setIsMoreDrawerOpen = useSetAtom(moreDrawerState);
 
   const isDesktop = useBreakpointValue(
     {

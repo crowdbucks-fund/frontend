@@ -16,6 +16,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import UserEditIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { mobileSidebarMenu } from "constants/console";
+import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { atom, useAtom } from "jotai";
 import NextLink from "next/link";
 import { useAuth } from "states/console/user";
@@ -25,6 +26,7 @@ export const moreDrawerState = atom(false);
 export const MoreOptionsBottomDrawer = () => {
   const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useAtom(moreDrawerState);
   const { user } = useAuth();
+  const authProvider = useUserAuthProvider();
   return (
     <Drawer
       onClose={setIsMoreDrawerOpen.bind(null, false)}
@@ -59,6 +61,9 @@ export const MoreOptionsBottomDrawer = () => {
                     {user?.displayName}
                   </Text>
                 </HStack>
+                <Text color="gray.700" fontSize={"14px"}>
+                  {authProvider.provider}: {authProvider.value}
+                </Text>
               </VStack>
             </HStack>
             {mobileSidebarMenu.length > 0 && (
