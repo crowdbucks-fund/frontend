@@ -310,7 +310,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             onClick={onChangeStep.bind(null, EMAIL_STEP)}
           >
             <Envelope />
-            Sign in with Email
+            Sign in With You Email
           </Button>
           <Button
             colorScheme="primary"
@@ -321,7 +321,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             onClick={onChangeStep.bind(null, MASTODON_STEP)}
           >
             <MastodonIcon />
-            Sign in with Mastodon
+            Sign in With Mastodon
           </Button>
         </VStack>
       </VStack>
