@@ -389,6 +389,9 @@ export default function CreateUpdateCommunityPage({
                       <VStack w="full">
                         <AutoResizeTextarea {...field} />
                         <HStack justify="end" w="full">
+                          <FormErrorMessage flexGrow="1" mt="0">
+                            {errors.summary?.message}
+                          </FormErrorMessage>
                           <Text
                             fontSize="12px"
                             color={
@@ -404,7 +407,6 @@ export default function CreateUpdateCommunityPage({
                     );
                   }}
                 />
-                <FormErrorMessage>{errors.summary?.message}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.banner}>
                 <FormLabel>Banner</FormLabel>

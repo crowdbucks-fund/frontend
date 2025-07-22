@@ -311,6 +311,9 @@ export default function CreateUpdateGoal({
                   <VStack w="full">
                     <AutoResizeTextarea {...field} />
                     <HStack justify="end" w="full">
+                      <FormErrorMessage flexGrow="1" mt="0">
+                        {errors.caption?.message}
+                      </FormErrorMessage>
                       <Text
                         fontSize="12px"
                         color={
@@ -326,7 +329,6 @@ export default function CreateUpdateGoal({
                 );
               }}
             />
-            <FormErrorMessage>{errors.priority?.message}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.priority}>
             <FormLabel>Priority</FormLabel>

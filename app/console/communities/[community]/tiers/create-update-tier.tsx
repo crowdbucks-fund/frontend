@@ -308,6 +308,9 @@ export default function CreateUpdateTier({
                   <VStack w="full">
                     <AutoResizeTextarea {...field} />
                     <HStack justify="end" w="full">
+                      <FormErrorMessage flexGrow="1" mt="0">
+                        {errors.caption?.message}
+                      </FormErrorMessage>
                       <Text
                         fontSize="12px"
                         color={
@@ -323,7 +326,6 @@ export default function CreateUpdateTier({
                 );
               }}
             />
-            <FormErrorMessage>{errors.caption?.message}</FormErrorMessage>
           </FormControl>
         </VStack>
         <VStack w="full">
