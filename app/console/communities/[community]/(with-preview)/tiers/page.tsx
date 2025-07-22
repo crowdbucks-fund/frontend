@@ -203,7 +203,7 @@ export default function TiersPage() {
                 key={tier.id}
                 tier={tier}
                 community={community}
-                href={`/console/communities/${community.id}/tiers/${tier.id}`}
+                // href={`/console/communities/${community.id}/tiers/${tier.id}`}
                 onDelete={setIsDeletingTier.bind(null, tier)}
               />
             );
