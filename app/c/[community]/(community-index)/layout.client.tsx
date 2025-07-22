@@ -2,10 +2,7 @@
 import { Box, VStack } from "@chakra-ui/react";
 import { CommunityTabLayout } from "app/console/communities/[community]/components/community-layout";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
-import {
-  CommunityPreview,
-  CommunityPreviewSlim,
-} from "app/console/communities/components/CommunityPreview";
+import { CommunityPreview } from "app/console/communities/components/CommunityPreview";
 import CupIcon from "assets/icons/cup.svg?react";
 import TreeIcon from "assets/icons/tree.svg?react";
 import { usePathname } from "next/navigation";
@@ -25,7 +22,7 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
   return (
     <VStack gap={{ base: 2, md: 6 }} w="full">
       <Box display={{ base: "none", md: "block" }} w="full">
-        <CommunityPreviewSlim community={community} />
+        <CommunityPreview community={community} />
       </Box>
 
       <CommunityTabLayout
