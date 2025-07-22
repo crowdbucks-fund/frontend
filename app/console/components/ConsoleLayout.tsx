@@ -26,6 +26,7 @@ import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
 import { motion } from "framer-motion";
+import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { useAtom, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
@@ -99,6 +100,7 @@ export default function ConsoleLayout({
   );
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const segments = useSelectedLayoutSegments();
+  const authProvider = useUserAuthProvider();
   const isWithPreviewRoute =
     segments.includes("(with-preview)") ||
     segments.includes("(community-index)");
@@ -401,8 +403,9 @@ export default function ConsoleLayout({
                 activeProps={{
                   color: "brand.black.1",
                 }}
+                overflow="hidden"
               >
-                <HStack overflow="hidden">
+                <HStack overflow="hidden" flexGrow={1}>
                   <Avatar
                     width="36px"
                     height="36px"
@@ -410,9 +413,25 @@ export default function ConsoleLayout({
                       (user as GetProfileResult)?.avatar || defaultAvatar.src
                     }
                   />
-                  <Text isTruncated maxW="full">
-                    {(user as GetProfileResult)?.displayName}
-                  </Text>
+                  <VStack
+                    align="start"
+                    gap="0.5"
+                    flexGrow={1}
+                    overflow="hidden"
+                  >
+                    <Text isTruncated maxW="full">
+                      {(user as GetProfileResult)?.displayName}
+                    </Text>
+                    <Text
+                      as="span"
+                      fontSize="10px"
+                      fontWeight="normal"
+                      maxW="full"
+                      isTruncated
+                    >
+                      {authProvider.provider}: {authProvider.value}
+                    </Text>
+                  </VStack>
                 </HStack>
                 <Icon p={0} width="24px" h="24px">
                   <UserEditIcon />
