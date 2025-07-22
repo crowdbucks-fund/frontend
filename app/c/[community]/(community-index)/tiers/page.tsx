@@ -51,7 +51,7 @@ export default function TierPage() {
               Thanks a lot for your contribution
             </Text>
             <Text textStyle="regular20" mb={4}>
-              Your donation keeps {community.name} to grow
+              Your donation helps {community.name} to grow
             </Text>
             <Image alt="" src={createCommunityImage} width={300} priority />
           </VStack>
