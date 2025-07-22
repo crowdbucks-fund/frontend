@@ -558,6 +558,7 @@ const Step2: FC<StepProps> = ({
   onComplete,
   onChangeStep,
   changeRouteOnCompleteSteps,
+  compact,
 }) => {
   const [showResendCode, setShowResendCode] = useState(false);
   const form = useFormContext<FormType>();
@@ -649,26 +650,60 @@ const Step2: FC<StepProps> = ({
         md: "full",
       }}
       flexGrow="1"
-      justifyContent="center"
+      justifyContent={{
+        base: "start",
+        md: "center",
+      }}
       flexDir={{
         base: "column",
-        md: "row",
+        md: compact ? "column" : "row",
       }}
       maxWidth={{
         base: "full",
         md: "auto",
       }}
     >
-      <EarthIcon
+      <Box
         maxH={{
-          base: "50%",
-          md: "full",
+          base: compact ? "230px" : "full",
+          md: compact ? "230px" : "full",
+        }}
+        h={{
+          base: "calc(100vw / 1.4)",
+          md: compact ? "calc(100vw / 5.5)" : "auto",
         }}
         minW={{
           lg: "450px",
-          base: "auto",
+          base: "calc(100% - 460px)",
         }}
-      />
+      >
+        <Image
+          alt=""
+          src={CoinGlassJar}
+          position="absolute"
+          left={{
+            base: "50%",
+            md: compact ? "50%" : "0",
+          }}
+          top={{
+            base: 0,
+            md: compact ? "30px" : "50%",
+          }}
+          w={compact ? "auto" : "full"}
+          maxH={{
+            base: compact ? "230px" : "full",
+          }}
+          maxW={{
+            base: "85%",
+            md: "42%",
+            lg: "50%",
+          }}
+          transform={{
+            md: compact ? "translateX(-50%) rotate(90deg)" : "translateY(-50%)",
+            base: "translateX(-50%) rotate(90deg)",
+          }}
+        />
+      </Box>
       <VStack
         gap={4}
         textAlign="center"
