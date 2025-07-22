@@ -71,8 +71,7 @@ export default function TiersPage() {
           zIndex={2}
         >
           <Text as="span" mr="2">
-            {community.customAmountsEnabled ? "Disable" : "Enable"} custom
-            amount
+            Enable custom amount
           </Text>
         </Checkbox>
         <CreateFirstEntity
@@ -92,8 +91,7 @@ export default function TiersPage() {
               w="full"
               zIndex={2}
             >
-              {community.customAmountsEnabled ? "Disable" : "Enable"} custom
-              amount
+              Enable custom amount
             </Checkbox>
           }
           mobileButtonText={
@@ -130,7 +128,7 @@ export default function TiersPage() {
           pr="0"
           zIndex={2}
         >
-          {community.customAmountsEnabled ? "Disable" : "Enable"} custom amount
+          Enable custom amount
         </Checkbox>
         <HStack py="4" w="full" display={{ base: "flex", md: "none" }}>
           <Checkbox
@@ -147,8 +145,7 @@ export default function TiersPage() {
             w="full"
             zIndex={2}
           >
-            {community.customAmountsEnabled ? "Disable" : "Enable"} custom
-            amount
+            Enable custom amount
           </Checkbox>
           <Button
             as={NextLink}
