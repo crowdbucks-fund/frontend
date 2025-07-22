@@ -8,6 +8,7 @@ import createCommunityImage from "assets/images/amico.svg";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { TierCard } from "components/TierCard";
 import { usePaymentVerification } from "hooks/usePaymentVerification";
+import { sortTiers } from "hooks/useTiers";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
@@ -95,33 +96,24 @@ export default function TierPage() {
           </HStack>
         </VStack>
       )}
-      {community.tiers
-        .sort((a, b) => {
-          const aScore = a.recommended ? 1 : 0;
-          const bScore = b.recommended ? 1 : 0;
-          return aScore - bScore;
-        })
-        .map((tier) => {
-          return (
-            <TierCard
-              key={tier.id}
-              community={community}
-              tier={tier}
-              btnText={`Join with $${tier.amount} a ${tier.tierFrequency?.unit}`}
-              buttonProps={{
-                as: NextLink,
-                href: joinURL(
-                  getCommunityTiersLink(community),
-                  String(tier.id)
-                ),
-                variant: "solid",
-                colorScheme: tier.recommended ? "secondary" : "primary",
-                color: undefined,
-                border: undefined,
-              }}
-            />
-          );
-        })}
+      {community.tiers.sort(sortTiers).map((tier) => {
+        return (
+          <TierCard
+            key={tier.id}
+            community={community}
+            tier={tier}
+            btnText={`Join with $${tier.amount} a ${tier.tierFrequency?.unit}`}
+            buttonProps={{
+              as: NextLink,
+              href: joinURL(getCommunityTiersLink(community), String(tier.id)),
+              variant: "solid",
+              colorScheme: tier.recommended ? "secondary" : "primary",
+              color: undefined,
+              border: undefined,
+            }}
+          />
+        );
+      })}
     </CenterLayout>
   );
 }
