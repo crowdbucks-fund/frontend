@@ -24,7 +24,7 @@ import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { useSetAtom } from "jotai";
 import { ApiError, api } from "lib/api";
-import { queryClient } from "lib/reactQuery";
+import { formatErrorMessage, queryClient } from "lib/reactQuery";
 import { find, lowerCase, upperFirst } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
@@ -358,40 +358,45 @@ const Email: FC<StepProps> = ({
     isLoading,
     isSuccess,
   } = useMutation({
+    retry: false,
     mutationFn() {
-      return form.trigger("email", { shouldFocus: true }).then((isValid) => {
-        if (isValid)
-          return api
-            .signIn({
-              email: form.getValues("email"),
-            })
-            .then((data) => {
-              if (!!parseInt(data?.code))
-                toast({
-                  status: "success",
-                  colorScheme: "green",
-                  duration: 10000,
-                  title: "Your Magic Code",
-                  description: data?.code,
-                  isClosable: true,
-                });
-              form.setValue("token", data!.token);
-              form.setValue("code", "");
-              onChangeStep(VERIFICATION_STEP);
-            })
-            .catch((error) => {
-              form.setError("email", { message: error.message });
-              throw error;
+      return api
+        .signIn({
+          email: form.getValues("email"),
+        })
+        .then((data) => {
+          if (!!parseInt(data?.code))
+            toast({
+              status: "success",
+              colorScheme: "green",
+              duration: 10000,
+              title: "Your Magic Code",
+              description: data?.code,
+              isClosable: true,
             });
-        throw new Error();
-      });
+          form.setValue("token", data!.token);
+          form.setValue("code", "");
+          onChangeStep(VERIFICATION_STEP);
+        });
+    },
+    onError(error: ApiError) {
+      console.log("xyzxyz", error);
+      form.setError("email", { message: formatErrorMessage(error) });
     },
   });
+
+  const handleSubmitEmail = async () => {
+    const isEmailValid = await form.trigger("email", { shouldFocus: true });
+    if (isEmailValid) {
+      onSubmit();
+    }
+  };
+
   if (step === EMAIL_STEP)
     return (
       <HStack
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleSubmitEmail)}
         gap={6}
         w="full"
         px={props.compact ? 0 : 4}
@@ -601,47 +606,45 @@ const Step2: FC<StepProps> = ({
     isLoading,
     isSuccess,
   } = useMutation({
+    retry: false,
+    mutationFn() {
+      return api
+        .verify({
+          email: form.getValues("email"),
+          code: form.getValues("code"),
+          token: form.getValues("token"),
+        })
+        .then((data) => {
+          if (data && data.token) {
+            form.setValue("token", data.token);
+            if (data.newUser) {
+              onChangeStep(INFORMATION_STEP);
+            } else {
+              onComplete && onComplete(data.token);
+            }
+          } else throw new Error();
+        });
+    },
     onError(error: ApiError) {
       if (error.message) {
-        form.setError("code", { message: error.message });
+        setShowResendCode(true);
+        firstInputRef.current?.focus();
+        form.resetField("code");
+        form.setError("code", { message: formatErrorMessage(error) });
         setTimeout(() => firstInputRef.current?.focus());
       }
     },
-    mutationFn() {
-      return form.trigger("code", { shouldFocus: true }).then((isValid) => {
-        if (isValid)
-          return api
-            .verify({
-              email: form.getValues("email"),
-              code: form.getValues("code"),
-              token: form.getValues("token"),
-            })
-            .then((data) => {
-              if (data && data.token) {
-                form.setValue("token", data.token);
-                if (data.newUser) {
-                  onChangeStep(INFORMATION_STEP);
-                } else {
-                  onComplete && onComplete(data.token);
-                }
-              } else throw new Error();
-            })
-            .catch((error) => {
-              setShowResendCode(true);
-              firstInputRef.current?.focus();
-              form.resetField("code");
-              form.setError("code", { message: error.message });
-              throw error;
-            });
-        throw new Error();
-      });
-    },
   });
+
+  const handleSubmitVerifyCode = async () => {
+    const isCodeValid = await form.trigger("code", { shouldFocus: true });
+    if (isCodeValid) onSubmit();
+  };
 
   return (
     <HStack
       as="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitVerifyCode)}
       gap={6}
       w="full"
       px={4}
@@ -853,28 +856,28 @@ const Step3: FC<StepProps> = ({ onComplete, onChangeStep }) => {
     isLoading,
     isSuccess,
   } = useMutation({
+    retry: false,
     onError(error: ApiError) {
-      error.message && form.setError("name", { message: error.message });
+      error.message &&
+        form.setError("name", { message: formatErrorMessage(error) });
     },
     mutationFn() {
-      return form.trigger("name", { shouldFocus: true }).then((isValid) => {
-        if (isValid)
-          return api
-            .updateProfile({
-              displayName: form.getValues("name"),
-              bio: "",
-              avatar: "",
-            })
-            .then(async () => {
-              setUpToken();
-            })
-            .catch((error) =>
-              form.setError("code", { message: error.message })
-            );
-        throw new Error();
-      });
+      return api
+        .updateProfile({
+          displayName: form.getValues("name"),
+          bio: "",
+          avatar: "",
+        })
+        .then(() => {
+          setUpToken();
+        });
     },
   });
+
+  const handleSubmitName = async () => {
+    const isNameValid = await form.trigger("name", { shouldFocus: true });
+    isNameValid && onSubmit();
+  };
 
   return (
     <VStack
@@ -891,7 +894,7 @@ const Step3: FC<StepProps> = ({ onComplete, onChangeStep }) => {
       justifyContent="center"
       w="full"
       as="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitName)}
     >
       <VStack gap={2} textAlign="center">
         <Text
