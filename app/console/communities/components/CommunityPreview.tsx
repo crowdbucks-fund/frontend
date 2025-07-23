@@ -17,7 +17,7 @@ import {
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import ShareSVGIcon from "assets/icons/Share my community.svg?react";
 import UserEditIcon from "assets/icons/user-edit.svg?react";
-import defaultAvatar from "assets/images/default-avatar.png";
+import defaultAvatar from "assets/images/default-avatar.svg";
 import { useCopyCommunityLink } from "hooks/useCopyCommunityLink";
 import NextLink from "next/link";
 import { FC } from "react";
@@ -54,7 +54,7 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
     <Box {...props} w="full">
       <Box w="full">
         <Box
-          bg="gray.50"
+          bg="#9CA3AF"
           width="100%"
           w="full"
           aspectRatio={{
@@ -89,7 +89,7 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
                 linkCoppiedCallback(community);
               }}
               colorScheme={
-                community.banner?.length ? "whiteAlpha" : "blackAlpha"
+                community.banner?.length ? "whiteAlpha" : "whiteAlpha"
               }
               leftIcon={<ShareIcon />}
               bottom={4}
