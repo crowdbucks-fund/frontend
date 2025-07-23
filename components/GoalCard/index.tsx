@@ -17,16 +17,17 @@ import { UserGoal } from "@xeronith/granola/core/objects";
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import AddIcon from "assets/icons/add-square.svg?react";
-import MaximizeIcon from "assets/icons/maximize.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
+import EditIconBase from "assets/images/edit.svg?react";
 import { format as dateFormat } from "date-fns";
 import { useDesktop } from "hooks/useDesktop";
+import { MenuIcon } from "lucide-react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 
 const DeleteIcon = chakra(TrashIcon);
-const DragIcon = chakra(MaximizeIcon);
+const EditIcon = chakra(EditIconBase);
 const ZERO_PROGRESS_GOAL_PROGRESS = 5;
 
 export type GoalCardProps = {
@@ -151,24 +152,17 @@ export const GoalCard: FC<GoalCardProps> = ({
               {...attributes}
               {...listeners}
               ref={dragRef}
-            >
-              <DragIcon width={{ base: "18px", md: "24px" }} />
-            </IconButton>
-          )}
-          {onDelete && (
-            <IconButton
-              aria-label="Delete Payment Method"
-              variant="ghost"
-              size="sm"
-              colorScheme="blackAlpha"
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete && onDelete();
+              __css={{
+                "& > svg": {
+                  color: "#9CA3AF",
+                  width: {
+                    base: "18px",
+                    md: "24px",
+                  },
+                },
               }}
             >
-              <DeleteIcon width={{ base: "18px", md: "24px" }} />
+              <MenuIcon />
             </IconButton>
           )}
         </HStack>
@@ -205,29 +199,47 @@ export const GoalCard: FC<GoalCardProps> = ({
         {goal.caption}
       </Text>
       {editable && (
-        <HStack gap={4} justify="space-between" w="full" color={"primary.500"}>
+        <HStack gap={4} justify="end" w="full" color={"primary.500"}>
+          {onDelete && (
+            <Button
+              colorScheme={"gray"}
+              cursor={"pointer"}
+              color={"red.500"}
+              border={"2px solid"}
+              size="lg"
+              borderColor={"gray.200"}
+              variant="solid"
+              {...buttonProps}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete && onDelete();
+              }}
+            >
+              <DeleteIcon width={{ base: "18px", md: "24px" }} />
+            </Button>
+          )}
+
           <Button
-            pointerEvents={format === "preview" ? "none" : "unset"}
-            as={format !== "preview" ? NextLink : undefined}
-            w="full"
-            colorScheme={format === "preview" ? "primary-glass" : "gray"}
-            cursor={format === "preview" ? "default" : "pointer"}
-            color={format === "preview" ? "primary.500" : "primary.500"}
-            border={format !== "preview" ? "2px solid" : undefined}
-            borderColor={format !== "preview" ? "gray.200" : undefined}
+            as={NextLink}
+            colorScheme={"gray"}
+            cursor={"pointer"}
+            color={"primary.500"}
+            border={"2px solid"}
+            borderColor={"gray.200"}
             size="lg"
             variant="solid"
-            href={
-              format !== "preview"
-                ? `/console/communities/${community.id}/goals/${goal.id}/edit`
-                : undefined
-            }
+            href={`/console/communities/${community.id}/goals/${goal.id}/edit`}
             onClick={(e) => e.stopPropagation()}
             {...buttonProps}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
           >
-            {btnText}
+            <EditIcon
+              width={{ base: "18px", md: "24px" }}
+              height={{ base: "18px", md: "24px" }}
+            />
           </Button>
         </HStack>
       )}
