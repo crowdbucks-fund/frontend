@@ -124,10 +124,11 @@ export default function GoalsPage() {
               items={localGoals.map((goal) => goal.id)}
               strategy={verticalListSortingStrategy}
             >
-              {localGoals.map((goal) => {
+              {localGoals.map((goal, i) => {
                 return (
                   <DraggableGoalCard
                     key={goal.id}
+                    index={i}
                     goal={goal}
                     community={community}
                     onDelete={setIsDeletingGoal.bind(null, goal)}
@@ -150,8 +151,8 @@ export default function GoalsPage() {
 }
 
 const DraggableGoalCard: FC<
-  GoalCardProps & { goalPriorityLoading: boolean }
-> = ({ goal, community, onDelete, goalPriorityLoading }) => {
+  GoalCardProps & { goalPriorityLoading: boolean; index: number }
+> = ({ goal, community, onDelete, goalPriorityLoading, index }) => {
   const {
     attributes,
     listeners,
@@ -169,7 +170,7 @@ const DraggableGoalCard: FC<
     <GoalCard
       dragRef={setNodeRef}
       draggable
-      goal={goal}
+      goal={{ ...goal, priority: index + 1 }}
       style={style}
       community={community}
       onDelete={onDelete}

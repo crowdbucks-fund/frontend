@@ -90,7 +90,7 @@ export default function CreateUpdateGoal({
 
   const router = useRouter();
   const errors = form.formState.errors;
-  const { data: goals, isFetching: goalsLoading } = useGoals({
+  useGoals({
     communityId,
     onSuccess(data) {
       if (!isEditing) {
@@ -120,7 +120,9 @@ export default function CreateUpdateGoal({
     onSuccess() {
       toast({
         status: "success",
-        title: "The goal was successfully updated",
+        title: `The goal was successfully ${
+          isEditing ? "updated" : "created"
+        }.`,
       });
       router.push(`/console/communities/${communityId}/goals`);
     },
@@ -174,12 +176,12 @@ export default function CreateUpdateGoal({
   const handleSubmit = (
     values: Omit<z.infer<typeof goalZodSchema>, "currency" | "goalFrequency">
   ) => {
-    if (isEditing) return createUpdateGoal(values);
+    return createUpdateGoal(values);
     // reset form to the validated values
-    form.reset(values, {
-      keepValues: false,
-    });
-    router.push(`/console/communities/${community.id}/goals/create/publish`);
+    // form.reset(values, {
+    //   keepValues: false,
+    // });
+    // router.push(`/console/communities/${community.id}/goals/create/publish`);
   };
 
   const editButtonIsDisabled = isEditing && !form.formState.isDirty;
@@ -329,46 +331,6 @@ export default function CreateUpdateGoal({
                 );
               }}
             />
-          </FormControl>
-          <FormControl isInvalid={!!errors.priority}>
-            <FormLabel>Priority</FormLabel>
-            <Controller
-              control={form.control}
-              name="priority"
-              render={({ field }) => {
-                return (
-                  <Select
-                    {...field}
-                    isDisabled={goalsLoading}
-                    icon={
-                      goalsLoading ? (
-                        <CircularProgress
-                          isIndeterminate
-                          size="25px"
-                          color="primary.500"
-                        />
-                      ) : undefined
-                    }
-                  >
-                    {goals &&
-                      goals.map((cr, id) => {
-                        return (
-                          <option key={id} value={id + 1}>
-                            #{id + 1}
-                          </option>
-                        );
-                      })}
-
-                    {!isEditing && goals && (
-                      <option value={goals.length + 1}>
-                        #{goals.length + 1}
-                      </option>
-                    )}
-                  </Select>
-                );
-              }}
-            />
-            <FormErrorMessage>{errors.priority?.message}</FormErrorMessage>
           </FormControl>
         </VStack>
         <VStack w="full">

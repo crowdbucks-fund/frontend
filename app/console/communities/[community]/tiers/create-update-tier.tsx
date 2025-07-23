@@ -117,7 +117,7 @@ export default function CreateUpdateTier({
     onSuccess() {
       toast({
         status: "success",
-        title: "The tier was successfully updated",
+        title: `The tier was successfully ${isEditing ? "updated" : "created"}`,
       });
       router.push(`/console/communities/${communityId}/tiers`);
     },
@@ -171,12 +171,12 @@ export default function CreateUpdateTier({
   const handleSubmit = (
     values: Omit<z.infer<typeof tierZodSchema>, "currency" | "tierFrequency">
   ) => {
-    if (isEditing) return createUpdateTier(values);
+    return createUpdateTier(values);
     // reset form to the validated values
-    form.reset(values, {
-      keepValues: false,
-    });
-    router.push(`/console/communities/${community.id}/tiers/create/publish`);
+    // form.reset(values, {
+    //   keepValues: false,
+    // });
+    // router.push(`/console/communities/${community.id}/tiers/create/publish`);
   };
 
   const editButtonIsDisabled = isEditing && !form.formState.isDirty;
