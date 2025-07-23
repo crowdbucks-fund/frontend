@@ -48,7 +48,7 @@ export const FirstTierModal: FC<FirstTierModal> = ({
             You have your first tier ready!
           </Text>
           <Text fontSize={{ base: "14px", md: "20px" }} color="#343333">
-            you&rsquo;re ready to collect money
+            You&rsquo;re ready to collect money
           </Text>
         </VStack>
         {tier && (
