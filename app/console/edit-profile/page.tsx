@@ -19,7 +19,6 @@ import LogoutIcon from "assets/icons/logout.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
-import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { ApiError, api } from "lib/api";
 import { mutateOnSubmit, useMutationWithFile } from "lib/file";
 import { queryClient } from "lib/reactQuery";
@@ -40,7 +39,6 @@ const schema = z.object({
 
 export default function EditProfilePage() {
   const { user } = useAuth();
-  const authProvider = useUserAuthProvider();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: {
@@ -209,10 +207,6 @@ export default function EditProfilePage() {
             />
             <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
-          <Text w="full" color="gray.700" fontSize={"14px"}>
-            Authenticated using <b>{authProvider.provider}</b> as{" "}
-            <b>{authProvider.value}</b>
-          </Text>
         </VStack>
         <Flex
           gap={{ base: 3, md: 6 }}
