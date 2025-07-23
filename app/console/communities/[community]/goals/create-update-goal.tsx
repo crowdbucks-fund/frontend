@@ -347,7 +347,7 @@ export default function CreateUpdateGoal({
             variant="solid"
             isLoading={isLoading}
           >
-            {isEditing ? "Update changes" : "Create goal"}
+            {isEditing ? "Save changes" : "Create goal"}
           </Button>
           {isEditing && (
             <Button

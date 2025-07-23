@@ -343,7 +343,7 @@ export default function CreateUpdateTier({
             variant="solid"
             isLoading={isLoading}
           >
-            {isEditing ? "Update changes" : "Create a tier"}
+            {isEditing ? "Save changes" : "Create a tier"}
           </Button>
           {isEditing && (
             <Button

@@ -438,7 +438,7 @@ export default function CreateUpdateCommunityPage({
                 isLoading={isLoading}
                 display={{ base: "none", md: "flex" }}
               >
-                {community ? "Update changes" : "Create Community"}
+                {community ? "Save changes" : "Create Community"}
               </Button>
             </VStack>
           </VStack>
@@ -530,7 +530,7 @@ export default function CreateUpdateCommunityPage({
             isLoading={isLoading}
             display={{ base: "flex", md: "none" }}
           >
-            {community ? "Update changes" : "Create Community"}
+            {community ? "Save changes" : "Create Community"}
           </Button>
         </VStack>
       </VStack>
