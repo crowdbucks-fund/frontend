@@ -13,7 +13,8 @@ import {
 import { AddOrUpdateCommunityByUserRequest } from "@xeronith/granola/core/spi";
 import ShareCommunityIcon from "assets/icons/Share my community.svg?react";
 import AddIcon from "assets/icons/add-square.svg?react";
-import EditCommunityIcon from "assets/icons/user-edit.svg?react";
+import { Edit2Icon, EditIcon } from "lucide-react";
+// import EditCommunityIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-avatar.png";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -82,7 +83,7 @@ export const CommunityCard: FC<CommunityCardProps> = ({ community, href }) => {
                   variant="ghost"
                   colorScheme="blackAlpha"
                 >
-                  <EditCommunityIcon />
+                  <EditIcon />
                 </IconButton>
               </Tooltip>
               <Text
@@ -110,23 +111,25 @@ export const CommunityCard: FC<CommunityCardProps> = ({ community, href }) => {
           </VStack>
         </HStack>
         <HStack>
-          <IconButton
-            display={{
-              base: "flex",
-              md: "none",
-            }}
-            color="brand.black.1"
-            as={NextLink}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            href={`/console/communities/${community.id}/edit`}
-            aria-label="edit community"
-            variant="ghost"
-            colorScheme="blackAlpha"
-          >
-            <EditCommunityIcon />
-          </IconButton>
+          <Tooltip label="Edit Community" placement="top">
+            <IconButton
+              display={{
+                base: "flex",
+                md: "none",
+              }}
+              color="brand.black.1"
+              as={NextLink}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              href={`/console/communities/${community.id}/edit`}
+              aria-label="edit community"
+              variant="ghost"
+              colorScheme="blackAlpha"
+            >
+              <Edit2Icon size="20px" />
+            </IconButton>
+          </Tooltip>
           <Tooltip
             placement="top"
             label={hasCopied ? "Copied" : "Copy link"}
