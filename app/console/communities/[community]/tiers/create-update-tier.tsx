@@ -198,6 +198,7 @@ export default function CreateUpdateTier({
         h="full"
         as="form"
         onSubmit={form.handleSubmit(handleSubmit)}
+        gap="6"
       >
         <VStack gap={6} w="full">
           <FormControl isInvalid={!!errors.recommended}>

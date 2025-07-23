@@ -197,7 +197,7 @@ export default function CreateUpdateGoal({
       <VStack
         w="full"
         justify={{ base: "space-between", md: "start" }}
-        gap={8}
+        gap={6}
         flexGrow={1}
         h="full"
         as="form"
