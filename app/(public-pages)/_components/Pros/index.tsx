@@ -3,10 +3,8 @@
 import { Flex, Text, VStack } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 
-import { Image as ChakraImage } from "@chakra-ui/react";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector2 } from "app/(public-pages)/_components/Shapes";
-import Coin from "assets/images/coin.png";
 import FriendlyIcon from "assets/images/friendly.svg?react";
 import HappyIcon from "assets/images/happy.svg?react";
 import LoveIcon from "assets/images/love.svg?react";
@@ -129,15 +127,6 @@ export const MainProps: FC<{ showShapes?: boolean }> = ({
             }}
           />
         )}
-        <ChakraImage
-          src={Coin.src}
-          alt="Coin"
-          width={{ base: "20px", md: "24px" }}
-          display={{ base: "block", md: "none" }}
-          position="absolute"
-          bottom={-16}
-          right="20px"
-        />
       </VStack>
     </Container>
   );
