@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   chakra,
-  Image as ChakraImage,
   Divider,
   Flex,
   HStack,
@@ -18,7 +17,6 @@ import Flash from "assets/icons/flash.svg?react";
 import ZoomIcon from "assets/icons/search-normal.svg?react";
 import UserEdit from "assets/icons/user-edit.svg?react";
 import UserInfo from "assets/icons/user-tag.svg?react";
-import Coin from "assets/images/coin.png";
 import MoneyManagementImage from "assets/images/money-management.png";
 import { scrollAnimate } from "lib/framerMotion";
 import Image from "next/image";
@@ -205,29 +203,6 @@ export const Steps = () => {
             md: "none",
           }}
         />
-        <ChakraImage
-          src={Coin.src}
-          display={{
-            md: "block",
-            base: "none",
-          }}
-          position="absolute"
-          right={10}
-          top="70px"
-          width="23px"
-        />
-        <ChakraImage
-          src={Coin.src}
-          display={{
-            md: "block",
-            base: "none",
-          }}
-          position="absolute"
-          right="200px"
-          bottom="-100px"
-          width="40px"
-        />
-
         <Ellipsis
           position="absolute"
           bottom={{ md: "-160%" }}

@@ -1,20 +1,9 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Image as ChakraImage,
-  Flex,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Ellipsis } from "app/(public-pages)/_components/Shapes";
-import Coin from "assets/images/coin.png";
 import { scrollAnimate } from "lib/framerMotion";
-import NextImage from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -108,11 +97,6 @@ export const Comment: FC<CommentProps> = (props) => {
         <Text textAlign="center" as="span" textStyle="regular16">
           {props.comment}
         </Text>
-        <HStack gap={1}>
-          {[...Array(props.stars).keys()].map((i) => {
-            return <NextImage alt="coin icon" src={Coin} key={i} />;
-          })}
-        </HStack>
       </VStack>
     </VStack>
   );
@@ -172,34 +156,7 @@ export const Comments = () => {
             return <Comment key={i} {...comment} />;
           })}
         </Flex>
-        <Box
-          {...scrollAnimate("fadeInLeft", "resetDelayed2")}
-          position="absolute"
-          top="10px"
-          width="24px"
-          left="30%"
-          display={{
-            base: "none",
-            md: "block",
-          }}
-        >
-          <ChakraImage
-            src={Coin.src}
-            alt="Coin"
-            width={{ base: "20px", md: "24px" }}
-          />
-        </Box>
         <Ellipsis position="absolute" top="-200px" left="-600px" zIndex={-1} />
-
-        <ChakraImage
-          src={Coin.src}
-          alt="Coin"
-          width={{ base: "20px", md: "24px" }}
-          display={{ base: "block", md: "none" }}
-          position="absolute"
-          bottom={-10}
-          right="20px"
-        />
       </VStack>
     </Container>
   );

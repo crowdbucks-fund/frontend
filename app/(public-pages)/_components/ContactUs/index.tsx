@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   chakra,
-  Image as ChakraImage,
   Divider,
   Flex,
   FormControl,
@@ -21,7 +20,6 @@ import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
 import CallIcon from "assets/icons/call.svg?react";
 import LocationIcon from "assets/icons/location.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
-import Coin from "assets/images/coin.png";
 import MoneyBinImage from "assets/images/money-bin.png";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
@@ -293,17 +291,6 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
               md: "none",
             }}
           />
-
-          <ChakraImage
-            src={Coin.src}
-            alt="Coin"
-            display={{ base: "block", md: "none" }}
-            position="absolute"
-            bottom={20}
-            left="20px"
-            width="30px"
-          />
-          {/* <Star display={{ base: 'none', md: 'block' }} position="absolute" bottom="150px" right="140px" zIndex="1" width="23px" /> */}
         </VStack>
 
         {showShapes && (

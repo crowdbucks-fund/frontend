@@ -3,7 +3,6 @@
 import {
   Box,
   Button,
-  Image as ChakraImage,
   FormControl,
   FormErrorMessage,
   HStack,
@@ -17,7 +16,6 @@ import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
 import ThunderIcon from "assets/icons/Thunder.svg?react";
 import SendIcon from "assets/icons/send.svg?react";
-import Coin from "assets/images/coin.png";
 import { toast } from "components/Toast";
 import { ApiError, api } from "lib/api";
 import { scrollAnimate } from "lib/framerMotion";
@@ -187,18 +185,6 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
                 md: "none",
               }}
             />
-            <Box
-              {...scrollAnimate("fadeInBottom", "resetDelayed1")}
-              position="absolute"
-              top="-40px"
-              left="-50px"
-              display={{
-                base: "none",
-                md: "block",
-              }}
-            >
-              <ChakraImage src={Coin.src} width="23px" />
-            </Box>
           </>
         )}
         {shapesStyle === "custom" && (
