@@ -250,7 +250,13 @@ export default function CreateUpdateCommunityPage({
 
   return (
     <>
-      <VStack as="form" onSubmit={form.handleSubmit(mutateOnSubmit(mutate))}>
+      <VStack
+        as="form"
+        onSubmit={form.handleSubmit(mutateOnSubmit(mutate))}
+        flexGrow="1"
+        gap="6"
+        height="full"
+      >
         <CenterLayout
           flexGrow={1}
           h="full"
