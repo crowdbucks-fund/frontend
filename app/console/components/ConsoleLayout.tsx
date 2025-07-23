@@ -428,8 +428,19 @@ export default function ConsoleLayout({
                       fontWeight="normal"
                       maxW="full"
                       isTruncated
+                      color="#6B7280"
                     >
-                      {authProvider.provider}: {authProvider.value}
+                      {authProvider.provider}:
+                    </Text>
+                    <Text
+                      as="span"
+                      fontSize="10px"
+                      fontWeight="normal"
+                      maxW="full"
+                      isTruncated
+                      color="#6B7280"
+                    >
+                      {authProvider.value}
                     </Text>
                   </VStack>
                 </HStack>
