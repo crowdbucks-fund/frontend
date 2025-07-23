@@ -17,7 +17,8 @@ import Flash from "assets/icons/flash.svg?react";
 import ZoomIcon from "assets/icons/search-normal.svg?react";
 import UserEdit from "assets/icons/user-edit.svg?react";
 import UserInfo from "assets/icons/user-tag.svg?react";
-import MoneyManagementImage from "assets/images/money-management.png";
+import HelperImage from "assets/images/woman invests.svg";
+import FundraiserImage from "assets/images/woman received dividend payments 2.svg";
 import { scrollAnimate } from "lib/framerMotion";
 import Image from "next/image";
 import { Fragment, useState } from "react";
@@ -25,34 +26,40 @@ import { Fragment, useState } from "react";
 const ChakraNextImage = chakra(Image);
 
 const data = {
-  helper: [
-    {
-      icon: <UserEdit />,
-      title: "Join CrowdBucks",
-    },
-    {
-      icon: <ZoomIcon />,
-      title: "Find your favorite fundraiser",
-    },
-    {
-      icon: <HappyIcon />,
-      title: "Help out",
-    },
-  ],
-  fundraiser: [
-    {
-      icon: <UserEdit />,
-      title: "Join CrowdBucks",
-    },
-    {
-      icon: <Flash />,
-      title: "Share your CrowdBucks page",
-    },
-    {
-      icon: <UserInfo />,
-      title: "Build sustainable revenue streams",
-    },
-  ],
+  helper: {
+    steps: [
+      {
+        icon: <UserEdit />,
+        title: "Join CrowdBucks",
+      },
+      {
+        icon: <ZoomIcon />,
+        title: "Find your favorite fundraiser",
+      },
+      {
+        icon: <HappyIcon />,
+        title: "Help out",
+      },
+    ],
+    image: HelperImage,
+  },
+  fundraiser: {
+    steps: [
+      {
+        icon: <UserEdit />,
+        title: "Join CrowdBucks",
+      },
+      {
+        icon: <Flash />,
+        title: "Share your CrowdBucks page",
+      },
+      {
+        icon: <UserInfo />,
+        title: "Build sustainable revenue streams",
+      },
+    ],
+    image: FundraiserImage,
+  },
 };
 
 export const Steps = () => {
@@ -138,7 +145,7 @@ export const Steps = () => {
             w="full"
             {...scrollAnimate("fadeInBottom", "resetDelayed1")}
           >
-            {data[selectedRole].map((row) => {
+            {data[selectedRole].steps.map((row) => {
               return (
                 <HStack
                   key={row.title}
@@ -186,7 +193,7 @@ export const Steps = () => {
           {...scrollAnimate("fadeInRight", "resetDelayed1")}
         >
           <ChakraNextImage
-            src={MoneyManagementImage}
+            src={data[selectedRole].image}
             priority
             objectFit="cover"
             objectPosition="10%"
