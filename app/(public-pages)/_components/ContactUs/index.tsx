@@ -17,10 +17,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
-import CallIcon from "assets/icons/call.svg?react";
-import LocationIcon from "assets/icons/location.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
-import MoneyBinImage from "assets/images/money-bin.png";
+import MoneyBinImage from "assets/images/woman has a successful contract.svg";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
 import { api } from "lib/api";
@@ -31,39 +29,8 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { z } from "zod";
+
 const ChakraNextImage = chakra(Image);
-
-const data = [
-  {
-    icon: <LocationIcon />,
-    data: (
-      <>
-        Somewhere on a{" "}
-        <Text as="span" color="primary.400">
-          4th
-        </Text>{" "}
-        street
-      </>
-    ),
-  },
-
-  {
-    icon: <CallIcon />,
-    data: (
-      <>
-        <Text as="span" color="primary.400">
-          +89{" "}
-        </Text>
-        5869 1234
-      </>
-    ),
-  },
-
-  {
-    icon: <EnvelopeIcon />,
-    data: <>{platformInfo.contact.email}</>,
-  },
-];
 
 const schema = z.object({
   name: z.string().trim().min(1),
