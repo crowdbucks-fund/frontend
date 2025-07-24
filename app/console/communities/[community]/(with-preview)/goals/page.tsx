@@ -26,7 +26,7 @@ import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import NextLink from "next/link";
 import { useParams } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useMutation } from "react-query";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
@@ -38,11 +38,6 @@ export default function GoalsPage() {
   const { data: goals, isLoading } = useGoals({
     communityId: community.id,
   });
-  const [localGoals, setLocalGoals] = useState<UserGoal[]>([]);
-
-  useEffect(() => {
-    if (goals) setLocalGoals(goals);
-  }, [goals]);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -66,7 +61,7 @@ export default function GoalsPage() {
       const newIndex = goals.findIndex((goal) => goal.id === over.id);
 
       const newArr = arrayMove(goals, oldIndex, newIndex);
-      setLocalGoals(newArr);
+      useGoals.setData(community.id, newArr);
       updateGoalsPriority({
         goalPriorities: newArr.map((goal, i) => ({
           id: goal.id,
@@ -121,10 +116,10 @@ export default function GoalsPage() {
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={localGoals.map((goal) => goal.id)}
+              items={goals.map((goal) => goal.id)}
               strategy={verticalListSortingStrategy}
             >
-              {localGoals.map((goal, i) => {
+              {goals.map((goal, i) => {
                 return (
                   <DraggableGoalCard
                     key={goal.id}

@@ -1,17 +1,18 @@
 "use client";
 import {
   Button,
-  CircularProgress,
   FormControl,
   FormErrorMessage,
   FormLabel,
   HStack,
   Input,
-  Select,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { GetGoalByUserResult } from "@xeronith/granola/core/spi";
+import {
+  AddOrUpdateGoalByUserRequest,
+  GetGoalByUserResult,
+} from "@xeronith/granola/core/spi";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
@@ -21,7 +22,7 @@ import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
 import { zodInputStringPipe } from "lib/zod";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
@@ -100,7 +101,13 @@ export default function CreateUpdateGoal({
   });
   const { data: currencies, isLoading: currenciesLoading } = useCurrencies();
   const { data: goalsFrequencies, isLoading: frequenciesLoading } =
-    useGoalsFrequency();
+    useGoalsFrequency({
+      select(data) {
+        return data.filter(
+          (frequency) => frequency.name.toLowerCase() === "milestone"
+        );
+      },
+    });
 
   useEffect(() => {
     if (currencies && !form.getValues("currencyId")) {
@@ -116,8 +123,11 @@ export default function CreateUpdateGoal({
   }, [goalsFrequencies]);
 
   const { mutate: createUpdateGoal, isLoading } = useMutation({
-    mutationFn: api.addOrUpdateGoalByUser.bind(api),
-    onSuccess() {
+    mutationFn: (data: AddOrUpdateGoalByUserRequest) =>
+      api
+        .addOrUpdateGoalByUser(data)
+        .then(() => useGoals.invalidateQuery(communityId)),
+    async onSuccess() {
       toast({
         status: "success",
         title: `The goal was successfully ${
@@ -177,11 +187,6 @@ export default function CreateUpdateGoal({
     values: Omit<z.infer<typeof goalZodSchema>, "currency" | "goalFrequency">
   ) => {
     return createUpdateGoal(values);
-    // reset form to the validated values
-    // form.reset(values, {
-    //   keepValues: false,
-    // });
-    // router.push(`/console/communities/${community.id}/goals/create/publish`);
   };
 
   const editButtonIsDisabled = isEditing && !form.formState.isDirty;
@@ -223,8 +228,9 @@ export default function CreateUpdateGoal({
                   render={({ field }) => {
                     return (
                       <Input
+                        tabIndex={-1}
                         id="currencyId"
-                        value={field.value?.name}
+                        defaultValue={field.value?.name}
                         readOnly
                         isDisabled={isEditing}
                       />
@@ -251,7 +257,7 @@ export default function CreateUpdateGoal({
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl
+              {/* <FormControl
                 isInvalid={!!errors.goalFrequencyId}
                 h="full"
                 display="flex"
@@ -300,7 +306,7 @@ export default function CreateUpdateGoal({
                 <FormErrorMessage>
                   {errors.goalFrequencyId?.message}
                 </FormErrorMessage>
-              </FormControl>
+              </FormControl> */}
             </HStack>
           </VStack>
           <FormControl isInvalid={!!errors.caption}>
@@ -368,7 +374,9 @@ export default function CreateUpdateGoal({
           deletingGoal={goal}
           onClose={setIsDeleting.bind(null, false)}
           onDeleted={() => {
-            router.push(`/console/communities/${communityId}/goals/`);
+            startTransition(() => {
+              router.push(`/console/communities/${communityId}/goals/`);
+            });
           }}
         />
       )}
