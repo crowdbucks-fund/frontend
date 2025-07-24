@@ -48,6 +48,7 @@ export const OnboardingState: FC<{
               base: "12px",
               md: "18px",
             }}
+            suppressHydrationWarning
           >
             {passedSteps}/{steps}
           </Text>
