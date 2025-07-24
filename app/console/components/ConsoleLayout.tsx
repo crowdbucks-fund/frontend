@@ -14,7 +14,6 @@ import {
   IconButton,
   Text,
   VStack,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { GetProfileResult } from "@xeronith/granola/core/spi";
@@ -91,15 +90,6 @@ export default function ConsoleLayout({
 
   const setIsMoreDrawerOpen = useSetAtom(moreDrawerState);
 
-  const isDesktop = useBreakpointValue(
-    {
-      base: false,
-      md: true,
-    },
-    {
-      fallback: "base",
-    }
-  );
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const segments = useSelectedLayoutSegments();
   const authProvider = useUserAuthProvider();
@@ -366,7 +356,7 @@ export default function ConsoleLayout({
             },
           }}
           initial="closed"
-          animate={isSidebarOpen && !!user && isDesktop ? "open" : "closed"}
+          animate={isSidebarOpen && !!user ? "open" : "closed"}
           display={{ md: "block", base: "none" }}
           position="absolute"
           h="calc(100% - 25px)"
@@ -526,7 +516,7 @@ export default function ConsoleLayout({
           }}
           transition={{}}
           initial="closed"
-          animate={isSidebarOpen && !!user && isDesktop ? "open" : "closed"}
+          animate={isSidebarOpen && !!user ? "open" : "closed"}
           flexGrow={1}
           rounded="20px"
           border={{ md: !isWithPreviewRoute ? "2px solid" : "0" }}

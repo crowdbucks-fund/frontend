@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import "./global.css";
 
+import { api } from "lib/api";
 import { AUTH_TOKEN_KEY } from "lib/auth";
 import { cookies } from "next/headers";
 import { platformInfo } from "platform";
+// import { cache } from "react";
+import { GetProfileResult } from "@xeronith/granola/core/spi";
+import { cache } from "react";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
@@ -16,10 +20,18 @@ export const metadata: Metadata = {
   title: "CrowdBucks",
 };
 
-export const getAuthTokenFromCookie = async () => {
+export const getAuthTokenFromCookie = cache(async () => {
   "use server";
-  return (await cookies()).get(AUTH_TOKEN_KEY)?.value;
-};
+  const token = (await cookies()).get(AUTH_TOKEN_KEY)?.value;
+  return token;
+});
+
+let _profilePromise: Promise<GetProfileResult | null> = null!;
+const getUserProfile = cache(async (token: string) => {
+  if (_profilePromise) return await _profilePromise;
+  _profilePromise = api.getProfile({}, { token }).catch(() => null);
+  return await _profilePromise;
+});
 
 export default async function RootLayout({
   children,
@@ -27,10 +39,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const currentAuthToken = await getAuthTokenFromCookie();
+  const userProfile = currentAuthToken
+    ? await getUserProfile(currentAuthToken)
+    : null;
+
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        <Providers authToken={currentAuthToken}>{children}</Providers>
+        <Providers userProfile={userProfile}>{children}</Providers>
       </body>
     </html>
   );

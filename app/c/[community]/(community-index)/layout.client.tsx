@@ -1,10 +1,10 @@
 "use client";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, chakra, VStack } from "@chakra-ui/react";
 import { CommunityTabLayout } from "app/console/communities/[community]/components/community-layout";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CommunityPreview } from "app/console/communities/components/CommunityPreview";
-import CupIcon from "assets/icons/cup.svg?react";
-import TreeIcon from "assets/icons/tree.svg?react";
+import CupIconBase from "assets/icons/cup.svg?react";
+import TreeIconBase from "assets/icons/tree.svg?react";
 import { usePathname } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import {
@@ -12,6 +12,9 @@ import {
   getCommunityLink,
   getCommunityTiersLink,
 } from "utils/community";
+
+const CupIcon = chakra(CupIconBase);
+const TreeIcon = chakra(TreeIconBase);
 
 export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
   children,
@@ -44,7 +47,9 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
         links={(community) => [
           {
             title: "Tiers",
-            icon: <TreeIcon width="24px" />,
+            icon: (
+              <TreeIcon width="24px" display={{ base: "none", md: "block" }} />
+            ),
             href: getCommunityLink(community),
             props: {
               activatedLink:
@@ -54,7 +59,9 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
           },
           {
             title: "Goals",
-            icon: <CupIcon width="24px" />,
+            icon: (
+              <CupIcon width="24px" display={{ base: "none", md: "block" }} />
+            ),
             href: getCommunityGoalsLink(community),
           },
         ]}

@@ -147,11 +147,15 @@ export const GoalCard: FC<GoalCardProps> = ({
           </Text>
         </HStack>
         <HStack>
-          {draggable && isDesktop && (
+          {draggable && (
             <IconButton
               aria-label="Drag the goal to change its priority"
               variant="ghost"
               size="sm"
+              display={{
+                base: "none",
+                md: "flex",
+              }}
               colorScheme="blackAlpha"
               {...attributes}
               {...listeners}

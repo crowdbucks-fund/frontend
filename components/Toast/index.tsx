@@ -93,7 +93,6 @@ const { ToastContainer, toast } = createStandaloneToast({
   theme,
   defaultOptions: {
     containerStyle: { maxW: "none" },
-    // duration: 400000,
     render: function Render(props) {
       const isDesktop = useBreakpointValue({ md: true, base: false });
       return isDesktop ? (

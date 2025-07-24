@@ -1,4 +1,4 @@
-import { api } from "lib/api.server";
+import { api } from "lib/api";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { CommunityPublicPageLayout } from "./layout.client";

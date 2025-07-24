@@ -1,18 +1,21 @@
 "use client";
 
-import { Box, Button, HStack, VStack } from "@chakra-ui/react";
+import { Box, Button, chakra, HStack, VStack } from "@chakra-ui/react";
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
-import CupIcon from "assets/icons/cup.svg?react";
-import HomeIcon from "assets/icons/home NB.svg?react";
-import TreeIcon from "assets/icons/tree.svg?react";
+import CupIconBase from "assets/icons/cup.svg?react";
+import HomeIconBase from "assets/icons/home NB.svg?react";
+import TreeIconBase from "assets/icons/tree.svg?react";
 import { ActiveLink } from "components/Link";
-import { useDesktop } from "hooks/useDesktop";
 import { FC, PropsWithChildren, ReactNode } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { CommunityPreview } from "../../components/CommunityPreview";
 import CommunityValidatorLayout, {
   useCurrentCommunity,
 } from "./community-validator-layout";
+
+const HomeIcon = chakra(HomeIconBase);
+const TreeIcon = chakra(TreeIconBase);
+const CupIcon = chakra(CupIconBase);
 
 export default function CommunityLayout({ children }: PropsWithChildren) {
   return (
@@ -39,7 +42,6 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
   communityPreview = true,
   beforeTab,
 }) => {
-  const isDesktop = useDesktop();
   return (
     <VStack flexGrow={{ base: 1, md: "unset" }} w="full">
       <Box
@@ -121,7 +123,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
                     },
                   },
                 }}
-                leftIcon={isDesktop ? tab.icon : undefined}
+                leftIcon={tab.icon}
                 href={tab.href}
                 scroll={false}
                 {...(tab.props || {})}
@@ -154,18 +156,43 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
 const links = (community: GetCommunityByUserResult) => [
   {
     title: "Home",
-    icon: <HomeIcon width="24px" strokeWidth="2.7px" />,
+    icon: (
+      <HomeIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+        strokeWidth="2.7px"
+      />
+    ),
     href: `/console/communities/${community.id}`,
     props: {},
   },
   {
     title: "Tiers",
-    icon: <TreeIcon width="24px" />,
+    icon: (
+      <TreeIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+      />
+    ),
     href: `/console/communities/${community.id}/tiers`,
   },
   {
     title: "Goals",
-    icon: <CupIcon width="24px" />,
+    icon: (
+      <CupIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+      />
+    ),
     href: `/console/communities/${community.id}/goals`,
   },
 ];

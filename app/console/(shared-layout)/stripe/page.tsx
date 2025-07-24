@@ -1,13 +1,12 @@
 "use client";
-import { Button, CircularProgress, VStack } from "@chakra-ui/react";
+import { Button, chakra, CircularProgress, VStack } from "@chakra-ui/react";
 import { CenterLayout } from "app/console/components/CenterLayout";
-import LinkIcon from "assets/icons//link-2.svg?react";
+import LinkIconBase from "assets/icons/link-2.svg?react";
 import StripeLogo from "assets/images/Stripe.svg";
 import { CreateFirstEntity } from "components/FirstEntity";
 import { StripeCard } from "components/StripeCard";
 import { toast } from "components/Toast";
 import { useConnectToStripe } from "hooks/useConnectToStripe";
-import { useDesktop } from "hooks/useDesktop";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { isStripeConnected } from "lib/stripe";
@@ -16,8 +15,9 @@ import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { useAuth } from "states/console/user";
 
+const LinkIcon = chakra(LinkIconBase);
+
 export default function StripePage() {
-  const isDesktop = useDesktop();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const {
     user,
@@ -93,17 +93,23 @@ export default function StripePage() {
                 isIndeterminate
                 size="18px"
                 p="3px"
-                color={isDesktop ? "primary.500" : "black"}
+                __css={{
+                  color: {
+                    md: "primary.500",
+                    base: "black",
+                  },
+                }}
               />
-            ) : !isDesktop ? (
-              <LinkIcon />
-            ) : undefined
+            ) : (
+              <LinkIcon
+                display={{
+                  base: "none",
+                  md: "block",
+                }}
+              />
+            )
           }
-          btnText={
-            isDesktop
-              ? "Connect your Stripe account to collect money"
-              : "Connect to Stripe to collect money"
-          }
+          btnText={"Connect to Stripe to collect money"}
           link={"#"}
           disabled={loading}
           onClick={connectToStripe}

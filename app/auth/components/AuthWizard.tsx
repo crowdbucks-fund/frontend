@@ -36,7 +36,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { useMutation } from "react-query";
-import { authTokenAtom } from "states/console/user";
+import { userProfileSSR } from "states/console/user";
 import { handleSubmit } from "utils/formHandler";
 import { maskEmail } from "utils/strings";
 import { z } from "zod";
@@ -88,7 +88,7 @@ type FormType = z.infer<typeof schema>;
 
 export const AuthWizard: FC<AuthWizardProps> = (props) => {
   const router = useRouter();
-  const setAuthToken = useSetAtom(authTokenAtom);
+  const setAuthToken = useSetAtom(userProfileSSR);
   const onComplete = async (token: string) => {
     setAuthToken(token);
     if (props.onSignIn) {

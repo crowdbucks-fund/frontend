@@ -2,6 +2,7 @@
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
+import { GetProfileResult } from "@xeronith/granola/core/spi";
 import { ToastContainer } from "components/Toast";
 import { Provider as JotaiProvider } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
@@ -11,18 +12,18 @@ import "lib/zod";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { QueryClientProvider } from "react-query";
-import { authTokenAtom } from "states/console/user";
+import { userProfileSSR } from "states/console/user";
 import theme from "theme/chakra.config";
 
 export function Providers({
   children,
-  authToken,
+  userProfile = null,
 }: {
   children: React.ReactNode;
-  authToken?: string;
+  userProfile?: GetProfileResult | null;
 }) {
   const path = usePathname();
-  useHydrateAtoms([[authTokenAtom, authToken]], { store });
+  useHydrateAtoms([[userProfileSSR, userProfile]], { store });
   useEffect(() => {
     const appHeight = () => {
       const doc = document.documentElement;

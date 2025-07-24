@@ -15,7 +15,7 @@ import ShareCommunityIcon from "assets/icons/Share my community.svg?react";
 import AddIcon from "assets/icons/add-square.svg?react";
 import { Edit2Icon, EditIcon } from "lucide-react";
 // import EditCommunityIcon from "assets/icons/user-edit.svg?react";
-import defaultAvatar from "assets/images/default-avatar.png";
+import defaultAvatar from "assets/images/default-avatar.svg";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
