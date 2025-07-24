@@ -93,10 +93,16 @@ const { ToastContainer, toast } = createStandaloneToast({
   theme,
   defaultOptions: {
     containerStyle: { maxW: "none" },
+    // duration: 400000,
     render: function Render(props) {
       const isDesktop = useBreakpointValue({ md: true, base: false });
       return isDesktop ? (
-        <Alert status={props.status} variant="brand" maxW="none">
+        <Alert
+          status={props.status}
+          variant="brand"
+          maxW="none"
+          className="animate-slide-top"
+        >
           <AlertIcon>
             {props.status === "success" && <CircleCheckIcon />}
             {props.status === "error" && <ErrorIcon />}

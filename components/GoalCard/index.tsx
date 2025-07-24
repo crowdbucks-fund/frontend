@@ -68,6 +68,7 @@ export const GoalCard: FC<GoalCardProps> = ({
 
   return (
     <VStack
+      id={`goal-${goal.id}`}
       role="group"
       gap={{ base: 4, md: 7 }}
       color="brand.black.1"

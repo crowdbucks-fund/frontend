@@ -26,6 +26,7 @@ import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
 import { motion } from "framer-motion";
+import { useScrollRestoration } from "hooks/useScrollRestoration";
 import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { useAtom, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
@@ -70,6 +71,7 @@ export default function ConsoleLayout({
   children,
   publicPage = false,
 }: PropsWithChildren<{ publicPage?: boolean }>) {
+  useScrollRestoration();
   const { user, loading, isFetching } = useAuth(
     publicPage ? { onError() {} } : {}
   );
