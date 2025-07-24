@@ -1,7 +1,7 @@
 import API from '@xeronith/granola';
 
 const baseApi = new API(process.env.NEXT_PUBLIC_API_BASE as string, {
-  suppressConsoleOutput: process.env.NODE_ENV === 'production',
+  // suppressConsoleOutput: process.env.NODE_ENV === 'production',
 })
 
 // export const api = new Proxy(baseApi, {
