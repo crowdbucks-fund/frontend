@@ -4,7 +4,7 @@ import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { useSetAtom } from "jotai";
 import { queryClient } from "lib/reactQuery";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { authTokenAtom, useAuth } from "states/console/user";
+import { useAuth, userProfileSSR } from "states/console/user";
 
 const SignInModal: FC<{
   isOpen: boolean;
@@ -50,7 +50,7 @@ export default function CommunityInfoLayoutClient({
     onError(err) {},
   });
   const [isAuthorized, setIsAuthorized] = useState(true);
-  const setAuthToken = useSetAtom(authTokenAtom);
+  const setAuthToken = useSetAtom(userProfileSSR);
   useEffect(() => {
     if (!user && !isFetching) setIsAuthorized(false);
   }, [user, isFetching]);

@@ -21,7 +21,7 @@ import { CenterLayout } from "app/console/components/CenterLayout";
 import CameraIcon from "assets/icons/camera.svg?react";
 import CheckIcon from "assets/icons/tick-circle.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
-import defaultAvatar from "assets/images/default-avatar.png";
+import defaultAvatar from "assets/images/default-avatar.svg";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
 import { ApiError, api } from "lib/api";

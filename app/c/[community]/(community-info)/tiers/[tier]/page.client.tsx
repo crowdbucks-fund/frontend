@@ -8,10 +8,12 @@ import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
+import { useAuth } from "states/console/user";
 import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 
 export default function TierClientPage({ tier }: { tier: UserTier }) {
+  const { user } = useAuth();
   const community = useCurrentCommunity();
   const pathname = usePathname();
   useUpdateBreadcrumb({
@@ -46,15 +48,16 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
   });
 
   useEffect(() => {
-    createStripeIntent({
-      communityId: community.id,
-      tierFrequencyId: tier.tierFrequencyId,
-      amount: tier.amount,
-      tierId: tier.id,
-      goalFrequencyId: 0,
-      goalId: 0,
-    });
-  }, []);
+    if (user)
+      createStripeIntent({
+        communityId: community.id,
+        tierFrequencyId: tier.tierFrequencyId,
+        amount: tier.amount,
+        tierId: tier.id,
+        goalFrequencyId: 0,
+        goalId: 0,
+      });
+  }, [user]);
 
   return (
     <CenterLayout

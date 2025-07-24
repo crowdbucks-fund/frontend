@@ -7,10 +7,10 @@ import { usePathname } from 'next/navigation'
 import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
 export const useUserQueryKey = 'getProfile'
-export const authTokenAtom = atom<string | undefined>(undefined)
+export const userProfileSSR = atom<GetProfileResult | null>(null)
 
 export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey> = {}) => {
-  const [token] = useAtom(authTokenAtom);
+  const [userProfileFromServer] = useAtom(userProfileSSR);
   const pathName = usePathname();
   const {
     data: user,
@@ -35,7 +35,8 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     retryOnMount: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    enabled: !!token || pathName.startsWith('/console')
+    initialData: userProfileFromServer || undefined,
+    enabled: !!userProfileFromServer || pathName.startsWith('/console')
   })
 
   return { user, loading, isFetching }
