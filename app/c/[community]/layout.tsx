@@ -27,7 +27,11 @@ export default async function CommunityLayout({
   if (!community) return notFound();
   (params as any).currentCommunity = community;
   return (
-    <ConsoleLayout publicPage getProfilePromise={getProfilePromise}>
+    <ConsoleLayout
+      publicPage
+      getProfilePromise={getProfilePromise}
+      authRequired={false}
+    >
       <CommunityPublicPageLayout community={community}>
         {children}
       </CommunityPublicPageLayout>

@@ -22,6 +22,7 @@ export const SharedLayout: FC<BoxProps> = (props) => {
   const avatarSrc = useMemo(() => {
     return user?.avatar || defaultAvatar.src;
   }, [user?.avatar]);
+
   return (
     <Box
       {...props}

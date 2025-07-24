@@ -15,7 +15,6 @@ import {
   VStack,
   chakra,
 } from "@chakra-ui/react";
-import { AtSymbolIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import CameraIcon from "assets/icons/camera.svg?react";
@@ -49,7 +48,6 @@ import { DeleteCommunityModal } from "./components/DeleteCommunityModal";
 const DeleteIcon = chakra(TrashIcon);
 const UploadIcon = chakra(CameraIcon);
 const HandleCheckIcon = chakra(CheckIcon);
-const HandleIcon = chakra(AtSymbolIcon);
 
 const requiredString = z.string().min(1);
 

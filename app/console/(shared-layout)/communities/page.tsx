@@ -9,10 +9,18 @@ import { FullPageLoading } from "components/Loading";
 import { useCommunities } from "hooks/useCommunities";
 import Link from "next/link";
 import { FC } from "react";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 
 export default function CommunitiesPage() {
   const { data: communities, isLoading } = useCommunities();
-
+  useUpdateBreadcrumb({
+    breadcrumb: [
+      {
+        title: "Communities",
+        link: "/console/communities",
+      },
+    ],
+  });
   return (
     <>
       {isLoading && <FullPageLoading />}
