@@ -235,11 +235,14 @@ export const GoalCard: FC<GoalCardProps> = ({
             {...buttonProps}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
+            w={btnText ? "full" : undefined}
           >
-            <EditIcon
-              width={{ base: "18px", md: "24px" }}
-              height={{ base: "18px", md: "24px" }}
-            />
+            {btnText || (
+              <EditIcon
+                width={{ base: "18px", md: "24px" }}
+                height={{ base: "18px", md: "24px" }}
+              />
+            )}
           </Button>
         </HStack>
       )}
