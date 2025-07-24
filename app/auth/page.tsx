@@ -7,10 +7,10 @@ import { AuthWizard } from "./components/AuthWizard";
 export const setAuthCookie = async (token: string) => {
   "use server";
   (await cookies()).set(AUTH_TOKEN_KEY, token, {
-    httpOnly: true,
+    httpOnly: false,
     maxAge: 60 * 60 * 24 * 14, // 14 days
     sameSite: process.env.NODE_ENV === "production" ? "lax" : "lax", // Use 'none' for cross-site cookies
-    secure: process.env.NODE_ENV === "production", // must be HTTPS with SameSite=None
+    secure: false, // must be HTTPS with SameSite=None
   });
 };
 
