@@ -123,7 +123,10 @@ export const GoalCard: FC<GoalCardProps> = ({
               borderLeftColor="primary.500"
               textTransform="lowercase"
             >
-              ${goal.amount} {goal.goalFrequency?.name}
+              ${goal.amount}{" "}
+              {goal.goalFrequency?.name !== "Milestone"
+                ? goal.goalFrequency?.name
+                : null}
             </Text>
             <Text
               fontSize={{
