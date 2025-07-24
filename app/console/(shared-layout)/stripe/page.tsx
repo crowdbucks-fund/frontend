@@ -13,6 +13,7 @@ import { isStripeConnected } from "lib/stripe";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
 
 const LinkIcon = chakra(LinkIconBase);
@@ -26,7 +27,14 @@ export default function StripePage() {
   } = useAuth();
   const router = useRouter();
   const isVerifying = useSearchParams().get("verify") !== null;
-
+  useUpdateBreadcrumb({
+    breadcrumb: [
+      {
+        title: "Stripe",
+        link: "/console/stripe",
+      },
+    ],
+  });
   const { mutate: verifyConnection, isLoading: isValidatingUser } = useMutation(
     {
       mutationKey: "confirmStripeIntegrationByUser",

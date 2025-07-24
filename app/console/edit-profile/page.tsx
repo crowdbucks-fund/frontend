@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { MouseEventHandler, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm, useWatch } from "react-hook-form";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth, useUserQueryKey } from "states/console/user";
 import { createFilePath } from "utils/files";
 import { z } from "zod";
@@ -40,6 +41,24 @@ const schema = z.object({
 export default function EditProfilePage() {
   const { user } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  useUpdateBreadcrumb({
+    breadcrumb: [
+      {
+        title: `Home`,
+        link: `/console/`,
+      },
+      {
+        title: `Edit profile`,
+        link: "/console/edit-profile",
+      },
+    ],
+    showConsoleMenu: false,
+    title: "Edit profile",
+    back: {
+      link: "/console",
+      title: "Console",
+    },
+  });
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: {
       avatar: null,

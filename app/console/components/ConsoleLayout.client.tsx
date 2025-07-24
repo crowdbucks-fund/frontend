@@ -32,9 +32,9 @@ import { useHydrateAtoms } from "jotai/utils";
 import { store } from "lib/jotai";
 import Image from "next/image";
 import NextLink from "next/link";
-import { usePathname, useSelectedLayoutSegments } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { breadcrumbLinks, breadcrumbs } from "states/console/breadcrumb";
+import { useSelectedLayoutSegments } from "next/navigation";
+import { FC, PropsWithChildren, useState } from "react";
+import { breadcrumbLinks } from "states/console/breadcrumb";
 import { sidebarState } from "states/console/sidebar";
 import { useAuth, userProfileSSR } from "states/console/user";
 import { LogoutModal } from "../edit-profile/LogoutModal";
@@ -81,18 +81,10 @@ export default function ConsoleLayoutClient({
     publicPage ? { onError() {} } : {}
   );
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);
-  const pathname = usePathname();
-  useHydrateAtoms([[breadcrumbLinks, breadcrumbs[pathname] || {}]]);
+
   const [
     { breadcrumb, title: routeTitle, back: backButton, showConsoleMenu = true },
-    setBreadcrumb,
   ] = useAtom(breadcrumbLinks);
-
-  useEffect(() => {
-    if (breadcrumbs[pathname]) {
-      setBreadcrumb(breadcrumbs[pathname]);
-    }
-  }, [pathname]);
 
   const setIsMoreDrawerOpen = useSetAtom(moreDrawerState);
 

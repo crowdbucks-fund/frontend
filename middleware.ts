@@ -25,19 +25,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    if (request.nextUrl.pathname.startsWith("/auth")) {
-      if (isUserLoggedIn) {
-        return NextResponse.redirect(new URL("/console", request.url));
-      }
-    }
-
-    if (request.nextUrl.pathname.startsWith("/console")) {
-      if (!isUserLoggedIn) {
-        {
-          return NextResponse.redirect(new URL("/auth", request.url));
-        }
-      }
-    }
   }
   return NextResponse.next();
 }

@@ -5,8 +5,13 @@ import "./styles.css";
 
 export default function ConsoleMainLayout({ children }: PropsWithChildren) {
   const getProfilePromise = fetchProfile();
+
   return (
-    <ConsoleLayout publicPage={false} getProfilePromise={getProfilePromise}>
+    <ConsoleLayout
+      publicPage={false}
+      getProfilePromise={getProfilePromise}
+      authRequired
+    >
       {children}
     </ConsoleLayout>
   );

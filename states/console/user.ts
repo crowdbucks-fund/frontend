@@ -36,7 +36,9 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     initialData: userProfileFromServer || undefined,
-    enabled: !!userProfileFromServer || pathName.startsWith('/console') || pathName.startsWith('/c/')
+    enabled: false,
+    // enabled: !!userProfileFromServer
+    // || pathName.startsWith('/console') || pathName.startsWith('/c/')
   })
 
   return { user, loading, isFetching }
