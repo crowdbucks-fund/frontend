@@ -1,3 +1,4 @@
+import ConsoleLayout from "app/console/components/ConsoleLayout";
 import { api } from "lib/api";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -24,8 +25,10 @@ export default async function CommunityLayout({
   if (!community) return notFound();
   (params as any).currentCommunity = community;
   return (
-    <CommunityPublicPageLayout community={community}>
-      {children}
-    </CommunityPublicPageLayout>
+    <ConsoleLayout publicPage>
+      <CommunityPublicPageLayout community={community}>
+        {children}
+      </CommunityPublicPageLayout>
+    </ConsoleLayout>
   );
 }
