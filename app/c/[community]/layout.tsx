@@ -1,4 +1,5 @@
 import ConsoleLayout from "app/console/components/ConsoleLayout";
+import { fetchProfile } from "app/console/components/ConsoleLayout.server";
 import { api } from "lib/api";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -21,11 +22,12 @@ export default async function CommunityLayout({
   children,
 }: PropsWithChildren<{ params: { community: string } }>) {
   params = await params;
+  const getProfilePromise = fetchProfile();
   const community = await fetchCommunity(params.community);
   if (!community) return notFound();
   (params as any).currentCommunity = community;
   return (
-    <ConsoleLayout publicPage>
+    <ConsoleLayout publicPage getProfilePromise={getProfilePromise}>
       <CommunityPublicPageLayout community={community}>
         {children}
       </CommunityPublicPageLayout>
