@@ -15,9 +15,6 @@ import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export default function TierPage() {
   const community = useCurrentCommunity<FindCommunityByUserResult>();
   const [{ hasPayment, isSuccess }, updatePaymentState] =
