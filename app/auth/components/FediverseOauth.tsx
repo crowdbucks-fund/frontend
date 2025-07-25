@@ -356,7 +356,7 @@ export const FediverseOauth: FC<{
             onClick={onBack}
             as={changeRouteOnCompleteSteps ? Link : undefined}
             href={changeRouteOnCompleteSteps ? "/auth" : undefined}
-            disabled={isLoading || isAuthorizing}
+            disabled={isLoading || isAuthorizing || isSuccess}
           >
             Back
           </Button>

@@ -123,7 +123,11 @@ export default function CreateUpdateGoal({
     }
   }, [goalsFrequencies]);
 
-  const { mutate: createUpdateGoal, isLoading } = useMutation({
+  const {
+    mutate: createUpdateGoal,
+    isLoading,
+    isSuccess,
+  } = useMutation({
     mutationFn: (data: AddOrUpdateGoalByUserRequest) =>
       api
         .addOrUpdateGoalByUser(data)
@@ -352,7 +356,7 @@ export default function CreateUpdateGoal({
             size="lg"
             colorScheme="primary"
             variant="solid"
-            isLoading={isLoading}
+            isLoading={isLoading || isSuccess}
           >
             {isEditing ? "Save changes" : "Create goal"}
           </Button>
