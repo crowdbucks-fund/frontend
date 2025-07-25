@@ -5,8 +5,6 @@ import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
 import { CommunityPublicPageLayout } from "./layout.client";
 
-export const dynamic = "force-dynamic";
-
 const fetchCommunity = async (handle: string) => {
   try {
     return await api.findCommunityByUser({
@@ -16,6 +14,9 @@ const fetchCommunity = async (handle: string) => {
     return null;
   }
 };
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0; // Disable revalidation for this layout
 
 export default async function CommunityLayout({
   params,
