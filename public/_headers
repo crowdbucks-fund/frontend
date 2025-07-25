@@ -1,2 +1,10 @@
 /_next/static/*
   Cache-Control: public,max-age=31536000,immutable
+
+/c/*
+  Cache-Control: no-store
+  Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch
+
+/console/*
+  Cache-Control: no-store
+  Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch
