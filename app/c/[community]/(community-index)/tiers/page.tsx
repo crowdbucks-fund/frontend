@@ -46,7 +46,16 @@ export default function TierPage() {
           })}
           title=""
         >
-          <VStack justify="center" textAlign="center" gap={1} py={4}>
+          <VStack
+            justify="center"
+            textAlign="center"
+            gap={1}
+            py={4}
+            mt={{
+              base: 0,
+              md: 6,
+            }}
+          >
             <Text textStyle="modalTitle">
               Thanks a lot for your contribution
             </Text>
