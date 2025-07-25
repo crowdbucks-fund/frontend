@@ -1,8 +1,11 @@
 "use client";
 
 import {
+  Box,
   Button,
   CircularProgress,
+  Divider,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -20,8 +23,9 @@ import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import { useCurrencies } from "hooks/useCurrencies";
 import { useTierFrequency } from "hooks/useTierFrequency";
 import { requiredNumericString } from "lib/zod";
+import { lowerCase } from "lodash";
 import { notFound, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { joinURL } from "ufo";
@@ -97,9 +101,23 @@ export default function CustomTierClientPage() {
     isLoading,
     data: paymentFormData,
     isSuccess: paymentFormReady,
+    variables,
   } = useCreateStripeIntent({
     onError() {},
   });
+
+  const selectedFrequency = useMemo(() => {
+    if (variables && tierFrequencies) {
+      return (
+        tierFrequencies.find((f) => f.id === variables?.tierFrequencyId) || {
+          id: 0,
+          name: "One-time",
+          unit: "one-time",
+        }
+      );
+    }
+    return null;
+  }, [variables?.tierFrequencyId, tierFrequencies]);
 
   if (!community.customAmountsEnabled) return notFound();
   const errors = form.formState.errors;
@@ -122,12 +140,13 @@ export default function CustomTierClientPage() {
         flexGrow: 1,
         height: "full",
       }}
-      maxW={{ base: "unset", md: "370px" }}
+      maxW="full"
       justifyContent="start"
     >
       {!paymentFormReady && (
         <>
           <VStack
+            maxW={{ base: "unset", md: "370px" }}
             w="full"
             justify={{ base: "space-between", md: "start" }}
             flexGrow={{ base: 1, md: 0 }}
@@ -293,13 +312,75 @@ export default function CustomTierClientPage() {
         </>
       )}
       {paymentFormReady && (
-        <PaymentForm
-          {...paymentFormData}
-          returnUrl={`${joinURL(
-            window.location.origin,
-            getCommunityTiersLink(community)
-          )}?verify`}
-        />
+        <Flex
+          flexDirection={{
+            base: "column",
+            md: "row",
+          }}
+          w="full"
+          gap={8}
+          justifyContent="center"
+        >
+          <Box
+            maxW={{
+              base: "unset",
+              md: "340px",
+            }}
+            flexGrow={1}
+          >
+            <VStack
+              p={{ base: 4, md: 5 }}
+              borderRadius="2xl"
+              border="2px solid"
+              borderColor="brand.gray.1"
+              bg="brand.gray.4"
+              gap={4}
+              w="full"
+              alignItems="start"
+            >
+              <Text
+                fontSize={{
+                  base: "16px",
+                  md: "18px",
+                }}
+                fontWeight="bold"
+              >
+                Order Summary
+              </Text>
+              <Divider color="brand.gray.2" />
+              <VStack w="full">
+                <HStack w="full" justifyContent="space-between">
+                  <Text>Price</Text>
+                  <Text>
+                    ${variables?.amount}
+                    {selectedFrequency?.unit !== "one-time" &&
+                      `/` + lowerCase(selectedFrequency?.unit)}
+                  </Text>
+                </HStack>
+              </VStack>
+              <Divider color="brand.gray.2" />
+              <VStack w="full">
+                <HStack w="full" justifyContent="space-between">
+                  <Text>Total</Text>
+                  <Text>
+                    ${variables?.amount}
+                    {selectedFrequency?.unit !== "one-time" &&
+                      `/` + lowerCase(selectedFrequency?.unit)}
+                  </Text>
+                </HStack>
+              </VStack>
+            </VStack>
+          </Box>
+          <VStack minW={{ base: "unset", md: "370px" }}>
+            <PaymentForm
+              {...paymentFormData}
+              returnUrl={`${joinURL(
+                window.location.origin,
+                getCommunityTiersLink(community)
+              )}?verify`}
+            />
+          </VStack>
+        </Flex>
       )}
     </CenterLayout>
   );
