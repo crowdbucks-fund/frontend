@@ -141,7 +141,11 @@ export default function CreateUpdateCommunityPage({
     form.setValue<any>("avatar", null);
   };
   const queryClient = useQueryClient();
-  const { mutate: mutate, isLoading } = useMutationWithFile(
+  const {
+    mutate: mutate,
+    isLoading,
+    isSuccess,
+  } = useMutationWithFile(
     async (data) => {
       toast.closeAll();
       return await api.addOrUpdateCommunityByUser(data);
@@ -425,7 +429,9 @@ export default function CreateUpdateCommunityPage({
               <Button
                 maxW={{ base: "unset", md: "370px" }}
                 isDisabled={
-                  Object.keys(errors).length > 0 || isCheckingUsername
+                  Object.keys(errors).length > 0 ||
+                  isCheckingUsername ||
+                  isSuccess
                 }
                 type="submit"
                 w="full"
@@ -435,7 +441,13 @@ export default function CreateUpdateCommunityPage({
                 isLoading={isLoading}
                 display={{ base: "none", md: "flex" }}
               >
-                {community ? "Save changes" : "Create Community"}
+                {isSuccess
+                  ? community
+                    ? "Changes saved"
+                    : "Community created"
+                  : community
+                  ? "Save changes"
+                  : "Create Community"}
               </Button>
             </VStack>
           </VStack>
@@ -518,7 +530,7 @@ export default function CreateUpdateCommunityPage({
             </VStack>
           )}
           <Button
-            isDisabled={Object.keys(errors).length > 0}
+            isDisabled={Object.keys(errors).length > 0 || isSuccess}
             type="submit"
             w="full"
             size="lg"
@@ -527,7 +539,13 @@ export default function CreateUpdateCommunityPage({
             isLoading={isLoading}
             display={{ base: "flex", md: "none" }}
           >
-            {community ? "Save changes" : "Create Community"}
+            {isSuccess
+              ? community
+                ? "Changes saved"
+                : "Community created"
+              : community
+              ? "Save changes"
+              : "Create Community"}
           </Button>
         </VStack>
       </VStack>

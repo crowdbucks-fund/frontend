@@ -112,7 +112,11 @@ export default function CreateUpdateTier({
     }
   }, [tierFrequencies]);
 
-  const { mutate: createUpdateTier, isLoading } = useMutation({
+  const {
+    mutate: createUpdateTier,
+    isLoading,
+    isSuccess,
+  } = useMutation({
     mutationFn: api.addOrUpdateTierByUser.bind(api),
     onSuccess() {
       toast({
@@ -341,7 +345,7 @@ export default function CreateUpdateTier({
             size="lg"
             colorScheme="primary"
             variant="solid"
-            isLoading={isLoading}
+            isLoading={isLoading || isSuccess}
           >
             {isEditing ? "Save changes" : "Create a tier"}
           </Button>
