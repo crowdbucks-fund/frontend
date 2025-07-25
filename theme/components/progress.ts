@@ -17,7 +17,7 @@ export const Progress = defineMultiStyleConfig({
       },
       filledTrack: {
         borderRadius: '9999px',
-        minW: '28px',
+        minW: '0',
         bg: 'primary.500',
       },
     },
@@ -30,7 +30,7 @@ export const Progress = defineMultiStyleConfig({
       },
       filledTrack: {
         borderRadius: '9999px',
-        minW: '28px',
+        minW: '0',
         bg: 'secondary.500',
       },
     },

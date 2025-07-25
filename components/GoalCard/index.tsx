@@ -31,7 +31,7 @@ import { getCommunityGoalsLink } from "utils/community";
 
 const LinkIcon = chakra(LinkIconBase);
 const DeleteIcon = chakra(TrashIcon);
-const ZERO_PROGRESS_GOAL_PROGRESS = 5;
+const ZERO_PROGRESS_GOAL_PROGRESS = 0;
 
 export type GoalCardProps = {
   goal: UserGoal;
