@@ -2,6 +2,7 @@
 
 import { UserGoal } from "@xeronith/granola/core/objects";
 import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
+import { EmptyState } from "app/c/[community]/(community-index)/EmptyState";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import { GoalCard } from "components/GoalCard";
@@ -62,6 +63,9 @@ export default function GoalsPage() {
 
   return (
     <CenterLayout maxW={{ md: "630px" }} mx="auto" gap="8">
+      {community.goals.length === 0 && (
+        <EmptyState>There is no goal defined yet!</EmptyState>
+      )}
       {community.goals.sort(sortGoals).map((goal) => {
         return (
           <GoalCard

@@ -2,6 +2,7 @@
 
 import { Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
+import { EmptyState } from "app/c/[community]/(community-index)/EmptyState";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import createCommunityImage from "assets/images/amico.svg";
@@ -104,6 +105,9 @@ export default function TierPage() {
             </VStack>
           </HStack>
         </VStack>
+      )}
+      {community.tiers.length === 0 && (
+        <EmptyState>There is no tier defined yet!</EmptyState>
       )}
       {community.tiers.sort(sortTiers).map((tier) => {
         return (
