@@ -77,31 +77,6 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
               h="full"
             />
           )}
-          {!compact && (
-            <Button
-              display={{
-                base: "none",
-                md: "flex",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onCopy();
-                linkCoppiedCallback(community);
-              }}
-              colorScheme={
-                community.banner?.length ? "whiteAlpha" : "whiteAlpha"
-              }
-              leftIcon={<ShareIcon />}
-              bottom={4}
-              right={4}
-              position="absolute"
-              variant="ghost"
-              fontWeight="medium"
-              fontSize="20px"
-            >
-              Share my community
-            </Button>
-          )}
         </Box>
         <Avatar
           border="3px solid white"
@@ -124,37 +99,61 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
         pt={{ md: "4", base: 1 }}
       >
         <HStack justify="space-between" w="full">
-          <VStack align="start" gap={0}>
-            <HStack gap={1}>
-              {editButton && (
-                <IconButton
-                  display={{ base: "none", md: "flex" }}
-                  as={NextLink}
-                  href={`/console/communities/${community.id}/edit`}
-                  aria-label="edit community"
-                  colorScheme="blackAlpha"
-                  variant="ghost"
-                  color="brand.black.1"
-                  size="sm"
-                >
-                  <UserEditIcon />
-                </IconButton>
-              )}
-              <Text fontWeight="bold" fontSize={{ base: "16px", md: "20px" }}>
-                {community.name}
-              </Text>
-            </HStack>
-            <Link
-              target="_blank"
-              as={NextLink}
-              href={getCommunityLink(community)}
-              fontWeight="normal"
-              fontSize={{ base: "10px", md: "16px" }}
-              color="brand.black.3"
+          <HStack
+            h="full"
+            justifyContent="space-between"
+            flexGrow={1}
+            alignItems="start"
+          >
+            <VStack align="start" gap={0}>
+              <HStack gap={1}>
+                {editButton && (
+                  <IconButton
+                    display={{ base: "none", md: "flex" }}
+                    as={NextLink}
+                    href={`/console/communities/${community.id}/edit`}
+                    aria-label="edit community"
+                    colorScheme="blackAlpha"
+                    variant="ghost"
+                    color="brand.black.1"
+                    size="sm"
+                  >
+                    <UserEditIcon />
+                  </IconButton>
+                )}
+                <Text fontWeight="bold" fontSize={{ base: "16px", md: "20px" }}>
+                  {community.name}
+                </Text>
+              </HStack>
+              <Link
+                target="_blank"
+                as={NextLink}
+                href={getCommunityLink(community)}
+                fontWeight="normal"
+                fontSize={{ base: "10px", md: "16px" }}
+                color="brand.black.3"
+              >
+                {generateCommunityLink(community.handle, false)}
+              </Link>
+            </VStack>
+            <Button
+              display={{
+                base: "none",
+                md: "flex",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onCopy();
+                linkCoppiedCallback(community);
+              }}
+              leftIcon={<ShareIcon />}
+              variant="ghost"
+              fontWeight="medium"
+              fontSize="20px"
             >
-              {generateCommunityLink(community.handle, false)}
-            </Link>
-          </VStack>
+              Share community
+            </Button>
+          </HStack>
 
           <HStack gap={1}>
             {editButton && (
