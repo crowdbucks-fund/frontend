@@ -44,6 +44,7 @@ export type GoalCardProps = {
   btnText?: ReactNode;
   draggable?: boolean;
   attributes?: DraggableAttributes;
+  extra?: boolean;
   listeners?: SyntheticListenerMap | undefined;
   dragRef?: (node: HTMLElement | null) => void;
   buttonProps?: ButtonProps & { href?: string };
@@ -63,6 +64,7 @@ export const GoalCard: FC<GoalCardProps> = ({
   btnText = "Edit goal",
   buttonProps = {},
   copyLinkButton = false,
+  extra = false,
   ...props
 }) => {
   const router = useRouter();
@@ -96,9 +98,9 @@ export const GoalCard: FC<GoalCardProps> = ({
         ? {
             ...attributes,
             ...listeners,
-            ref: dragRef,
           }
         : {})}
+      ref={!isDesktop ? dragRef : undefined}
     >
       <HStack
         justify="space-between"
@@ -114,11 +116,14 @@ export const GoalCard: FC<GoalCardProps> = ({
             isTruncated
             maxW="100%"
           >
-            <Text as="span" mr="3" color="primary.500">
-              #{goal.priority}
-            </Text>
+            {!extra && (
+              <Text as="span" mr="3" color="primary.500">
+                #{goal.priority}
+              </Text>
+            )}
             {goal.name}
           </Text>
+          (
           <Text fontSize="16px">
             <Text
               fontSize={{
@@ -138,27 +143,29 @@ export const GoalCard: FC<GoalCardProps> = ({
                 ? goal.goalFrequency?.name
                 : null}
             </Text>
-            <Text
-              fontSize={{
-                md: "md",
-                base: "10px",
-              }}
-              whiteSpace="nowrap"
-              as="span"
-              ml={{ md: "3", base: 2 }}
-              pl={{ md: "3", base: 2 }}
-              borderLeft="2px solid"
-              borderLeftColor="primary.500"
-              color="brand.black.3"
-              textTransform="lowercase"
-            >
-              {dateFormat(goal.timestamp, "yy/MM/dd")}
-            </Text>
+            {!extra && (
+              <Text
+                fontSize={{
+                  md: "md",
+                  base: "10px",
+                }}
+                whiteSpace="nowrap"
+                as="span"
+                ml={{ md: "3", base: 2 }}
+                pl={{ md: "3", base: 2 }}
+                borderLeft="2px solid"
+                borderLeftColor="primary.500"
+                color="brand.black.3"
+                textTransform="lowercase"
+              >
+                {dateFormat(goal.timestamp, "yy/MM/dd")}
+              </Text>
+            )}
           </Text>
         </HStack>
         <HStack>
           {draggable && (
-            <IconButton
+            <Button
               aria-label="Drag the goal to change its priority"
               variant="ghost"
               size="sm"
@@ -181,28 +188,30 @@ export const GoalCard: FC<GoalCardProps> = ({
               }}
             >
               <MenuIcon />
-            </IconButton>
+            </Button>
           )}
         </HStack>
       </HStack>
-      <Box position="relative" w="full">
-        <Progress
-          value={Math.max(
-            Math.min((goal.accumulatedFunds / (goal.amount || 0)) * 100, 100),
-            ZERO_PROGRESS_GOAL_PROGRESS
-          )}
-        />
-        <Text
-          fontSize={{ base: "12px", md: "16px" }}
-          color="#343333"
-          position="absolute"
-          top="50%"
-          right="2"
-          transform="translateY(-50%)"
-        >
-          $ {goal.accumulatedFunds || 0} / $ {goal.amount}
-        </Text>
-      </Box>
+      {!extra && (
+        <Box position="relative" w="full">
+          <Progress
+            value={Math.max(
+              Math.min((goal.accumulatedFunds / (goal.amount || 0)) * 100, 100),
+              ZERO_PROGRESS_GOAL_PROGRESS
+            )}
+          />
+          <Text
+            fontSize={{ base: "12px", md: "16px" }}
+            color="#343333"
+            position="absolute"
+            top="50%"
+            right="2"
+            transform="translateY(-50%)"
+          >
+            $ {goal.accumulatedFunds || 0} / $ {goal.amount}
+          </Text>
+        </Box>
+      )}
       <Text
         isTruncated
         noOfLines={3}
