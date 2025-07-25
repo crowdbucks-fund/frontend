@@ -85,15 +85,12 @@ export default function GoalsPage() {
         [0, 0]
       );
       if (extraGoal) {
-        const extraDonationAmount =
-          extraGoal.accumulatedFunds - extraGoal.amount;
+        const extraDonationAmount = totalRaised - totalAmount;
         return {
           accumulatedFunds: extraDonationAmount,
           amount: extraDonationAmount,
           title: "Extra Donation",
-          caption: `$${totalRaised} raised of total $${totalAmount} goal + $${
-            totalRaised - totalAmount
-          } extra thanks to generous donors! Your community keeps giving. Put their trust to work by starting your next goal now.`,
+          caption: `Goals are met! $${totalRaised} raised of $${totalAmount} goal + $${totalRaised} extra thanks to generous donors! Your community keeps giving. Put their trust to work by starting your next goal now.`,
           communityId: community.id,
           currency: extraGoal.currency,
           goalFrequency: extraGoal.goalFrequency,

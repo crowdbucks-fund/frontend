@@ -219,7 +219,7 @@ export const GoalCard: FC<GoalCardProps> = ({
           md: "md",
           base: "14px",
         }}
-        whiteSpace="normal"
+        whiteSpace="pre-line"
         wordBreak="break-word"
         maxW="100%"
       >

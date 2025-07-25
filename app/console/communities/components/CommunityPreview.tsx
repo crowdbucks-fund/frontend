@@ -136,23 +136,25 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
                 {generateCommunityLink(community.handle, false)}
               </Link>
             </VStack>
-            <Button
-              display={{
-                base: "none",
-                md: "flex",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onCopy();
-                linkCoppiedCallback(community);
-              }}
-              leftIcon={<ShareIcon />}
-              variant="ghost"
-              fontWeight="medium"
-              fontSize="20px"
-            >
-              Share community
-            </Button>
+            {!compact && (
+              <Button
+                display={{
+                  base: "none",
+                  md: "flex",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCopy();
+                  linkCoppiedCallback(community);
+                }}
+                leftIcon={<ShareIcon />}
+                variant="ghost"
+                fontWeight="medium"
+                fontSize="20px"
+              >
+                Share community
+              </Button>
+            )}
           </HStack>
 
           <HStack gap={1}>
