@@ -46,3 +46,11 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
 useAuth.invalidateQuery = () => {
   queryClient.invalidateQueries([useUserQueryKey])
 }
+
+useAuth.setData = (data: GetProfileResult | null) => {
+  queryClient.setQueryData<GetProfileResult | null>([useUserQueryKey], data)
+}
+
+useAuth.fetchProfile = async () => {
+  useAuth.setData(await api.getProfile({}));
+}

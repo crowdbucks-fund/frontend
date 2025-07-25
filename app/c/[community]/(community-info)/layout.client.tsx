@@ -53,6 +53,7 @@ export default function CommunityInfoLayoutClient({
   }, [user, isFetching]);
 
   const onAuthorized = async (token: string) => {
+    useAuth.fetchProfile();
     setIsAuthorized(true);
     await onAuthorize(token);
   };
