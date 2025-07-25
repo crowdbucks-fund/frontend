@@ -1,7 +1,6 @@
 "use client";
 import { AuthWizardContent } from "app/auth/components/AuthWizard";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
-import { queryClient } from "lib/reactQuery";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useAuth } from "states/console/user";
 
@@ -56,7 +55,6 @@ export default function CommunityInfoLayoutClient({
   const onAuthorized = async (token: string) => {
     setIsAuthorized(true);
     await onAuthorize(token);
-    queryClient.invalidateQueries();
   };
 
   return (

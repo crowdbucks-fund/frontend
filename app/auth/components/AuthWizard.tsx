@@ -22,7 +22,6 @@ import Earth from "assets/images/earth.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
 import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
-import { useSetAtom } from "jotai";
 import { ApiError, api } from "lib/api";
 import { formatErrorMessage, queryClient } from "lib/reactQuery";
 import { find, lowerCase, upperFirst } from "lodash";
@@ -36,7 +35,6 @@ import {
   useWatch,
 } from "react-hook-form";
 import { useMutation } from "react-query";
-import { userProfileSSR } from "states/console/user";
 import { handleSubmit } from "utils/formHandler";
 import { maskEmail } from "utils/strings";
 import { z } from "zod";
@@ -88,9 +86,7 @@ type FormType = z.infer<typeof schema>;
 
 export const AuthWizard: FC<AuthWizardProps> = (props) => {
   const router = useRouter();
-  const setAuthToken = useSetAtom(userProfileSSR);
   const onComplete = async (token: string) => {
-    setAuthToken(token);
     if (props.onSignIn) {
       props.onSignIn(token).then(async () => {
         queryClient.clear();

@@ -3,6 +3,7 @@
 import { GetProfileResult } from '@xeronith/granola/core/spi'
 import { atom, useAtom } from 'jotai'
 import { api } from 'lib/api'
+import { queryClient } from 'lib/reactQuery'
 import { usePathname } from 'next/navigation'
 import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
@@ -40,4 +41,8 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
   })
 
   return { user, loading, isFetching }
+}
+
+useAuth.invalidateQuery = () => {
+  queryClient.invalidateQueries([useUserQueryKey])
 }
