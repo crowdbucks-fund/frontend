@@ -503,18 +503,11 @@ export default function ConsoleLayoutClient({
           </VStack>
         </Box>
         <Box
-          as={motion.div}
-          variants={{
-            open: {
-              marginLeft: "300px",
-            },
-            closed: {
-              marginLeft: "0",
-            },
+          marginLeft={{
+            md: isSidebarOpen && !!user ? "300px" : "0",
+            base: "0",
           }}
-          transition={{}}
-          initial="closed"
-          animate={isSidebarOpen && !!user ? "open" : "closed"}
+          transition="all 0.2s ease-in-out"
           flexGrow={1}
           rounded="20px"
           border={{ md: !isWithPreviewRoute ? "2px solid" : "0" }}
