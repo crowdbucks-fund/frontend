@@ -7,14 +7,12 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
-  IconButton,
   Input,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CenterLayout } from "app/console/components/CenterLayout";
-import CameraIcon from "assets/icons/camera.svg?react";
 import LogoutIcon from "assets/icons/logout.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
@@ -153,13 +151,13 @@ export default function EditProfilePage() {
 
             {!selectedAvatar ? (
               <>
-                <IconButton
+                {/* <IconButton
                   aria-label="upload image"
                   variant="ghost"
                   colorScheme="blackAlpha"
                 >
                   <CameraIcon />
-                </IconButton>
+                </IconButton> */}
                 <Button
                   variant="link"
                   fontWeight="normal"

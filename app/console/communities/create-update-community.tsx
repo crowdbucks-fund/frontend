@@ -7,7 +7,6 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -283,13 +282,13 @@ export default function CreateUpdateCommunityPage({
 
                 {!selectedAvatar ? (
                   <>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="upload image"
                       variant="ghost"
                       colorScheme="blackAlpha"
                     >
                       <UploadIcon width={{ base: "24px", md: "32px" }} />
-                    </IconButton>
+                    </IconButton> */}
                     <Button
                       variant="link"
                       fontWeight="normal"
