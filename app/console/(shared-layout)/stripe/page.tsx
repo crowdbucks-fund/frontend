@@ -133,7 +133,6 @@ export default function StripePage() {
           gap={{ base: 4, md: 6 }}
         >
           <StripeCard
-            name={user?.stripeAccountInfo?.displayName || ""}
             stripeUrl="https://dashboard.stripe.com/"
             partiallyConnect={!user?.stripeAccountInfo?.chargesEnabled}
           />
