@@ -105,10 +105,11 @@ export const FediverseOauth: FC<{
     }
   }, [searchParams.get("error"), isLoading]);
   const formContext = useFormContext();
-  const { isLoading: isAuthorizing, error: verificationError } = useQuery<
-    AuthenticateResult,
-    string
-  >({
+  const {
+    isLoading: isAuthorizing,
+    error: verificationError,
+    isSuccess,
+  } = useQuery<AuthenticateResult, string>({
     queryKey: ["oauth-callback", platformKey],
     queryFn: () => {
       const code = searchParams.get("code");
@@ -343,7 +344,7 @@ export const FediverseOauth: FC<{
             as={"a"}
             href={`/auth/${platformKey}?instance=${selectedInstance}&redirect_url=${currentPathname}`}
             ref={nextButtonRef}
-            isLoading={isLoading || isAuthorizing}
+            isLoading={isLoading || isAuthorizing || isSuccess}
             onClick={onStartAuth}
             loadingText={isLoading ? "Redirecting..." : "Authorizing..."}
           >

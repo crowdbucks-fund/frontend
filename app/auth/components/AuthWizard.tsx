@@ -462,10 +462,12 @@ const Email: FC<StepProps> = ({
         <VStack
           gap={4}
           textAlign="center"
-          minW={{
-            base: "full",
-            md: "400px",
-          }}
+          // minW={{
+          //   base: "full",
+          //   md: "400px",
+          // }}
+          w="full"
+          maxW={{ md: "370px", base: "400px" }}
         >
           <Text
             fontWeight="bold"
@@ -737,7 +739,7 @@ const Step2: FC<StepProps> = ({
         </VStack>
         <VStack
           gap={{ md: 6, base: 3 }}
-          maxW={{ md: "370px", base: "450px" }}
+          maxW={{ md: "370px", base: "400px" }}
           w="full"
         >
           <FormControl
