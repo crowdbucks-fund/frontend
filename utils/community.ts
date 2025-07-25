@@ -16,12 +16,12 @@ export const linkCoppiedCallback = (community: Community) => {
     description: generateCommunityLink(community.handle, false),
   });
 };
-export const getCommunityLink = (community: Community) => {
-  return joinURL(platformInfo.communityPrefix, community.handle)
+export const getCommunityLink = (community: Community, withHost: boolean = false) => {
+  return joinURL(withHost ? platformInfo.url : '', platformInfo.communityPrefix, community.handle)
 }
-export const getCommunityTiersLink = (community: Community) => {
-  return joinURL(platformInfo.communityPrefix, community.handle, 'tiers')
+export const getCommunityTiersLink = (community: Community, withHost: boolean = false) => {
+  return joinURL(withHost ? platformInfo.url : '', platformInfo.communityPrefix, community.handle, 'tiers')
 }
-export const getCommunityGoalsLink = (community: Community) => {
-  return joinURL(platformInfo.communityPrefix, community.handle, 'goals')
+export const getCommunityGoalsLink = (community: Community, withHost: boolean = false) => {
+  return joinURL(withHost ? platformInfo.url : '', platformInfo.communityPrefix, community.handle, 'goals')
 }

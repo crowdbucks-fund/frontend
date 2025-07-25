@@ -36,8 +36,10 @@ export default function GoalsPage() {
               community={community}
               goal={goal}
               btnText={`Help achieve the goal`}
+              copyLinkButton={false}
               buttonProps={{
                 as: NextLink,
+                w: "full",
                 href: getCommunityTiersLink(community),
                 variant: "solid",
                 colorScheme: "primary-glass",

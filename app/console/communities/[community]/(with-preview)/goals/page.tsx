@@ -1,5 +1,5 @@
 "use client";
-import { Box, Button, HStack, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, VStack, chakra } from "@chakra-ui/react";
 import {
   DndContext,
   MouseSensor,
@@ -17,6 +17,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { UserGoal } from "@xeronith/granola/core/objects";
 import GoalIcon from "assets/icons/cup.svg?react";
+import EditIconBase from "assets/images/edit.svg?react";
 import { CreateFirstEntity } from "components/FirstEntity";
 import { CreateGoalCard, GoalCard, GoalCardProps } from "components/GoalCard";
 import { FullPageLoading } from "components/Loading";
@@ -30,6 +31,8 @@ import { FC, useState } from "react";
 import { useMutation } from "react-query";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
+
+const EditIcon = chakra(EditIconBase);
 
 export default function GoalsPage() {
   const params = useParams();
@@ -157,7 +160,12 @@ const DraggableGoalCard: FC<
     isDragging,
   } = useSortable({ id: goal.id, disabled: goalPriorityLoading });
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString({
+      x: 0,
+      y: transform?.y ?? 0,
+      scaleX: transform?.scaleX ?? 1,
+      scaleY: transform?.scaleY ?? 1,
+    }),
     transition,
     zIndex: isDragging ? 999 : undefined,
   };
@@ -171,6 +179,16 @@ const DraggableGoalCard: FC<
       onDelete={onDelete}
       attributes={attributes}
       listeners={listeners}
+      btnText={
+        <EditIcon
+          width={{ base: "18px", md: "24px" }}
+          height={{ base: "18px", md: "24px" }}
+        />
+      }
+      buttonProps={{
+        w: "auto",
+        title: "Edit goal",
+      }}
     />
   );
 };

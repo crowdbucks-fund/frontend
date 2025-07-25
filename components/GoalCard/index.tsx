@@ -8,8 +8,10 @@ import {
   Progress,
   StackProps,
   Text,
+  Tooltip,
   VStack,
   chakra,
+  useClipboard,
 } from "@chakra-ui/react";
 import { DraggableAttributes } from "@dnd-kit/core";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
@@ -17,27 +19,29 @@ import { UserGoal } from "@xeronith/granola/core/objects";
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import AddIcon from "assets/icons/add-square.svg?react";
+import LinkIconBase from "assets/icons/link-2.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
-import EditIconBase from "assets/images/edit.svg?react";
 import { format as dateFormat } from "date-fns";
 import { useDesktop } from "hooks/useDesktop";
 import { MenuIcon } from "lucide-react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
+import { getCommunityGoalsLink } from "utils/community";
 
+const LinkIcon = chakra(LinkIconBase);
 const DeleteIcon = chakra(TrashIcon);
-const EditIcon = chakra(EditIconBase);
 const ZERO_PROGRESS_GOAL_PROGRESS = 5;
 
 export type GoalCardProps = {
   goal: UserGoal;
+  copyLinkButton?: boolean;
   href?: string;
   onDelete?: () => void;
   community: GetCommunityByUserResult;
   editable?: boolean;
   format?: "preview";
-  btnText?: string;
+  btnText?: ReactNode;
   draggable?: boolean;
   attributes?: DraggableAttributes;
   listeners?: SyntheticListenerMap | undefined;
@@ -58,10 +62,16 @@ export const GoalCard: FC<GoalCardProps> = ({
   editable = true,
   btnText = "Edit goal",
   buttonProps = {},
+  copyLinkButton = false,
   ...props
 }) => {
   const router = useRouter();
   const isDesktop = useDesktop();
+  const currentCommunity = useCurrentCommunity();
+  const { onCopy: copyGoalLink, hasCopied: goalLinkCoppied } = useClipboard(
+    getCommunityGoalsLink(currentCommunity, true) + `#goal-${goal.id}`
+  );
+
   const handleOnClick = () => {
     if (href) router.push(href);
   };
@@ -207,51 +217,78 @@ export const GoalCard: FC<GoalCardProps> = ({
         {goal.caption}
       </Text>
       {editable && (
-        <HStack gap={4} justify="end" w="full" color={"primary.500"}>
+        <HStack
+          gap={{ base: 2, md: 4 }}
+          justify="end"
+          w="full"
+          color={"primary.500"}
+        >
           {onDelete && (
+            <Tooltip label={"Delete goal"} placement="top">
+              <Button
+                colorScheme={"gray"}
+                cursor={"pointer"}
+                color={"red.500"}
+                border={"2px solid"}
+                size="lg"
+                borderColor={"gray.200"}
+                variant="solid"
+                {...buttonProps}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete && onDelete();
+                }}
+              >
+                <DeleteIcon width={{ base: "18px", md: "24px" }} />
+              </Button>
+            </Tooltip>
+          )}
+
+          {copyLinkButton && (
+            <Tooltip
+              label={goalLinkCoppied ? "Goal link coppied" : "Copy goal link"}
+              placement="top"
+              closeOnClick={false}
+            >
+              <Button
+                colorScheme={"gray"}
+                cursor={"pointer"}
+                border={"2px solid"}
+                size="lg"
+                borderColor={"gray.200"}
+                variant="solid"
+                color="#6B7280"
+                onClick={copyGoalLink}
+              >
+                <LinkIcon
+                  height={{ base: "18px", md: "24px" }}
+                  width={{ base: "18px", md: "24px" }}
+                />
+              </Button>
+            </Tooltip>
+          )}
+
+          <Tooltip label={buttonProps.title} placement="top">
             <Button
+              as={NextLink}
               colorScheme={"gray"}
               cursor={"pointer"}
-              color={"red.500"}
+              color={"primary.500"}
               border={"2px solid"}
-              size="lg"
               borderColor={"gray.200"}
+              size="lg"
               variant="solid"
+              href={`/console/communities/${community.id}/goals/${goal.id}/edit`}
+              onClick={(e) => e.stopPropagation()}
               {...buttonProps}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete && onDelete();
-              }}
             >
-              <DeleteIcon width={{ base: "18px", md: "24px" }} />
+              {btnText}
             </Button>
-          )}
-
-          <Button
-            as={NextLink}
-            colorScheme={"gray"}
-            cursor={"pointer"}
-            color={"primary.500"}
-            border={"2px solid"}
-            borderColor={"gray.200"}
-            size="lg"
-            variant="solid"
-            href={`/console/communities/${community.id}/goals/${goal.id}/edit`}
-            onClick={(e) => e.stopPropagation()}
-            {...buttonProps}
-            onMouseDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            w={btnText ? "full" : undefined}
-          >
-            {btnText || (
-              <EditIcon
-                width={{ base: "18px", md: "24px" }}
-                height={{ base: "18px", md: "24px" }}
-              />
-            )}
-          </Button>
+          </Tooltip>
         </HStack>
       )}
     </VStack>

@@ -5,6 +5,7 @@ import WarningIcon from "assets/icons/warning.svg?react";
 import { GoalCard } from "components/GoalCard";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { toast } from "components/Toast";
+import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { FC } from "react";
@@ -34,6 +35,11 @@ export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
         status: "success",
         title: deletingGoal && `The goal was successfully deleted`,
       });
+      const currentGoals = useGoals.getData(community.id) || [];
+      useGoals.setData(
+        community.id,
+        currentGoals.filter((goal) => goal.id !== deletingGoal?.id)
+      );
       queryClient.invalidateQueries(["findGoalsByUser"]);
       onDeleted && onDeleted();
       onClose();
