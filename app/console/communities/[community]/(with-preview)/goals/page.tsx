@@ -78,6 +78,12 @@ export default function GoalsPage() {
       const extraGoal = goals.find(
         (goal) => goal.accumulatedFunds - goal.amount > 0
       );
+      const [totalRaised, totalAmount] = goals.reduce(
+        ([raised, amount], goal) => {
+          return [raised + goal.accumulatedFunds, amount + goal.amount];
+        },
+        [0, 0]
+      );
       if (extraGoal) {
         const extraDonationAmount =
           extraGoal.accumulatedFunds - extraGoal.amount;
@@ -85,8 +91,9 @@ export default function GoalsPage() {
           accumulatedFunds: extraDonationAmount,
           amount: extraDonationAmount,
           title: "Extra Donation",
-          caption:
-            "The goals are done, but your community keeps giving. Put their trust to work by starting your next goal now.",
+          caption: `$${totalRaised} raised of total $${totalAmount} goal + $${
+            totalRaised - totalAmount
+          } extra thanks to generous donors! Your community keeps giving. Put their trust to work by starting your next goal now.`,
           communityId: community.id,
           currency: extraGoal.currency,
           goalFrequency: extraGoal.goalFrequency,
