@@ -23,3 +23,7 @@ useGoals.invalidateQuery = (communityId: number) => {
 useGoals.setData = (communityId: number, data: UserGoal[]) => {
   return queryClient.setQueryData(['findGoalsByUser', communityId.toString()], data)
 }
+
+useGoals.getData = (communityId: number) => {
+  return queryClient.getQueryData<UserGoal[]>(['findGoalsByUser', communityId.toString()])
+}

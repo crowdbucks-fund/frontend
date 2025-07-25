@@ -21,6 +21,7 @@ import { useGoalsFrequency } from "hooks/useGoalFrequency";
 import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
 import { zodInputStringPipe } from "lib/zod";
+import { maxBy } from "lodash";
 import { usePathname, useRouter } from "next/navigation";
 import { startTransition, useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -94,11 +95,10 @@ export default function CreateUpdateGoal({
   useGoals({
     communityId,
     onSuccess(data) {
-      if (!isEditing) {
-        const lastGoalPriority = data[data.length - 1]?.priority || 0;
-        form.setValue("priority", lastGoalPriority + 1);
-      }
+      const lastGoalPriority = maxBy(data, (d) => d.priority)?.priority || 0;
+      form.setValue("priority", lastGoalPriority + 1);
     },
+    enabled: !isEditing,
   });
   const { data: currencies, isLoading: currenciesLoading } = useCurrencies();
   const { data: goalsFrequencies, isLoading: frequenciesLoading } =
