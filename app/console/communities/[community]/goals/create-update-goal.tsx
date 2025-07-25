@@ -95,7 +95,8 @@ export default function CreateUpdateGoal({
     communityId,
     onSuccess(data) {
       if (!isEditing) {
-        form.setValue("priority", data.length + 1);
+        const lastGoalPriority = data[data.length - 1]?.priority || 0;
+        form.setValue("priority", lastGoalPriority + 1);
       }
     },
   });
