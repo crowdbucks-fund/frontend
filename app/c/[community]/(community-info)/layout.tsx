@@ -3,6 +3,9 @@ import { serializeOauthStateCookie } from "app/auth/utils";
 import { PropsWithChildren } from "react";
 import CommunityInfoLayoutClient from "./layout.client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function CommunityInfoLayout({
   children,
 }: PropsWithChildren) {

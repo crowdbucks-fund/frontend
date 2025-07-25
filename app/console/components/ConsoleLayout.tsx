@@ -3,6 +3,9 @@ import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 import ConsoleLayoutClient from "./ConsoleLayout.client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function ConsoleLayout({
   children,
   publicPage,
