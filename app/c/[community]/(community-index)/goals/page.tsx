@@ -8,9 +8,6 @@ import NextLink from "next/link";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export default function GoalsPage() {
   const community = useCurrentCommunity<FindCommunityByUserResult>();
   useUpdateBreadcrumb({
