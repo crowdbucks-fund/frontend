@@ -8,7 +8,7 @@ import createCommunityImage from "assets/images/amico.svg";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { TierCard } from "components/TierCard";
 import { usePaymentVerification } from "hooks/usePaymentVerification";
-import { sortTiers } from "hooks/useTiers";
+import { sortTiers } from "hooks/useTiers.server";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";

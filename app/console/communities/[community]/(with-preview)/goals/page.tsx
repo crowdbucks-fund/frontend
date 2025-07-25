@@ -27,7 +27,7 @@ import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import NextLink from "next/link";
 import { useParams } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
@@ -55,14 +55,13 @@ export default function GoalsPage() {
       },
     });
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = useCallback((event: any) => {
+    const goals = useGoals.getData(community.id);
     if (!goals) return;
     const { active, over } = event;
-
     if (active.id !== over.id) {
       const oldIndex = goals.findIndex((goal) => goal.id === active.id);
       const newIndex = goals.findIndex((goal) => goal.id === over.id);
-
       const newArr = arrayMove(goals, oldIndex, newIndex);
       useGoals.setData(community.id, newArr);
       updateGoalsPriority({
@@ -72,7 +71,34 @@ export default function GoalsPage() {
         })),
       });
     }
-  };
+  }, []);
+
+  const extraGoal = useMemo(() => {
+    if (goals) {
+      const extraGoal = goals.find(
+        (goal) => goal.accumulatedFunds - goal.amount > 0
+      );
+      if (extraGoal) {
+        const extraDonationAmount =
+          extraGoal.accumulatedFunds - extraGoal.amount;
+        return {
+          accumulatedFunds: extraDonationAmount,
+          amount: extraDonationAmount,
+          title: "Extra Donation",
+          caption:
+            "The goals are done, but your community keeps giving. Put their trust to work by starting your next goal now.",
+          communityId: community.id,
+          currency: extraGoal.currency,
+          goalFrequency: extraGoal.goalFrequency,
+          name: "Extra Donation",
+          priority: extraGoal.priority + 1,
+          timestamp: extraGoal.timestamp + 1,
+          id: extraGoal.id + 1,
+        } as UserGoal;
+      }
+    }
+    return null;
+  }, [goals]);
 
   if (isLoading) return <FullPageLoading />;
   if (goals && !goals.length)
@@ -136,6 +162,19 @@ export default function GoalsPage() {
               })}
             </SortableContext>
           </DndContext>
+          {extraGoal && (
+            <GoalCard
+              community={community}
+              goal={extraGoal}
+              btnText={"Convert to a goal"}
+              extra
+              buttonProps={{
+                w: "full",
+                as: NextLink,
+                href: `/console/communities/${community.id}/goals/create`,
+              }}
+            />
+          )}
           <CreateGoalCard />
           <DeleteGoalModal
             isOpen={!!deletingGoal}
@@ -158,10 +197,11 @@ const DraggableGoalCard: FC<
     transform,
     transition,
     isDragging,
+    isSorting,
   } = useSortable({ id: goal.id, disabled: goalPriorityLoading });
   const style = {
     transform: CSS.Transform.toString({
-      x: 0,
+      x: isSorting ? 0 : transform?.x ?? 0,
       y: transform?.y ?? 0,
       scaleX: transform?.scaleX ?? 1,
       scaleY: transform?.scaleY ?? 1,
@@ -173,7 +213,14 @@ const DraggableGoalCard: FC<
     <GoalCard
       dragRef={setNodeRef}
       draggable
-      goal={{ ...goal, priority: index + 1 }}
+      goal={{
+        ...goal,
+        priority: index + 1,
+        accumulatedFunds:
+          goal.accumulatedFunds > goal.amount
+            ? goal.amount
+            : goal.accumulatedFunds,
+      }}
       style={style}
       community={community}
       onDelete={onDelete}

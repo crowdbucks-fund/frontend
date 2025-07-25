@@ -21,5 +21,18 @@ export const Progress = defineMultiStyleConfig({
         bg: 'primary.500',
       },
     },
+    secondary: {
+      track: {
+        height: { md: '30px', base: '20px' },
+        w: 'full',
+        rounded: 'full',
+        bg: 'secondary.200',
+      },
+      filledTrack: {
+        borderRadius: '9999px',
+        minW: '28px',
+        bg: 'secondary.500',
+      },
+    },
   },
 })

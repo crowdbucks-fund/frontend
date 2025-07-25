@@ -1,4 +1,5 @@
 import { UserGoal } from '@xeronith/granola/core/objects'
+import { sortGoals } from 'hooks/useGoals.server'
 import { api } from 'lib/api'
 import { queryClient } from 'lib/reactQuery'
 import { UseQueryOptions, useQuery } from 'react-query'
@@ -12,7 +13,7 @@ export const useGoals = ({ communityId, ...options }: UseQueryOptions<UserGoal[]
         await api.findGoalsByUser({
           communityId,
         })
-      ).goals.sort((a, b) => a.priority - b.priority),
+      ).goals.sort(sortGoals)
   })
 }
 

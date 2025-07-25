@@ -1,5 +1,6 @@
 import ConsoleLayout from "app/console/components/ConsoleLayout";
 import { fetchProfile } from "app/console/components/ConsoleLayout.server";
+import { sortGoals } from "hooks/useGoals.server";
 import { api } from "lib/api";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -7,9 +8,14 @@ import { CommunityPublicPageLayout } from "./layout.client";
 
 const fetchCommunity = async (handle: string) => {
   try {
-    return await api.findCommunityByUser({
-      handle,
-    });
+    return await api
+      .findCommunityByUser({
+        handle,
+      })
+      .then((res) => {
+        res.goals.sort(sortGoals);
+        return res;
+      });
   } catch (e) {
     return null;
   }
