@@ -16,7 +16,7 @@ const fetchCommunity = async (handle: string) => {
 };
 
 export const dynamic = "force-dynamic";
-export const revalidate = 0; // Disable revalidation for this layout
+export const revalidate = 0;
 
 export default async function CommunityLayout({
   params,

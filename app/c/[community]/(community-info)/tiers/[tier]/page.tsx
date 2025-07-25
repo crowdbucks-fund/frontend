@@ -12,6 +12,10 @@ const findTier = async (communityHandle: string, tierId: number) => {
     return null;
   }
 };
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function TierPage({ params }: { params: Params }) {
   const { community, tier } = await params;
   const currentTier = await findTier(

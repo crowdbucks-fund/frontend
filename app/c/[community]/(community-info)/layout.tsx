@@ -18,7 +18,6 @@ export default async function CommunityInfoLayout({
       onAuthorize={setAuthCookie}
       oauthInstance={instance}
     >
-      {" "}
       {children}
     </CommunityInfoLayoutClient>
   );
