@@ -90,7 +90,7 @@ export default function GoalsPage() {
           accumulatedFunds: extraDonationAmount,
           amount: extraDonationAmount,
           title: "Extra Donation",
-          caption: `Goals are met! $${totalRaised} raised of $${totalAmount} goal + $${totalRaised} extra thanks to generous donors! Your community keeps giving. Put their trust to work by starting your next goal now.`,
+          caption: `Goals are met! $${totalRaised} raised of $${totalAmount} goal + $${extraDonationAmount} extra thanks to generous donors! Your community keeps giving. Put their trust to work by starting your next goal now.`,
           communityId: community.id,
           currency: extraGoal.currency,
           goalFrequency: extraGoal.goalFrequency,
