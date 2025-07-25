@@ -35,6 +35,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { useMutation } from "react-query";
+import { useAuth } from "states/console/user";
 import { handleSubmit } from "utils/formHandler";
 import { maskEmail } from "utils/strings";
 import { z } from "zod";
@@ -87,6 +88,7 @@ type FormType = z.infer<typeof schema>;
 export const AuthWizard: FC<AuthWizardProps> = (props) => {
   const router = useRouter();
   const onComplete = async (token: string) => {
+    useAuth.fetchProfile();
     if (props.onSignIn) {
       props.onSignIn(token).then(async () => {
         queryClient.clear();
