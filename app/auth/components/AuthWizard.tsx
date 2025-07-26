@@ -66,8 +66,8 @@ const oauthSteps = [MASTODON_STEP];
 const steps = [
   DEFAULT_STEP,
   MASTODON_STEP,
-  EMAIL_STEP,
-  VERIFICATION_STEP,
+  // EMAIL_STEP,
+  // VERIFICATION_STEP,
   INFORMATION_STEP,
 ];
 
@@ -300,7 +300,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
           )}
         </Text>
         <VStack gap={3} w="full">
-          <Button
+          {/* <Button
             colorScheme="primary"
             size="lg"
             w="full"
@@ -309,13 +309,13 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
           >
             <Envelope />
             Sign in With Your Email
-          </Button>
+          </Button> */}
           <Button
             colorScheme="primary"
             size="lg"
             w="full"
             gap={2}
-            variant="outline"
+            // variant="outline"
             onClick={onChangeStep.bind(null, MASTODON_STEP)}
           >
             <MastodonIcon />
