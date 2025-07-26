@@ -12,7 +12,7 @@ export type LogoutModalProps = {
 
 export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
-  const { mutate: logout, isLoading, isSuccess } = useLogout(router);
+  const { mutate: logout, isLoading, isSuccess, isError } = useLogout(router);
   const close = () => {
     if (!isLoading && !isSuccess) onClose();
   };
@@ -37,7 +37,7 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
         <HStack justify="space-between" w="full">
           <Button
             onClick={close}
-            isDisabled={isLoading || isSuccess}
+            isDisabled={isLoading || isSuccess || isError}
             size="lg"
             flexGrow={1}
             w="full"
@@ -50,7 +50,7 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
           </Button>
           <Button
             onClick={() => logout()}
-            isLoading={isLoading || isSuccess}
+            isLoading={isLoading || isSuccess || isError}
             loadingText="Logging out..."
             size="lg"
             flexGrow={1}
