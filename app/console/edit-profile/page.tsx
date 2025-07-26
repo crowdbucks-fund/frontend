@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CenterLayout } from "app/console/components/CenterLayout";
-import LogoutIcon from "assets/icons/logout.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
@@ -245,7 +244,7 @@ export default function EditProfilePage() {
             Update profile
           </Button>
 
-          <Button
+          {/* <Button
             size="lg"
             onClick={setIsLoggingOut.bind(null, true)}
             leftIcon={<LogoutIcon />}
@@ -256,7 +255,7 @@ export default function EditProfilePage() {
             textUnderlineOffset="4px"
           >
             Log out
-          </Button>
+          </Button> */}
         </Flex>
       </VStack>
       <LogoutModal
