@@ -56,7 +56,7 @@ export function useScrollRestoration() {
     const y = scrollPositions.get(pathname);
     if (y !== undefined) {
       // console.log('scrolling to', y)
-      window.scrollTo(0, y);
+      // window.scrollTo(0, y);
       scrollPositions.delete(pathname)
     }
   }, [pathname]);

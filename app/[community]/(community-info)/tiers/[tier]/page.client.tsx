@@ -29,7 +29,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
     breadcrumb: [
       {
         link: getCommunityLink(community),
-        title: `${community.name} Community`,
+        title: `${community.name}`,
       },
       {
         link: getCommunityTiersLink(community),

@@ -7,7 +7,7 @@ import { queryClient } from 'lib/reactQuery'
 import { usePathname } from 'next/navigation'
 import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
-export const useUserQueryKey = 'getProfile'
+export const useUserQueryKey = ['getProfile']
 export const userProfileSSR = atom<GetProfileResult | null>(null)
 
 export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey> = {}) => {
@@ -20,7 +20,7 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
   } = useQuery<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey>({
     ...options,
     queryFn: () => api.getProfile({}),
-    queryKey: [useUserQueryKey],
+    queryKey: useUserQueryKey,
     retry: (count, error: unknown) => {
       const errorMessage = ((error as Error)?.message)
       if (errorMessage) {

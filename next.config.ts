@@ -48,6 +48,42 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  rewrites: async () => ({
+    beforeFiles: [
+      {
+        source: '/console',
+        destination: '/console/communities/default/tiers',
+      },
+      {
+        source: '/console/tiers',
+        destination: '/console/communities/default/tiers',
+      },
+      {
+        source: '/console/goals',
+        destination: '/console/communities/default/goals',
+      },
+      {
+        source: '/console/tiers/create',
+        destination: '/console/communities/default/tiers/create',
+      },
+      {
+        source: '/console/goals/create',
+        destination: '/console/communities/default/goals/create',
+      },
+      {
+        source: '/console/tiers/:id/edit',
+        destination: '/console/communities/default/tiers/:id/edit',
+      },
+      {
+        source: '/console/goals/:id/edit',
+        destination: '/console/communities/default/goals/:id/edit',
+      },
+      {
+        source: '/console/stripe',
+        destination: '/console/communities/default/stripe',
+      },
+    ]
+  })
 };
 
 export default nextConfig;

@@ -1,12 +1,20 @@
 "use client";
 
-import { Box, Button, chakra, HStack, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonProps,
+  chakra,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import CupIconBase from "assets/icons/cup.svg?react";
+import DollarIconBase from "assets/icons/dollar-square.svg?react";
 import HomeIconBase from "assets/icons/home NB.svg?react";
 import TreeIconBase from "assets/icons/tree.svg?react";
-import { ActiveLink } from "components/Link";
-import { FC, PropsWithChildren, ReactNode } from "react";
+import { ActiveLink, ActiveLinkProps } from "components/Link";
+import { FC, PropsWithChildren, ReactElement, ReactNode } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { CommunityPreview } from "../../components/CommunityPreview";
 import CommunityValidatorLayout, {
@@ -14,6 +22,7 @@ import CommunityValidatorLayout, {
 } from "./community-validator-layout";
 
 const HomeIcon = chakra(HomeIconBase);
+const DollarIcon = chakra(DollarIconBase);
 const TreeIcon = chakra(TreeIconBase);
 const CupIcon = chakra(CupIconBase);
 
@@ -124,9 +133,9 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
                   },
                 }}
                 leftIcon={tab.icon}
-                href={tab.href}
                 scroll={false}
                 {...(tab.props || {})}
+                href={tab.href}
               >
                 {tab.title}
               </Button>
@@ -153,22 +162,29 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
   );
 };
 
-const links = (community: GetCommunityByUserResult) => [
-  {
-    title: "Home",
-    icon: (
-      <HomeIcon
-        display={{
-          base: "none",
-          md: "block",
-        }}
-        width="24px"
-        strokeWidth="2.7px"
-      />
-    ),
-    href: `/console/communities/${community.id}`,
-    props: {},
-  },
+const links = (
+  community: GetCommunityByUserResult
+): {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  props?: Omit<ButtonProps & ActiveLinkProps, "href">;
+}[] => [
+  // {
+  //   title: "Home",
+  //   icon: (
+  //     <HomeIcon
+  //       display={{
+  //         base: "none",
+  //         md: "block",
+  //       }}
+  //       width="24px"
+  //       strokeWidth="2.7px"
+  //     />
+  //   ),
+  //   href: `/console/communities/${community.id}`,
+  //   props: {},
+  // },
   {
     title: "Tiers",
     icon: (
@@ -180,7 +196,8 @@ const links = (community: GetCommunityByUserResult) => [
         width="24px"
       />
     ),
-    href: `/console/communities/${community.id}/tiers`,
+    // href: `/console/communities/${community.id}/tiers`,
+    href: `/console`,
   },
   {
     title: "Goals",
@@ -193,7 +210,22 @@ const links = (community: GetCommunityByUserResult) => [
         width="24px"
       />
     ),
-    href: `/console/communities/${community.id}/goals`,
+    // href: `/console/communities/${community.id}/goals`,
+    href: `/console/goals`,
+  },
+  {
+    title: "Stripe",
+    icon: (
+      <DollarIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+      />
+    ),
+    // href: `/console/communities/${community.id}/goals`,
+    href: `/console/stripe`,
   },
 ];
 const CommunityLayoutComponents: FC<PropsWithChildren<CommunityPageProps>> = ({
@@ -204,16 +236,17 @@ const CommunityLayoutComponents: FC<PropsWithChildren<CommunityPageProps>> = ({
     {
       breadcrumb: [
         {
-          title: `${community!.name} community`,
-          link: `/console/communities/${community!.id}`,
+          title: `${community!.name}`,
+          // link: `/console/communities/${community!.id}`,
+          link: `/console`,
           startsWith: true,
         },
       ],
       title: community.name,
-      back: {
-        title: "communities",
-        link: "/console/communities",
-      },
+      // back: {
+      //   title: "communities",
+      //   link: "/console/communities",
+      // },
     },
     []
   );

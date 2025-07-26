@@ -2,7 +2,7 @@
 
 import { UserGoal } from "@xeronith/granola/core/objects";
 import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
-import { EmptyState } from "app/c/[community]/(community-index)/EmptyState";
+import { EmptyState } from "app/[community]/(community-index)/EmptyState";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import { GoalCard } from "components/GoalCard";
@@ -17,7 +17,7 @@ export default function GoalsPage() {
   useUpdateBreadcrumb({
     breadcrumb: [
       {
-        title: `${community.name} Community`,
+        title: `${community.name}`,
         link: getCommunityLink(community),
         startsWith: true,
       },

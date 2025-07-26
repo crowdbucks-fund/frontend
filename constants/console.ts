@@ -1,6 +1,6 @@
 import { ChakraComponent } from '@chakra-ui/react'
-import CreateIcon from 'assets/icons/add-circle.svg?react'
-import CommunitiesIcon from 'assets/icons/communities NB.svg?react'
+// import CreateIcon from 'assets/icons/add-circle.svg?react'
+// import CommunitiesIcon from 'assets/icons/communities NB.svg?react'
 import HomeIcon from 'assets/icons/home NB.svg?react'
 // import InsightIcon from 'assets/icons/insight NB.svg?react'
 // import FAQIcon from 'assets/icons/message-question.svg?react'
@@ -15,12 +15,12 @@ export const sideBarMenu = [
     link: '/console',
     prefetch: true,
   },
-  {
-    title: 'Communities',
-    icon: CommunitiesIcon,
-    link: '/console/communities',
-    prefetch: true,
-  },
+  // {
+  //   title: 'Communities',
+  //   icon: CommunitiesIcon,
+  //   link: '/console/communities',
+  //   prefetch: true,
+  // },
   //   {
   //     title: 'Insights',
   //     icon: InsightIcon,
@@ -59,11 +59,11 @@ export const mobileSharedLayoutMenu = [
     icon: HomeIcon,
     link: '/console',
   },
-  {
-    title: 'Communities',
-    icon: CommunitiesIcon,
-    link: '/console/communities',
-  },
+  // {
+  //   title: 'Communities',
+  //   icon: CommunitiesIcon,
+  //   link: '/console/communities',
+  // },
   {
     title: 'Stripe',
     icon: StripeIcon,
@@ -91,12 +91,12 @@ export const mobileNavigationMenu = [
     link: '/console',
     prefetch: true,
   },
-  {
-    title: 'Create',
-    icon: CreateIcon,
-    link: '/console/communities',
-    prefetch: true,
-  },
+  // {
+  //   title: 'Create',
+  //   icon: CreateIcon,
+  //   link: '/console/communities',
+  //   prefetch: true,
+  // },
   //   {
   //     title: 'Insights',
   //     icon: InsightIcon,
@@ -112,12 +112,12 @@ export const consoleMenu = [
     link: '/console',
     prefetch: true,
   },
-  {
-    title: 'Communities',
-    icon: CommunitiesIcon,
-    link: '/console/communities',
-    prefetch: true,
-  },
+  // {
+  //   title: 'Communities',
+  //   icon: CommunitiesIcon,
+  //   link: '/console/communities',
+  //   prefetch: true,
+  // },
   {
     title: 'Stripe',
     icon: StripeIcon,

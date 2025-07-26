@@ -1,10 +1,16 @@
 "use client";
-import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
+import {
+  GetCommunityByUserResult,
+  GetProfileResult,
+} from "@xeronith/granola/core/spi";
 import { FullPageLoading } from "components/Loading";
+import { useCommunities } from "hooks/useCommunities";
 import { api } from "lib/api";
+import { queryClient } from "lib/reactQuery";
 import { useParams } from "next/navigation";
 import { PropsWithChildren, createContext, useContext } from "react";
 import { useQuery } from "react-query";
+import { useUserQueryKey } from "states/console/user";
 import { CommunityNotFound } from "./not-found";
 
 export const CurrentCommunityContext = createContext<
@@ -16,18 +22,43 @@ export default function CommunityValidatorLayout({
 }: PropsWithChildren) {
   const communityId = useParams<{ community: string }>().community.toString();
   const {
+    data: communities,
+    isLoading: communitiesLoading,
+    isFetching: communitiesFetching,
+  } = useCommunities({
+    enabled: communityId === "default",
+  });
+  console.log(
+    communityId !== "default",
+    communityId === "default" && communities
+  );
+  const {
     data: community,
-    isLoading,
-    isFetching,
+    isLoading: communityLoading,
+    isFetching: isFetchingCommunity,
     isError,
   } = useQuery({
     queryKey: ["COMMUNITY", communityId],
     queryFn: () => {
+      if (communityId === "default" && communities) {
+        const user = queryClient.getQueryData(
+          useUserQueryKey
+        ) as GetProfileResult;
+        if (user) {
+          communities[0].handle = user.mastodonUsername.replace("@", "");
+        }
+        return communities[0];
+      }
       return api.getCommunityByUser({
         id: parseInt(communityId),
       });
     },
+    enabled:
+      communityId !== "default" || (communityId === "default" && !!communities),
   });
+
+  const isFetching = communitiesFetching || isFetchingCommunity;
+  const isLoading = communitiesLoading || communityLoading;
 
   if (isLoading) return <FullPageLoading />;
   if (isError) return <CommunityNotFound />;

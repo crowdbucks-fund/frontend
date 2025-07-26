@@ -289,7 +289,7 @@ export const GoalCard: FC<GoalCardProps> = ({
               borderColor={"gray.200"}
               size="lg"
               variant="solid"
-              href={`/console/communities/${community.id}/goals/${goal.id}/edit`}
+              href={`/console/goals/${goal.id}/edit`}
               onClick={(e) => e.stopPropagation()}
               {...buttonProps}
               onMouseDown={(e) => e.stopPropagation()}
@@ -310,7 +310,7 @@ export const CreateGoalCard: FC = () => {
     <VStack
       display={{ base: "none", md: "flex" }}
       as={NextLink}
-      href={`/console/communities/${community.id}/goals/create`}
+      href={`/console/goals/create`}
       overflow="hidden"
       role="group"
       gap={7}

@@ -139,7 +139,7 @@ export default function CreateUpdateGoal({
           isEditing ? "updated" : "created"
         }.`,
       });
-      router.push(`/console/communities/${communityId}/goals`);
+      router.push(`/console/goals`);
     },
   });
   const pathname = usePathname();
@@ -149,7 +149,7 @@ export default function CreateUpdateGoal({
           breadcrumb: [
             {
               title: `${community!.name} community`,
-              link: `/console/communities/${community!.id}`,
+              link: `/console`,
             },
             {
               title: `Create goal`,
@@ -158,7 +158,7 @@ export default function CreateUpdateGoal({
             },
           ],
           back: {
-            link: `/console/communities/${community.id}/goals`,
+            link: `/console/goals`,
             title: "Goals",
           },
           title: "Create Goal",
@@ -167,11 +167,11 @@ export default function CreateUpdateGoal({
           breadcrumb: [
             {
               title: `${community!.name} community`,
-              link: `/console/communities/${community!.id}`,
+              link: `/console`,
             },
             {
               title: `Gaols`,
-              link: `/console/communities/${community!.id}/goals`,
+              link: `/console/goals`,
             },
             {
               title: `Edit ${goal.name}`,
@@ -179,7 +179,7 @@ export default function CreateUpdateGoal({
             },
           ],
           back: {
-            link: `/console/communities/${community.id}/goals`,
+            link: `/console/goals`,
             title: "Goals",
           },
           title: "Edit Goal",
@@ -380,7 +380,7 @@ export default function CreateUpdateGoal({
           onClose={setIsDeleting.bind(null, false)}
           onDeleted={() => {
             startTransition(() => {
-              router.push(`/console/communities/${communityId}/goals/`);
+              router.push(`/console/goals`);
             });
           }}
         />

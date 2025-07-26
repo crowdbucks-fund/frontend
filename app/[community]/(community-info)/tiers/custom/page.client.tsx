@@ -82,7 +82,7 @@ export default function CustomTierClientPage() {
     breadcrumb: [
       {
         link: getCommunityLink(community),
-        title: `${community.name} Community`,
+        title: `${community.name}`,
       },
       {
         title: "Custom amount",

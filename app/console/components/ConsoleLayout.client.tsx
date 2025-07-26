@@ -507,7 +507,7 @@ export default function ConsoleLayoutClient({
             md: isSidebarOpen && !!user ? "300px" : "0",
             base: "0",
           }}
-          transition="all 0.2s ease-in-out"
+          transition="margin-left 0.2s ease-in-out"
           flexGrow={1}
           rounded="20px"
           border={{ md: !isWithPreviewRoute ? "2px solid" : "0" }}

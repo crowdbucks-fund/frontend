@@ -2,7 +2,7 @@
 
 import { Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
-import { EmptyState } from "app/c/[community]/(community-index)/EmptyState";
+import { EmptyState } from "app/[community]/(community-index)/EmptyState";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import createCommunityImage from "assets/images/amico.svg";
@@ -24,7 +24,7 @@ export default function TierPage() {
   useUpdateBreadcrumb({
     breadcrumb: [
       {
-        title: `${community.name} Community`,
+        title: `${community.name}`,
         link: getCommunityLink(community),
         startsWith: true,
       },

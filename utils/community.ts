@@ -17,11 +17,11 @@ export const linkCoppiedCallback = (community: Community) => {
   });
 };
 export const getCommunityLink = (community: Community, withHost: boolean = false) => {
-  return joinURL(withHost ? platformInfo.url : '', platformInfo.communityPrefix, community.handle)
+  return joinURL(withHost ? platformInfo.url : '/', platformInfo.communityPrefix, community.handle)
 }
 export const getCommunityTiersLink = (community: Community, withHost: boolean = false) => {
-  return joinURL(withHost ? platformInfo.url : '', platformInfo.communityPrefix, community.handle, 'tiers')
+  return joinURL(withHost ? platformInfo.url : '/', platformInfo.communityPrefix, community.handle, 'tiers')
 }
 export const getCommunityGoalsLink = (community: Community, withHost: boolean = false) => {
-  return joinURL(withHost ? platformInfo.url : '', platformInfo.communityPrefix, community.handle, 'goals')
+  return joinURL(withHost ? platformInfo.url : '/', platformInfo.communityPrefix, community.handle, 'goals')
 }

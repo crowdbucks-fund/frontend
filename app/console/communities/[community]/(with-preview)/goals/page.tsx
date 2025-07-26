@@ -26,21 +26,39 @@ import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import NextLink from "next/link";
-import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FC, useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
 
 const EditIcon = chakra(EditIconBase);
 
 export default function GoalsPage() {
-  const params = useParams();
   const [deletingGoal, setIsDeletingGoal] = useState<UserGoal | null>(null);
   const community = useCurrentCommunity();
   const { data: goals, isLoading } = useGoals({
     communityId: community.id,
   });
+  const pathname = usePathname();
+  useUpdateBreadcrumb(
+    {
+      breadcrumb: [
+        {
+          title: `${community!.name}`,
+          link: `/console`,
+        },
+        {
+          title: `Goals`,
+          link: pathname,
+          startsWith: true,
+        },
+      ],
+      title: `${community!.name} goals`,
+    },
+    []
+  );
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -116,7 +134,7 @@ export default function GoalsPage() {
         }
         title="Make dreams come true"
         btnText="Create your first goal"
-        link={`/console/communities/${params.community}/goals/create`}
+        link={`/console/goals/create`}
       />
     );
 
@@ -126,7 +144,7 @@ export default function GoalsPage() {
         <HStack py="4" w="full" display={{ base: "flex", md: "none" }}>
           <Button
             as={NextLink}
-            href={`/console/communities/${params.community}/goals/create`}
+            href={`/console/goals/create`}
             px="10"
             variant="outline"
             colorScheme="primary-glass"
@@ -175,7 +193,7 @@ export default function GoalsPage() {
               buttonProps={{
                 w: "full",
                 as: NextLink,
-                href: `/console/communities/${community.id}/goals/create`,
+                href: `/console/goals/create`,
               }}
             />
           )}

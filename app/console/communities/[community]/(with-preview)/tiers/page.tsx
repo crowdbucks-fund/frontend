@@ -17,20 +17,34 @@ import { useTiers } from "hooks/useTiers";
 import { api } from "lib/api";
 import { debounce } from "lodash";
 import NextLink from "next/link";
-import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteTierModal } from "../../tiers/components/DeleteTierModal";
 
 export default function TiersPage() {
-  const params = useParams();
   const [deletingTier, setIsDeletingTier] = useState<UserTier | null>(null);
   const community = useCurrentCommunity();
   const queryClient = useQueryClient();
   const { data: tiers, isLoading } = useTiers({
     communityId: community.id,
   });
+  const pathname = usePathname();
+  useUpdateBreadcrumb(
+    {
+      breadcrumb: [
+        {
+          title: `${community!.name}`,
+          link: `/console`,
+          startsWith: false,
+        },
+      ],
+      title: `${community!.name} tiers`,
+    },
+    []
+  );
 
   const { mutate: enableCustomAmount, isLoading: enableCustomAmountLoading } =
     useMutation(
@@ -103,7 +117,7 @@ export default function TiersPage() {
           icon={<></>}
           title="Start growing tiers"
           btnText="Create your first tier"
-          link={`/console/communities/${params.community}/tiers/create`}
+          link={`/console/tiers/create`}
         />
       </Box>
     );
@@ -149,7 +163,7 @@ export default function TiersPage() {
           </Checkbox>
           <Button
             as={NextLink}
-            href={`/console/communities/${params.community}/tiers/create`}
+            href={`/console/tiers/create`}
             px="10"
             variant="outline"
             colorScheme="primary-glass"

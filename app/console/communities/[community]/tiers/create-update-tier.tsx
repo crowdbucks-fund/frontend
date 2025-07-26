@@ -123,7 +123,7 @@ export default function CreateUpdateTier({
         status: "success",
         title: `The tier was successfully ${isEditing ? "updated" : "created"}`,
       });
-      router.push(`/console/communities/${communityId}/tiers`);
+      router.push(`/console/tiers`);
     },
   });
   const pathname = usePathname();
@@ -133,7 +133,7 @@ export default function CreateUpdateTier({
           breadcrumb: [
             {
               title: `${community!.name} community`,
-              link: `/console/communities/${community!.id}`,
+              link: `/console`,
             },
             {
               title: `Create tier`,
@@ -143,7 +143,7 @@ export default function CreateUpdateTier({
           ],
           back: {
             title: "Tiers",
-            link: `/console/communities/${community!.id}/tiers`,
+            link: `/console/tiers`,
           },
           title: "Create tier",
         }
@@ -151,11 +151,11 @@ export default function CreateUpdateTier({
           breadcrumb: [
             {
               title: `${community!.name} community`,
-              link: `/console/communities/${community!.id}`,
+              link: `/console`,
             },
             {
               title: `Tiers`,
-              link: `/console/communities/${community!.id}/tiers`,
+              link: `/console/tiers`,
             },
             {
               title: `Edit ${tier.name}`,
@@ -164,7 +164,7 @@ export default function CreateUpdateTier({
           ],
           back: {
             title: "Tiers",
-            link: `/console/communities/${community!.id}/tiers`,
+            link: `/console/tiers`,
           },
           title: "Edit tier",
         },
@@ -368,7 +368,7 @@ export default function CreateUpdateTier({
           deletingTier={tier}
           onClose={setIsDeleting.bind(null, false)}
           onDeleted={() => {
-            router.push(`/console/communities/${communityId}/tiers/`);
+            router.push(`/console/tiers/`);
           }}
         />
       )}

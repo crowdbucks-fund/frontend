@@ -10,7 +10,7 @@ const fetchCommunity = async (handle: string) => {
   try {
     return await api
       .findCommunityByUser({
-        handle,
+        handle: decodeURIComponent(handle),
       })
       .then((res) => {
         res.goals.sort(sortGoals);

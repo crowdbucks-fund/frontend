@@ -21,6 +21,7 @@ import defaultAvatar from "assets/images/default-avatar.svg";
 import { useCopyCommunityLink } from "hooks/useCopyCommunityLink";
 import NextLink from "next/link";
 import { FC } from "react";
+import { useAuth } from "states/console/user";
 import { Community } from "types/Community";
 import {
   generateCommunityLink,
@@ -49,6 +50,7 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
   shareCommunity = false,
   ...props
 }) => {
+  const { user } = useAuth();
   const { onCopy, hasCopied } = useCopyCommunityLink(community);
   return (
     <Box {...props} w="full">

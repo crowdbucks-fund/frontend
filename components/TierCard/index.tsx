@@ -10,7 +10,6 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
-import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import AddIcon from "assets/icons/add-square.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
 import NextLink from "next/link";
@@ -144,7 +143,7 @@ export const TierCard: FC<TierCardProps> = ({
             variant="solid"
             href={
               format !== "preview"
-                ? `/console/communities/${community.id}/tiers/${tier.id}/edit`
+                ? `/console/tiers/${tier.id}/edit`
                 : undefined
             }
             onClick={(e) => e.stopPropagation()}
@@ -159,12 +158,12 @@ export const TierCard: FC<TierCardProps> = ({
 };
 
 export const CreateTierCard: FC = () => {
-  const community = useCurrentCommunity();
+  // const community = useCurrentCommunity();
   return (
     <VStack
       display={{ base: "none", md: "flex" }}
       as={NextLink}
-      href={`/console/communities/${community.id}/tiers/create`}
+      href={`/console/tiers/create`}
       overflow="hidden"
       role="group"
       gap={7}
