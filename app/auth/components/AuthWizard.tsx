@@ -68,7 +68,7 @@ const steps = [
   MASTODON_STEP,
   // EMAIL_STEP,
   // VERIFICATION_STEP,
-  INFORMATION_STEP,
+  // INFORMATION_STEP,
 ];
 
 const schema = z
