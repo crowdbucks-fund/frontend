@@ -145,15 +145,15 @@ export const FediverseOauth: FC<{
                 // throw e.message || "Something went wrong";
                 throw "Something went wrong, please try again later.";
               });
-            if (credentials.newUser) {
-              formContext.setValue("email", "mastodon");
-              formContext.setValue("token", token);
-              onChangeStep("info");
-              return credentials;
-            } else {
-              await onSignIn(credentials.token);
-              return credentials;
-            }
+            // if (credentials.newUser) {
+            //   formContext.setValue("email", "mastodon");
+            //   formContext.setValue("token", token);
+            //   onChangeStep("info");
+            //   return credentials;
+            // } else {
+            await onSignIn(credentials.token);
+            return credentials;
+            // }
           }
           throw res;
         })
