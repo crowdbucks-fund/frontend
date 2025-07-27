@@ -235,8 +235,8 @@ export const FediverseOauth: FC<{
               {upperFirst(currentPlatform.name)}
             </Text>
             <Text color="blackAlpha.600" fontSize="14px">
-              Click next to join <b>“{upperFirst(selectedInstance)}”</b>. Or
-              choose one from the list below.
+              Click next to join <b>“{selectedInstance}”</b>. Or choose one from
+              the list below.
             </Text>
           </VStack>
           <VStack w="full">
@@ -260,7 +260,7 @@ export const FediverseOauth: FC<{
                   width="full"
                   disabled={isLoading || isAuthorizing || isSuccess}
                 >
-                  {upperFirst(instance)}
+                  {instance}
                   {instance === selectedInstance && <CheckIcon width="24px" />}
                 </Button>
               );
