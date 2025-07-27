@@ -31,7 +31,7 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
             Are you sure you want to log out?
           </Text>
           <Text fontSize={{ base: "14px", md: "20px" }}>
-            you can log back in anytime using your email
+            You can log back in anytime using your connected account.
           </Text>
         </VStack>
         <HStack justify="space-between" w="full">
@@ -74,7 +74,7 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
               <Text fontWeight="bold" fontSize="28px">
                 Are you sure you want to log out?
               </Text>
-              <Text fontSize="20px">you can log back in anytime using your email</Text>
+              <Text fontSize="20px">You can log back in anytime using your connected account.</Text>
             </VStack>
             <HStack justify="space-between" w="full">
               <Button onClick={close} isDisabled={isLoading || isSuccess} size="lg" flexGrow={1} w="full" variant="outline" colorScheme="gray" borderColor="brand.gray.1" bg="brand.gray.3">
@@ -95,7 +95,7 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
               <Text fontWeight="bold" fontSize="18px">
                 Are you sure you want to log out?
               </Text>
-              <Text fontSize="14px">you can log back in anytime using your email</Text>
+              <Text fontSize="14px">You can log back in anytime using your connected account.</Text>
             </VStack>
             <HStack justify="space-between" w="full">
               <Button onClick={close} isDisabled={isLoading || isSuccess} size="lg" flexGrow={1} w="full" variant="outline" colorScheme="gray" borderColor="brand.gray.1" bg="brand.gray.3">
