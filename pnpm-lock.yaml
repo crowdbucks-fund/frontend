@@ -49,8 +49,8 @@ importers:
         specifier: ^2.1.11
         version: 2.4.0
       '@xeronith/granola':
-        specifier: ^0.5.20
-        version: 0.5.20
+        specifier: ^0.5.21
+        version: 0.5.21
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -2715,8 +2715,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@xeronith/granola@0.5.20':
-    resolution: {integrity: sha512-6j94XgG82gLO/fVSwePQyLxuyy7hes/ujU679zXWIZZJhlyR2Ea1Aa0YV2K66Hupm6KrSAxuPxN9H3RekMPyqg==, tarball: https://npm.pkg.github.com/download/@xeronith/granola/0.5.20/d83052d32e62535d39076288f6ccfcc3d131173d}
+  '@xeronith/granola@0.5.21':
+    resolution: {integrity: sha512-qZK3XQKeOGDj8SlTno/pqRR0HocKT5Y5gYijJ6QioY3AQc1ioLDGU5XSszWiga9Zg+6zK7YBqtC2qTeuM4IuNA==, tarball: https://npm.pkg.github.com/download/@xeronith/granola/0.5.21/5891bc13e68d3eef8b555629e3d6f810b9de4e3c}
 
   '@zag-js/dom-query@0.31.1':
     resolution: {integrity: sha512-oiuohEXAXhBxpzzNm9k2VHGEOLC1SXlXSbRPcfBZ9so5NRQUA++zCE7cyQJqGLTZR0t3itFLlZqDbYEXRrefwg==}
@@ -8859,7 +8859,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.8.1':
     optional: true
 
-  '@xeronith/granola@0.5.20':
+  '@xeronith/granola@0.5.21':
     dependencies:
       long: 5.3.2
       lz-string: 1.5.0

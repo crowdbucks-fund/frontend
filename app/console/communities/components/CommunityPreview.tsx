@@ -71,6 +71,9 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
           {community.banner && (
             <Image
               src={createFilePath(community.banner)}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
               alt={`${community.name}'s banner`}
               rounded="12px"
               objectFit="cover"

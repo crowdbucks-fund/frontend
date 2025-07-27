@@ -13,6 +13,8 @@ const fetchCommunity = async (handle: string) => {
         handle: decodeURIComponent(handle),
       })
       .then((res) => {
+        res.name = res.handleAlias;
+        res.handle = res.handleAlias;
         res.goals.sort(sortGoals);
         return res;
       });

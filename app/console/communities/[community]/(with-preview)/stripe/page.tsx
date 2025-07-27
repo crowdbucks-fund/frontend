@@ -37,6 +37,11 @@ export default function StripePage() {
           link: `/console`,
           startsWith: false,
         },
+        {
+          title: "Stripe",
+          link: `/console/stripe`,
+          startsWith: false,
+        },
       ],
       title: `${community!.name}`,
     },
