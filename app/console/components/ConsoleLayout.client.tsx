@@ -1,11 +1,11 @@
 "use client";
 import {
-  Avatar,
   Box,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   Button,
+  Image as ChakraImage,
   CircularProgress,
   Divider,
   Flex,
@@ -24,7 +24,7 @@ import UserEditIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useScrollRestoration } from "hooks/useScrollRestoration";
 import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { useAtom, useSetAtom } from "jotai";
@@ -263,7 +263,7 @@ export default function ConsoleLayoutClient({
             </Button>
           )}
 
-          {breadcrumb && (
+          {breadcrumb.length && (
             <>
               <Divider
                 h="15px"
@@ -341,167 +341,170 @@ export default function ConsoleLayoutClient({
         flexDirection="column"
         position="relative"
       >
-        <Box
-          as={motion.div}
-          variants={{
-            open: {
-              width: "280px",
-              opacity: 1,
-            },
-            closed: {
-              width: "0",
-              opacity: 0,
-            },
-          }}
-          initial="closed"
-          animate={isSidebarOpen && !!user ? "open" : "closed"}
-          display={{ md: "block", base: "none" }}
-          position="absolute"
-          h="calc(100% - 25px)"
-          overflow="auto"
-        >
-          <VStack
-            minH="full"
-            width="280px"
-            float="right"
-            //   gap={12}
-            gap={2}
-            overflow="hidden"
-            p="6"
-            rounded="20px"
-            border={{ md: "2px solid" }}
-            borderColor={{ md: "brand.gray.2" }}
-            bg={{ md: "brand.gray.3" }}
+        <AnimatePresence initial={false}>
+          <Box
+            as={motion.div}
+            variants={{
+              open: {
+                width: "280px",
+                opacity: 1,
+              },
+              closed: {
+                width: "0",
+                opacity: 0,
+              },
+            }}
+            initial="closed"
+            animate={isSidebarOpen && !!user ? "open" : "closed"}
+            display={{ md: "block", base: "none" }}
+            position="absolute"
+            h="calc(100% - 25px)"
+            overflow="auto"
           >
-            <VStack w="full" gap={8}>
-              <Button
-                display="flex"
-                justifyContent="space-between"
-                as={ActiveLink}
-                _hover={{
-                  bg: "blackAlpha.100",
-                }}
-                variant="ghost"
-                href="/console/edit-profile"
-                p="4"
-                w="full"
-                h="auto"
-                bg="white"
-                rounded="10px"
-                color="brand.black.1"
-                gap={2}
-                activeProps={{
-                  color: "brand.black.1",
-                }}
-                overflow="hidden"
-              >
-                <HStack overflow="hidden" flexGrow={1}>
-                  <Avatar
-                    width="36px"
-                    height="36px"
-                    src={
-                      (user as GetProfileResult)?.avatar || defaultAvatar.src
-                    }
-                  />
-                  <VStack
-                    align="start"
-                    gap="0.5"
-                    flexGrow={1}
-                    overflow="hidden"
-                  >
-                    <Text isTruncated maxW="full">
-                      {(user as GetProfileResult)?.displayName}
-                    </Text>
-                    <Text
-                      as="span"
-                      fontSize="10px"
-                      fontWeight="normal"
-                      maxW="full"
-                      isTruncated
-                      color="#6B7280"
+            <VStack
+              minH="full"
+              width="280px"
+              float="right"
+              //   gap={12}
+              gap={2}
+              overflow="hidden"
+              p="6"
+              rounded="20px"
+              border={{ md: "2px solid" }}
+              borderColor={{ md: "brand.gray.2" }}
+              bg={{ md: "brand.gray.3" }}
+            >
+              <VStack w="full" gap={8}>
+                <Button
+                  display="flex"
+                  justifyContent="space-between"
+                  as={ActiveLink}
+                  _hover={{
+                    bg: "blackAlpha.100",
+                  }}
+                  variant="ghost"
+                  href="/console/edit-profile"
+                  p="4"
+                  w="full"
+                  h="auto"
+                  bg="white"
+                  rounded="10px"
+                  color="brand.black.1"
+                  gap={2}
+                  activeProps={{
+                    color: "brand.black.1",
+                  }}
+                  overflow="hidden"
+                >
+                  <HStack overflow="hidden" flexGrow={1}>
+                    <ChakraImage
+                      width="36px"
+                      height="36px"
+                      src={
+                        (user as GetProfileResult)?.avatar || defaultAvatar.src
+                      }
+                      rounded="full"
+                    />
+                    <VStack
+                      align="start"
+                      gap="0.5"
+                      flexGrow={1}
+                      overflow="hidden"
                     >
-                      {authProvider.provider}:
-                    </Text>
-                    <Text
-                      as="span"
-                      fontSize="10px"
-                      fontWeight="normal"
-                      maxW="full"
-                      isTruncated
-                      color="#6B7280"
-                    >
-                      {authProvider.value}
-                    </Text>
-                  </VStack>
-                </HStack>
-                <Icon p={0} width="24px" h="24px">
-                  <UserEditIcon />
-                </Icon>
-              </Button>
-              <VStack w="full">
-                {sideBarMenu.map((menuItem) => {
-                  const Icon = menuItem.icon;
-                  return (
-                    <Button
-                      as={ActiveLink}
-                      fontWeight="medium"
-                      fontSize="14px"
-                      colorScheme="blackAlpha"
-                      color="brand.black.3"
-                      w="full"
-                      py="6"
-                      justifyContent="start"
-                      variant="ghost"
-                      rounded="10px"
-                      leftIcon={<Icon width="18px" />}
-                      title={menuItem.title}
-                      aria-label={menuItem.title}
-                      key={menuItem.title}
-                      href={menuItem.link}
-                      startsWith={menuItem.link !== "/console"}
-                      prefetch={menuItem.prefetch}
-                      activeProps={{
-                        bg: "white !important",
-                        fontWeight: "bold !important",
-                        color: "brand.black.2 !important",
-                        __css: {
-                          svg: {
-                            path: {
-                              strokeWidth: "3px !important",
+                      <Text isTruncated maxW="full">
+                        {(user as GetProfileResult)?.displayName}
+                      </Text>
+                      <Text
+                        as="span"
+                        fontSize="10px"
+                        fontWeight="normal"
+                        maxW="full"
+                        isTruncated
+                        color="#6B7280"
+                      >
+                        {authProvider.provider}:
+                      </Text>
+                      <Text
+                        as="span"
+                        fontSize="10px"
+                        fontWeight="normal"
+                        maxW="full"
+                        isTruncated
+                        color="#6B7280"
+                      >
+                        {authProvider.value}
+                      </Text>
+                    </VStack>
+                  </HStack>
+                  <Icon p={0} width="24px" h="24px">
+                    <UserEditIcon />
+                  </Icon>
+                </Button>
+                <VStack w="full">
+                  {sideBarMenu.map((menuItem) => {
+                    const Icon = menuItem.icon;
+                    return (
+                      <Button
+                        as={ActiveLink}
+                        fontWeight="medium"
+                        fontSize="14px"
+                        colorScheme="blackAlpha"
+                        color="brand.black.3"
+                        w="full"
+                        py="6"
+                        justifyContent="start"
+                        variant="ghost"
+                        rounded="10px"
+                        leftIcon={<Icon width="18px" />}
+                        title={menuItem.title}
+                        aria-label={menuItem.title}
+                        key={menuItem.title}
+                        href={menuItem.link}
+                        startsWith={menuItem.link !== "/console"}
+                        prefetch={menuItem.prefetch}
+                        activeProps={{
+                          bg: "white !important",
+                          fontWeight: "bold !important",
+                          color: "brand.black.2 !important",
+                          __css: {
+                            svg: {
+                              path: {
+                                strokeWidth: "3px !important",
+                              },
                             },
                           },
-                        },
-                      }}
-                    >
-                      {menuItem.title}
-                    </Button>
-                  );
-                })}
+                        }}
+                      >
+                        {menuItem.title}
+                      </Button>
+                    );
+                  })}
+                </VStack>
               </VStack>
+              <Button
+                fontWeight="medium"
+                fontSize="14px"
+                color="red"
+                w="full"
+                py="6"
+                justifyContent="start"
+                variant="ghost"
+                rounded="10px"
+                leftIcon={<LogoutIcon width="18px" />}
+                title={"Log out"}
+                aria-label={"Log out"}
+                colorScheme="red"
+                onClick={setIsLoggingOut.bind(null, true)}
+              >
+                Log out
+              </Button>
+              <LogoutModal
+                isOpen={isLoggingOut}
+                onClose={setIsLoggingOut.bind(null, false)}
+              />
             </VStack>
-            <Button
-              fontWeight="medium"
-              fontSize="14px"
-              color="red"
-              w="full"
-              py="6"
-              justifyContent="start"
-              variant="ghost"
-              rounded="10px"
-              leftIcon={<LogoutIcon width="18px" />}
-              title={"Log out"}
-              aria-label={"Log out"}
-              colorScheme="red"
-              onClick={setIsLoggingOut.bind(null, true)}
-            >
-              Log out
-            </Button>
-            <LogoutModal
-              isOpen={isLoggingOut}
-              onClose={setIsLoggingOut.bind(null, false)}
-            />
-          </VStack>
-        </Box>
+          </Box>
+        </AnimatePresence>
         <Box
           marginLeft={{
             md: isSidebarOpen && !!user ? "300px" : "0",

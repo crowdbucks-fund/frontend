@@ -17,7 +17,6 @@ import { useTiers } from "hooks/useTiers";
 import { api } from "lib/api";
 import { debounce } from "lodash";
 import NextLink from "next/link";
-import { usePathname } from "next/navigation";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
@@ -31,7 +30,7 @@ export default function TiersPage() {
   const { data: tiers, isLoading } = useTiers({
     communityId: community.id,
   });
-  const pathname = usePathname();
+
   useUpdateBreadcrumb(
     {
       breadcrumb: [
@@ -41,7 +40,7 @@ export default function TiersPage() {
           startsWith: false,
         },
       ],
-      title: `${community!.name} tiers`,
+      title: `${community!.name}`,
     },
     []
   );
@@ -62,7 +61,6 @@ export default function TiersPage() {
 
   const onCustomAmountChanged = useCallback(
     debounce((e: ChangeEvent<HTMLInputElement>) => {
-      console.log(!e.target.checked, e.target.value);
       enableCustomAmount(!e.target.checked);
     }, 300),
     []

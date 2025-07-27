@@ -14,7 +14,6 @@ export type BreadcrumbLinksType = {
 export const breadcrumbLinks = atom<BreadcrumbLinksType>({ breadcrumb: [] })
 export const useUpdateBreadcrumb = (links: BreadcrumbLinksType, deps: any[] = [links]) => {
   const updateBreadcrumb = useSetAtom(breadcrumbLinks)
-  // useHydrateAtoms([[breadcrumbLinks, links || {}]], { store });
 
   useEffect(() => {
     updateBreadcrumb(links)

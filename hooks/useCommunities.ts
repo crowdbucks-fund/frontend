@@ -6,6 +6,7 @@ export const useCommunities = (options: UseQueryOptions<UserCommunity[], unknown
   return useQuery({
     ...options,
     queryKey: ['getCommunitiesByUser'],
+    staleTime: 1000,
     queryFn: async () => (await api.getCommunitiesByUser({})).communities,
   })
 }

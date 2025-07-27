@@ -258,7 +258,7 @@ export const FediverseOauth: FC<{
                   onClick={setSelectedInstance.bind(null, instance)}
                   key={instance}
                   width="full"
-                  disabled={isLoading || isAuthorizing}
+                  disabled={isLoading || isAuthorizing || isSuccess}
                 >
                   {upperFirst(instance)}
                   {instance === selectedInstance && <CheckIcon width="24px" />}
@@ -270,7 +270,7 @@ export const FediverseOauth: FC<{
             <Button
               onClick={onOpen}
               variant="ghost"
-              disabled={isLoading || isAuthorizing}
+              disabled={isLoading || isAuthorizing || isSuccess}
             >
               Sign-in with a different server?
             </Button>

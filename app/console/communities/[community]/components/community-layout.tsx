@@ -71,7 +71,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
         {communityPreview && (
           <>
             <Box display={{ base: "none", md: "block" }} w="full" pb="6">
-              <CommunityPreview community={community} />
+              <CommunityPreview community={community} editButton />
             </Box>
             <Box
               pt={{ md: "7" }}
@@ -81,6 +81,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
               <CommunityPreview
                 shareCommunity
                 showSummary
+                editButton
                 community={community}
               />
             </Box>

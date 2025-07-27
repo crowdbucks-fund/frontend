@@ -90,7 +90,6 @@ export default function GoalsPage() {
         <GoalCard
           community={community}
           goal={extraGoal}
-          btnText={"Convert to a goal"}
           extra
           editable={false}
           buttonProps={{

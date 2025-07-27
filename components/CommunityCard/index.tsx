@@ -1,9 +1,9 @@
 "use client";
 import {
-  Avatar,
   Button,
   HStack,
   IconButton,
+  Image,
   Text,
   Tooltip,
   VStack,
@@ -60,10 +60,11 @@ export const CommunityCard: FC<CommunityCardProps> = ({ community, href }) => {
     >
       <HStack justify="space-between" w="full">
         <HStack w="full" align="center" gap={4} overflow="hidden">
-          <Avatar
+          <Image
             w={{ base: "36px", md: "52px" }}
             h={{ base: "36px", md: "52px" }}
             src={community.avatar || defaultAvatar.src}
+            rounded="full"
           />
           <VStack align="start" gap={0} overflow="hidden">
             <HStack w="full" align="center" gap={0}>
@@ -183,7 +184,13 @@ export const CreateCommunityCard: FC = () => {
     >
       <HStack justify="space-between" w="full">
         <HStack w="full" align="center" gap={4}>
-          <Avatar w="52px" h="52px" opacity={0.4} src={defaultAvatar.src} />
+          <Image
+            rounded="full"
+            w="52px"
+            h="52px"
+            opacity={0.4}
+            src={defaultAvatar.src}
+          />
           <VStack align="start">
             <Text fontSize="20px" fontWeight="bold">
               New community

@@ -82,8 +82,22 @@ const nextConfig: NextConfig = {
         source: '/console/stripe',
         destination: '/console/communities/default/stripe',
       },
+      {
+        source: '/console/edit',
+        destination: '/console/communities/default/edit',
+      },
     ]
-  })
+  }),
+  redirects: async () => ([{
+    source: '/console/communities/:id*',
+    destination: '/console',
+    permanent: true,
+  },
+  {
+    source: '/console/tiers',
+    destination: '/console',
+    permanent: true,
+  },])
 };
 
 export default nextConfig;

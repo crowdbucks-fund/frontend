@@ -58,7 +58,7 @@ const handleSchema = z
       .string()
       .trim()
       .min(5, { message: "Username must be at least 5 characters" })
-      .max(16, { message: "Username must be at most 16 characters" })
+      .max(20, { message: "Username must be at most 16 characters" })
       .regex(
         /^(?=[a-zA-Z0-9._]{5,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
         "Username is not valid"
@@ -195,10 +195,10 @@ export default function CreateUpdateCommunityPage({
     community
       ? {
           breadcrumb: [
-            {
-              title: "Communities",
-              link: "/console/communities",
-            },
+            // {
+            //   title: "Communities",
+            //   link: "/console/communities",
+            // },
             {
               title: "Edit Community",
               link: pathname,
@@ -206,16 +206,16 @@ export default function CreateUpdateCommunityPage({
           ],
           title: "Edit community",
           back: {
-            title: "Communities",
-            link: "/console/communities",
+            title: "Home",
+            link: "/console",
           },
         }
       : {
           breadcrumb: [
-            {
-              title: "Communities",
-              link: "/console/communities",
-            },
+            // {
+            //   title: "Communities",
+            //   link: "/console/communities",
+            // },
             {
               title: "Create Community",
               link: "/console/communities/create",
@@ -223,8 +223,8 @@ export default function CreateUpdateCommunityPage({
           ],
           title: "Create community",
           back: {
-            title: "Communities",
-            link: "/console/communities",
+            title: "Home",
+            link: "/console",
           },
         }
   );

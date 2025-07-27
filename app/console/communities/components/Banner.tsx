@@ -59,7 +59,15 @@ export const BannerInput: FC<BannerProps> = ({ setBanner, selectedBanner }) => {
   return (
     <>
       {selectedBanner && (
-        <Image w="full" rounded="12px" src={createFilePath(selectedBanner)} />
+        <Image
+          aspectRatio={171 / 52}
+          w="full"
+          rounded="12px"
+          src={createFilePath(selectedBanner)}
+          borderWidth="2px"
+          borderStyle="solid"
+          borderColor="brand.gray.1"
+        />
       )}
       <Dropzone
         accept={{

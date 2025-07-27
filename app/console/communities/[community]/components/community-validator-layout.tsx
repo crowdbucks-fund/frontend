@@ -28,10 +28,7 @@ export default function CommunityValidatorLayout({
   } = useCommunities({
     enabled: communityId === "default",
   });
-  console.log(
-    communityId !== "default",
-    communityId === "default" && communities
-  );
+
   const {
     data: community,
     isLoading: communityLoading,
@@ -39,12 +36,15 @@ export default function CommunityValidatorLayout({
     isError,
   } = useQuery({
     queryKey: ["COMMUNITY", communityId],
+    staleTime: 1000,
     queryFn: () => {
       if (communityId === "default" && communities) {
         const user = queryClient.getQueryData(
           useUserQueryKey
         ) as GetProfileResult;
         if (user) {
+          // @ts-expect-error invalid property
+          communities[0]._handle = communities[0].handle;
           communities[0].handle = user.mastodonUsername.replace("@", "");
         }
         return communities[0];

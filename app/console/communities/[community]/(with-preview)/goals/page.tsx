@@ -55,7 +55,7 @@ export default function GoalsPage() {
           startsWith: true,
         },
       ],
-      title: `${community!.name} goals`,
+      title: `${community!.name}`,
     },
     []
   );
@@ -194,6 +194,12 @@ export default function GoalsPage() {
                 w: "full",
                 as: NextLink,
                 href: `/console/goals/create`,
+                leftIcon: (
+                  <EditIcon
+                    width={{ base: "18px", md: "24px" }}
+                    height={{ base: "18px", md: "24px" }}
+                  />
+                ),
               }}
             />
           )}

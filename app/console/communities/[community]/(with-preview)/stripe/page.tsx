@@ -1,5 +1,6 @@
 "use client";
 import { Button, chakra, CircularProgress, VStack } from "@chakra-ui/react";
+import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import LinkIconBase from "assets/icons/link-2.svg?react";
 import StripeLogo from "assets/images/Stripe.svg";
@@ -27,14 +28,20 @@ export default function StripePage() {
   } = useAuth();
   const router = useRouter();
   const isVerifying = useSearchParams().get("verify") !== null;
-  useUpdateBreadcrumb({
-    breadcrumb: [
-      {
-        title: "Stripe",
-        link: "/console/stripe",
-      },
-    ],
-  });
+  const community = useCurrentCommunity();
+  useUpdateBreadcrumb(
+    {
+      breadcrumb: [
+        {
+          title: `${community!.name}`,
+          link: `/console`,
+          startsWith: false,
+        },
+      ],
+      title: `${community!.name}`,
+    },
+    []
+  );
   const { mutate: verifyConnection, isLoading: isValidatingUser } = useMutation(
     {
       mutationKey: "confirmStripeIntegrationByUser",
