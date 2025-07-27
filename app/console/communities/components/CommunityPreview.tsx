@@ -143,8 +143,8 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
 
             <Button
               display={{
-                base: "none",
-                md: "flex",
+                base: "flex",
+                // md: "flex",
               }}
               onClick={(e) => {
                 e.stopPropagation();
