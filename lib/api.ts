@@ -10,6 +10,7 @@ export const api = new Proxy(baseApi, {
       if (prop === "addOrUpdateCommunityByUser" && args[0]?._handle) {
         // @ts-ignore
         args[0].handle = args[0]._handle;
+        delete args[0]._handle;
       }
       // @ts-ignore
       return target[prop](...args);

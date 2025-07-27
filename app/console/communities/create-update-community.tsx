@@ -58,11 +58,11 @@ const handleSchema = z
       .string()
       .trim()
       .min(5, { message: "Username must be at least 5 characters" })
-      .max(20, { message: "Username must be at most 16 characters" })
-      .regex(
-        /^(?=[a-zA-Z0-9._]{5,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
-        "Username is not valid"
-      )
+    // .max(16)
+    // .regex(
+    //   /^(?=[a-zA-Z0-9._]{5,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
+    //   "Username is not valid"
+    // )
   );
 export default function CreateUpdateCommunityPage({
   community,
@@ -148,6 +148,7 @@ export default function CreateUpdateCommunityPage({
   } = useMutationWithFile(
     async (data) => {
       toast.closeAll();
+      if (isEditing && community) data.handle = community.handle;
       return await api.addOrUpdateCommunityByUser(data);
     },
     {
@@ -351,6 +352,7 @@ export default function CreateUpdateCommunityPage({
                           defaultValue={field.value}
                           onChange={(e) => changeHandle(e.target.value)}
                           // pl={"10 !important"}
+                          isDisabled
                           pr={
                             isCheckingUsername ||
                             (usernameAvailability &&
