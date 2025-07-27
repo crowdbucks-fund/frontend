@@ -16,6 +16,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FediverseOauth } from "app/auth/components/FediverseOauth";
 import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
+import MisskeyIconBase from "assets/icons/Misskey-outline.svg?react";
+import PeerTubeIconBase from "assets/icons/Peertube-outline.svg?react";
+import PixelfedIconBase from "assets/icons/Pixelfed-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
 import CoinGlassJar from "assets/images/coins-glass-jar.webp";
 import Earth from "assets/images/earth.svg?react";
@@ -41,6 +44,9 @@ import { maskEmail } from "utils/strings";
 import { z } from "zod";
 
 const MastodonIcon = chakra(MastodonIconBase);
+const PixelfedIcon = chakra(PixelfedIconBase);
+const PeerTubeIcon = chakra(PeerTubeIconBase);
+const MisskeyIcon = chakra(MisskeyIconBase);
 const Envelope = chakra(EnvelopeIcon);
 const EarthIcon = chakra(Earth);
 
@@ -315,11 +321,44 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             size="lg"
             w="full"
             gap={2}
-            // variant="outline"
+            variant="outline"
             onClick={onChangeStep.bind(null, MASTODON_STEP)}
           >
             <MastodonIcon />
             Sign in With Mastodon
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            disabled={true}
+          >
+            <PixelfedIcon />
+            Sign in With Pixelfex
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            disabled={true}
+          >
+            <MisskeyIcon />
+            Sign in With Misskey
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            disabled={true}
+          >
+            <PeerTubeIcon />
+            Sign in With PeerTube
           </Button>
         </VStack>
       </VStack>
