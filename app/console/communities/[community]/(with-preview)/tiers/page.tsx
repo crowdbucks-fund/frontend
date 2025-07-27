@@ -1,13 +1,5 @@
 "use client";
-import {
-  Box,
-  Button,
-  Checkbox,
-  CircularProgress,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { UserTier } from "@xeronith/granola/core/objects";
 import TierIcon from "assets/icons/dollar-square.svg?react";
 import { CreateFirstEntity } from "components/FirstEntity";
@@ -70,7 +62,7 @@ export default function TiersPage() {
   if (tiers && !tiers.length && !community.customAmountsEnabled)
     return (
       <Box position="relative">
-        <Checkbox
+        {/* <Checkbox
           isChecked={community.customAmountsEnabled}
           isDisabled={enableCustomAmountLoading || community.isLoading}
           onChange={onCustomAmountChanged}
@@ -85,26 +77,27 @@ export default function TiersPage() {
           <Text as="span" mr="2">
             Enable custom amount
           </Text>
-        </Checkbox>
+        </Checkbox> */}
         <CreateFirstEntity
           customAction={
-            <Checkbox
-              isIndeterminate={enableCustomAmountLoading || community.isLoading}
-              icon={
-                enableCustomAmountLoading || community.isLoading ? (
-                  <CircularProgress size="12px" />
-                ) : undefined
-              }
-              isChecked={community.customAmountsEnabled}
-              isDisabled={enableCustomAmountLoading || community.isLoading}
-              onChange={onCustomAmountChanged}
-              display={{ base: "flex", md: "none" }}
-              flexGrow={1}
-              w="full"
-              zIndex={2}
-            >
-              Enable custom amount
-            </Checkbox>
+            null
+            // <Checkbox
+            //   isIndeterminate={enableCustomAmountLoading || community.isLoading}
+            //   icon={
+            //     enableCustomAmountLoading || community.isLoading ? (
+            //       <CircularProgress size="12px" />
+            //     ) : undefined
+            //   }
+            //   isChecked={community.customAmountsEnabled}
+            //   isDisabled={enableCustomAmountLoading || community.isLoading}
+            //   onChange={onCustomAmountChanged}
+            //   display={{ base: "flex", md: "none" }}
+            //   flexGrow={1}
+            //   w="full"
+            //   zIndex={2}
+            // >
+            //   Enable custom amount
+            // </Checkbox>
           }
           mobileButtonText={
             <HStack>
@@ -122,7 +115,7 @@ export default function TiersPage() {
   if (tiers)
     return (
       <Box position="relative">
-        <Checkbox
+        {/* <Checkbox
           isIndeterminate={enableCustomAmountLoading || community.isLoading}
           icon={
             enableCustomAmountLoading || community.isLoading ? (
@@ -141,9 +134,9 @@ export default function TiersPage() {
           zIndex={2}
         >
           Enable custom amount
-        </Checkbox>
+        </Checkbox> */}
         <HStack py="4" w="full" display={{ base: "flex", md: "none" }}>
-          <Checkbox
+          {/* <Checkbox
             isIndeterminate={enableCustomAmountLoading || community.isLoading}
             icon={
               enableCustomAmountLoading || community.isLoading ? (
@@ -158,7 +151,7 @@ export default function TiersPage() {
             zIndex={2}
           >
             Enable custom amount
-          </Checkbox>
+          </Checkbox> */}
           <Button
             as={NextLink}
             href={`/console/tiers/create`}

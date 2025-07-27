@@ -43,7 +43,7 @@ const instances = {
       "mastodon.social",
       "mastodon.online",
       "mstdn.social",
-      "mast.to",
+      "mas.to",
     ],
     name: "Mastodon",
     Icon: MastodonIcon,
