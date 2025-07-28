@@ -1,20 +1,22 @@
-/*
-  Cache-Control: no-store
-  Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch
 
 /_next/static/*
-  Cache-Control: public,max-age=31536000,immutable
-
-/console/*
-  Cache-Control: no-store
-  Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch
+  Cache-Control: public,max-age=31536000,immutable;
+  ! Vary
 
 /
-  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate
-
+  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate;
+  ! Vary
 /contact-us
-  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate
-
+  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate;
+  ! Vary
 /about
-  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate
+  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate;
+  ! Vary
 
+/console/*
+  Cache-Control: no-store;
+  Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch;
+
+/*
+  Cache-Control: no-store;
+  Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch;
