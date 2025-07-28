@@ -83,7 +83,13 @@ export default function ConsoleLayoutClient({
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);
 
   const [
-    { breadcrumb, title: routeTitle, back: backButton, showConsoleMenu = true },
+    {
+      breadcrumb,
+      title: routeTitle,
+      back: backButton,
+      //
+      showConsoleMenu = false,
+    },
   ] = useAtom(breadcrumbLinks);
 
   const setIsMoreDrawerOpen = useSetAtom(moreDrawerState);

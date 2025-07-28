@@ -45,6 +45,7 @@ export const TierCard: FC<TierCardProps> = ({
   const handleOnClick = () => {
     if (href) router.push(href);
   };
+
   return (
     <VStack
       role="group"

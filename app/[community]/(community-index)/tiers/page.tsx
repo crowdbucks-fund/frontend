@@ -10,8 +10,11 @@ import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { TierCard } from "components/TierCard";
 import { usePaymentVerification } from "hooks/usePaymentVerification";
 import { sortTiers } from "hooks/useTiers.server";
+import { lowerCase } from "lodash";
 import NextLink from "next/link";
+import { useCallback } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
+import { useAuth } from "states/console/user";
 import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 
@@ -21,7 +24,17 @@ export default function TierPage() {
   const community = useCurrentCommunity<FindCommunityByUserResult>();
   const [{ hasPayment, isSuccess }, updatePaymentState] =
     usePaymentVerification();
+  const { user } = useAuth();
 
+  const isSubscribedToTier = useCallback(
+    (tierId: number) => {
+      return false;
+      if (!user) return false;
+      // @ts-ignore
+      return user.subscribedTierIds.includes(tierId);
+    },
+    [user]
+  );
   useUpdateBreadcrumb({
     breadcrumb: [
       {
@@ -109,19 +122,32 @@ export default function TierPage() {
         <EmptyState>There is no tier defined yet!</EmptyState>
       )}
       {community.tiers.sort(sortTiers).map((tier) => {
+        const isSubscribed = isSubscribedToTier(tier.id);
         return (
           <TierCard
             key={tier.id}
             community={community}
             tier={tier}
-            btnText={`Join with $${tier.amount} a ${tier.tierFrequency?.unit}`}
+            btnText={
+              isSubscribed
+                ? "Unsubscribe"
+                : `Join with $${tier.amount} a ${lowerCase(
+                    tier.tierFrequency?.unit
+                  )}`
+            }
             buttonProps={{
-              as: NextLink,
-              href: joinURL(getCommunityTiersLink(community), String(tier.id)),
-              variant: "solid",
+              as: isSubscribed ? undefined : NextLink,
+              href: isSubscribed
+                ? undefined
+                : joinURL(getCommunityTiersLink(community), String(tier.id)),
+              variant: isSubscribed ? "glass" : "solid",
               colorScheme: tier.recommended ? "secondary" : "primary",
               color: undefined,
               border: undefined,
+              cursor: isSubscribed ? "not-allowed" : "pointer",
+              pointerEvents: isSubscribed ? "none" : "unset",
+              // opacity: isSubscribed ? ".5" : "1",
+              // isDisabled: isSubscribed,
             }}
           />
         );

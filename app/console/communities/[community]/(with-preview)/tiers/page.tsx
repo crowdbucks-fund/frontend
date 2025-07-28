@@ -165,6 +165,7 @@ export default function TiersPage() {
             borderColor="primary.500"
             size="lg"
             bg="primary-glass.500"
+            w="full"
           >
             Add a tier
           </Button>

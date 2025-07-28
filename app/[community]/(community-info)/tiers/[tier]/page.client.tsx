@@ -1,6 +1,7 @@
 "use client";
 import {
   Box,
+  chakra,
   CircularProgress,
   Divider,
   Flex,
@@ -11,15 +12,19 @@ import {
 import { UserTier } from "@xeronith/granola/core/objects";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
+import TickSquare from "assets/icons/tick-square.svg?react";
 import { PaymentForm } from "components/PaymentForm";
 import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import { lowerCase } from "lodash";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
 import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
+
+const CheckIcon = chakra(TickSquare);
 
 export default function TierClientPage({ tier }: { tier: UserTier }) {
   const { user } = useAuth();
@@ -52,6 +57,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
     isLoading,
     data: paymentFormData,
     isSuccess: paymentFormReady,
+    error,
   } = useCreateStripeIntent({
     onError() {},
   });
@@ -145,17 +151,49 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
               />
             </HStack>
           )}
-          {paymentFormReady && (
-            <PaymentForm
-              {...paymentFormData}
-              returnUrl={`${joinURL(
-                window.location.origin,
-                getCommunityTiersLink(community)
-              )}?verify`}
-            />
-          )}
+          {!!error && <ErrorComponent error={error as Error} />}
+          <ErrorBoundary FallbackComponent={ErrorComponent}>
+            {paymentFormReady && (
+              <PaymentForm
+                {...paymentFormData}
+                returnUrl={`${joinURL(
+                  window.location.origin,
+                  getCommunityTiersLink(community)
+                )}?verify`}
+              />
+            )}
+          </ErrorBoundary>
         </VStack>
       </Flex>
     </CenterLayout>
   );
 }
+
+const ErrorComponent: FC<{ error: Error | string }> = ({ error }) => {
+  const message =
+    typeof error === "string"
+      ? error
+      : error.message || "An unexpected error occurred.";
+
+  const isSubscribeError = message.includes("subscribed");
+  if (isSubscribeError) {
+    return (
+      <VStack>
+        <CheckIcon color="primary.500" w={{ base: "42px", md: "52px" }} />
+        <Text color="primary.500" fontSize="lg" fontWeight="bold">
+          {message}
+        </Text>
+      </VStack>
+    );
+  }
+  return (
+    <VStack>
+      <Text color="red.500" fontSize="lg" fontWeight="bold">
+        An error occurred
+      </Text>
+      <Text color="red.300">
+        Please try again later or contact support if the issue persists.
+      </Text>
+    </VStack>
+  );
+};
