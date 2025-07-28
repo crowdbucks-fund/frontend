@@ -4,7 +4,7 @@ import { GetProfileResult } from '@xeronith/granola/core/spi'
 import { atom, useAtom } from 'jotai'
 import { api } from 'lib/api'
 import { queryClient } from 'lib/reactQuery'
-import { useSelectedLayoutSegments } from 'next/navigation'
+import { useSelectedLayoutSegment } from 'next/navigation'
 import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
 export const useUserQueryKey = ['getProfile']
@@ -12,8 +12,8 @@ export const userProfileSSR = atom<GetProfileResult | null>(null)
 
 export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey> = {}) => {
   const [userProfileFromServer] = useAtom(userProfileSSR);
-  const layoutSegments = useSelectedLayoutSegments()
-  const isCommunityPublicPage = layoutSegments[0] === '(community-index)'
+  const layoutSegment = useSelectedLayoutSegment()
+  const isCommunityPublicPage = !!layoutSegment || layoutSegment === '(community-index)' || layoutSegment === null
   const {
     data: user,
     isLoading: loading,
