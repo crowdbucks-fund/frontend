@@ -97,7 +97,64 @@ const nextConfig: NextConfig = {
     source: '/console/tiers',
     destination: '/console',
     permanent: true,
-  },])
+  },]),
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store',
+          },
+          // {
+          //   key: 'Vary',
+          //   value: 'Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
+          // },
+        ],
+      },
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/about',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/contact-us',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/console/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store',
+          },
+          // {
+          //   key: 'Vary',
+          //   value: 'Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
+          // },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
