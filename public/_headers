@@ -1,10 +1,19 @@
 /_next/static/*
   Cache-Control: public,max-age=31536000,immutable
 
-/c/*
+/console/*
   Cache-Control: no-store
   Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch
 
-/console/*
+/
+  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate
+
+/contact-us
+  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate
+
+/about
+  Cache-Control: public, s-maxage=31536000, max-age=86400, must-revalidate
+
+/*
   Cache-Control: no-store
   Vary: Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch
