@@ -3,21 +3,30 @@ import { fetchProfile } from "app/console/components/ConsoleLayout.server";
 import { sortGoals } from "hooks/useGoals.server";
 import { api } from "lib/api";
 import { notFound } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { cache, PropsWithChildren } from "react";
 import { CommunityPublicPageLayout } from "./layout.client";
 
-const fetchCommunity = async (handle: string) => {
+const communityCache = cache(() => new Map());
+export const fetchCommunity = async (handle: string) => {
   try {
-    return await api
-      .findCommunityByUser({
-        handle: decodeURIComponent(handle),
-      })
-      .then((res) => {
-        res.name = res.handleAlias;
-        res.handle = res.handleAlias;
-        res.goals.sort(sortGoals);
-        return res;
-      });
+    const cache = communityCache();
+    if (!cache.get(handle))
+      cache.set(
+        handle,
+        api
+          .findCommunityByUser({
+            handle: decodeURIComponent(handle),
+          })
+          .then((res) => {
+            res.name = res.handleAlias;
+            // @ts-expect-error this _handle is not in the type
+            if (!res._handle) res._handle = res.handle;
+            res.handle = res.handleAlias;
+            res.goals.sort(sortGoals);
+            return res;
+          })
+      );
+    return await cache.get(handle);
   } catch (e) {
     return null;
   }
@@ -31,10 +40,12 @@ export default async function CommunityLayout({
   children,
 }: PropsWithChildren<{ params: { community: string } }>) {
   params = await params;
+
   const getProfilePromise = fetchProfile();
   const community = await fetchCommunity(params.community);
   if (!community) return notFound();
   (params as any).currentCommunity = community;
+
   return (
     <ConsoleLayout
       publicPage

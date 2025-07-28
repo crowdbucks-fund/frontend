@@ -1,3 +1,4 @@
+import { fetchCommunity } from "app/[community]/layout";
 import { api } from "lib/api";
 import { notFound } from "next/navigation";
 import TierClientPage from "./page.client";
@@ -15,10 +16,8 @@ const findTier = async (communityHandle: string, tierId: number) => {
 
 export default async function TierPage({ params }: { params: Params }) {
   const { community, tier } = await params;
-  const currentTier = await findTier(
-    community.toString(),
-    parseInt(tier.toString())
-  );
+  const com = await fetchCommunity(community.toString());
+  const currentTier = await findTier(com._handle, parseInt(tier.toString()));
   if (currentTier && currentTier.belongsToCommunity)
     return <TierClientPage tier={currentTier} />;
   return notFound();
