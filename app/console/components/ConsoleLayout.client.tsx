@@ -1,4 +1,5 @@
 "use client";
+import { Image } from "@chakra-ui/next-js";
 import {
   Box,
   Breadcrumb,
@@ -30,7 +31,6 @@ import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { useAtom, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { store } from "lib/jotai";
-import Image from "next/image";
 import NextLink from "next/link";
 import { useSelectedLayoutSegments } from "next/navigation";
 import { FC, PropsWithChildren, useState } from "react";
@@ -100,6 +100,8 @@ export default function ConsoleLayoutClient({
   const isWithPreviewRoute =
     segments.includes("(with-preview)") ||
     segments.includes("(community-index)");
+
+  const isCommunityPublicPage = segments.includes("(community-index)");
   if (loading) return <SplashLoading />;
   return (
     <VStack
@@ -108,31 +110,31 @@ export default function ConsoleLayoutClient({
       minH="100svh"
       bg={{ base: "brand.gray.3", md: "brand.gray.4" }}
     >
-      <HStack
-        w="full"
-        justify="space-between"
-        py={4}
-        mt={2}
-        position={!!user ? "static" : "relative"}
-      >
-        {user ? (
-          <IconButton
-            colorScheme="blackAlpha"
-            color="black"
-            display={{ base: "none", md: "flex" }}
-            aria-label="Toggle Menu"
-            variant="ghost"
-            onClick={setSidebarOpen.bind(null, !isSidebarOpen)}
-          >
-            <MenuIcon />
-          </IconButton>
-        ) : (
-          <Box h="40px" />
-        )}
+      {!isCommunityPublicPage && (
+        <HStack
+          w="full"
+          justify="space-between"
+          py={4}
+          mt={2}
+          position={!!user ? "static" : "relative"}
+        >
+          {user ? (
+            <IconButton
+              colorScheme="blackAlpha"
+              color="black"
+              display={{ base: "none", md: "flex" }}
+              aria-label="Toggle Menu"
+              variant="ghost"
+              onClick={setSidebarOpen.bind(null, !isSidebarOpen)}
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <Box h="40px" />
+          )}
 
-        <Box display={{ base: "flex", md: "none" }}>
-          {
-            backButton && user ? (
+          <Box display={{ base: "flex", md: "none" }}>
+            {backButton && user ? (
               <Button
                 variant="unstyled"
                 display="flex"
@@ -149,109 +151,62 @@ export default function ConsoleLayoutClient({
                 </Box>
                 {backButton.title}
               </Button>
-            ) : null
-            // user && (
-            //   <IconButton
-            //     as={ActiveLink}
-            //     href="/console/settings"
-            //     colorScheme="blackAlpha"
-            //     color="black"
-            //     display={{ base: "flex", md: "none" }}
-            //     aria-label="Settings Menu"
-            //     variant="ghost"
-            //   >
-            //     <SettingsIcon />
-            //   </IconButton>
-            // )
-          }
-        </Box>
+            ) : null}
+          </Box>
 
-        <Box
-          position="absolute"
-          left={"50%"}
-          transform="translateX(-50%)"
-          display={{ base: "none", md: "block" }}
-        >
-          <Image
-            priority
-            src="/logo.svg"
-            alt="CrowdBucks Logo"
-            width={130}
-            height={42}
-          />
-        </Box>
-
-        <Box
-          position="absolute"
-          left={!!user ? "50%" : "0"}
-          transform={!!user ? "translateX(-50%)" : undefined}
-          display={{ base: "block", md: "none" }}
-        >
-          {routeTitle ? (
-            <Text
-              fontWeight="bold"
-              fontSize="14px"
-              isTruncated
-              maxW="calc(100vw - 215px)"
-            >
-              {routeTitle}
-            </Text>
-          ) : (
+          <Box
+            position="absolute"
+            left={"50%"}
+            transform="translateX(-50%)"
+            display={{ base: "none", md: "block" }}
+          >
             <Image
               priority
-              src="/logo-standalone.svg"
+              src="/logo.svg"
               alt="CrowdBucks Logo"
-              width={120}
-              height={35}
+              width={130}
+              height={42}
             />
-          )}
-        </Box>
+          </Box>
 
-        {user ? (
-          <IconButton
-            onClick={setIsMoreDrawerOpen.bind(null, true)}
-            colorScheme="blackAlpha"
-            color="black"
-            display={{ base: "flex", md: "none" }}
-            aria-label="Settings Menu"
-            variant="ghost"
+          <Box
+            position="absolute"
+            left={!!user ? "50%" : "0"}
+            transform={!!user ? "translateX(-50%)" : undefined}
+            display={{ base: "block", md: "none" }}
           >
-            <MoreIcon />
-          </IconButton>
-        ) : (
-          <Button
-            as={NextLink}
-            href="/auth"
-            size="sm"
-            variant="solid"
-            fontSize={{ base: "10px", md: "14px" }}
-            px={{ base: 2, md: 3 }}
-            h={{ base: "28px", md: "34px" }}
-            fontWeight="bold"
-            colorScheme="primary"
-            rounded="10px"
-            isLoading={isFetching}
-            display={{ base: "flex", md: "none" }}
-          >
-            {user ? "Get started" : "Join CrowdBucks Now"}
-          </Button>
-        )}
-      </HStack>
-      <HStack
-        w="full"
-        justify="space-between"
-        py={4}
-        display={{ base: "none", md: "flex" }}
-      >
-        <HStack gap={2}>
-          {user && !loading && (
-            <Text fontWeight="bold" fontSize="16px" color="brand.black.1">
-              {user.displayName
-                ? `${user.displayName}'s Console`
-                : `Your Console`}
-            </Text>
-          )}
-          {!user && !loading && (
+            {routeTitle ? (
+              <Text
+                fontWeight="bold"
+                fontSize="14px"
+                isTruncated
+                maxW="calc(100vw - 215px)"
+              >
+                {routeTitle}
+              </Text>
+            ) : (
+              <Image
+                priority
+                src="/logo-standalone.svg"
+                alt="CrowdBucks Logo"
+                width={120}
+                height={35}
+              />
+            )}
+          </Box>
+
+          {user ? (
+            <IconButton
+              onClick={setIsMoreDrawerOpen.bind(null, true)}
+              colorScheme="blackAlpha"
+              color="black"
+              display={{ base: "flex", md: "none" }}
+              aria-label="Settings Menu"
+              variant="ghost"
+            >
+              <MoreIcon />
+            </IconButton>
+          ) : (
             <Button
               as={NextLink}
               href="/auth"
@@ -264,68 +219,123 @@ export default function ConsoleLayoutClient({
               colorScheme="primary"
               rounded="10px"
               isLoading={isFetching}
+              display={{ base: "flex", md: "none" }}
             >
               {user ? "Get started" : "Join CrowdBucks Now"}
             </Button>
           )}
+        </HStack>
+      )}
 
-          {breadcrumb.length && (
-            <>
-              <Divider
-                h="15px"
-                borderColor="secondary.500"
-                borderWidth="1.5px"
-                orientation="vertical"
-              />
-              <Breadcrumb
-                separator={
-                  <ChevronRightIcon
-                    color="gray.500"
-                    width="13px"
-                    strokeWidth="2px"
-                  />
-                }
+      {isCommunityPublicPage && (
+        <HStack
+          justifyContent="center"
+          py={{ base: 2, md: "4" }}
+          mt={{ base: 4, md: 4 }}
+        >
+          <Image
+            priority
+            src="/logo-standalone.svg"
+            alt="CrowdBucks Logo"
+            width={120}
+            height={35}
+            h={{ base: "24px", md: "35px" }}
+          />
+        </HStack>
+      )}
+
+      {!isCommunityPublicPage && (
+        <HStack
+          w="full"
+          justify="space-between"
+          py={4}
+          display={{ base: "none", md: "flex" }}
+        >
+          <HStack gap={2}>
+            {user && !loading && (
+              <Text fontWeight="bold" fontSize="16px" color="brand.black.1">
+                {user.displayName
+                  ? `${user.displayName}'s Console`
+                  : `Your Console`}
+              </Text>
+            )}
+            {!user && !loading && (
+              <Button
+                as={NextLink}
+                href="/auth"
+                size="sm"
+                variant="solid"
+                fontSize={{ base: "10px", md: "14px" }}
+                px={{ base: 2, md: 3 }}
+                h={{ base: "28px", md: "34px" }}
+                fontWeight="bold"
+                colorScheme="primary"
+                rounded="10px"
+                isLoading={isFetching}
               >
-                {breadcrumb.map((breadcrumb, i) => {
-                  return (
-                    <BreadcrumbItem key={`${breadcrumb.title}-${i}`}>
-                      <BreadcrumbLink
-                        as={ActiveLink}
-                        textUnderlineOffset="3px"
-                        href={breadcrumb.link}
-                        startsWith={breadcrumb.startsWith || false}
-                      >
-                        {breadcrumb.title}
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  );
-                })}
-              </Breadcrumb>
-            </>
-          )}
-        </HStack>
-        <HStack gap="4" height="40px">
-          {user &&
-            showConsoleMenu &&
-            consoleMenu.map((menuItem) => {
-              const Icon = menuItem.icon;
-              return (
-                <IconButton
-                  startsWith={menuItem.link !== "/console"}
-                  as={ActiveLink}
-                  href={menuItem.link}
-                  title={menuItem.title}
-                  aria-label={menuItem.title}
-                  key={menuItem.title}
-                  variant="ghost"
-                  prefetch={menuItem.prefetch}
+                {user ? "Get started" : "Join CrowdBucks Now"}
+              </Button>
+            )}
+
+            {breadcrumb.length && (
+              <>
+                <Divider
+                  h="15px"
+                  borderColor="secondary.500"
+                  borderWidth="1.5px"
+                  orientation="vertical"
+                />
+                <Breadcrumb
+                  separator={
+                    <ChevronRightIcon
+                      color="gray.500"
+                      width="13px"
+                      strokeWidth="2px"
+                    />
+                  }
                 >
-                  <Icon />
-                </IconButton>
-              );
-            })}
+                  {breadcrumb.map((breadcrumb, i) => {
+                    return (
+                      <BreadcrumbItem key={`${breadcrumb.title}-${i}`}>
+                        <BreadcrumbLink
+                          as={ActiveLink}
+                          textUnderlineOffset="3px"
+                          href={breadcrumb.link}
+                          startsWith={breadcrumb.startsWith || false}
+                        >
+                          {breadcrumb.title}
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                    );
+                  })}
+                </Breadcrumb>
+              </>
+            )}
+          </HStack>
+
+          <HStack gap="4" height="40px">
+            {user &&
+              showConsoleMenu &&
+              consoleMenu.map((menuItem) => {
+                const Icon = menuItem.icon;
+                return (
+                  <IconButton
+                    startsWith={menuItem.link !== "/console"}
+                    as={ActiveLink}
+                    href={menuItem.link}
+                    title={menuItem.title}
+                    aria-label={menuItem.title}
+                    key={menuItem.title}
+                    variant="ghost"
+                    prefetch={menuItem.prefetch}
+                  >
+                    <Icon />
+                  </IconButton>
+                );
+              })}
+          </HStack>
         </HStack>
-      </HStack>
+      )}
       <Flex
         flexGrow={1}
         overflow="auto"

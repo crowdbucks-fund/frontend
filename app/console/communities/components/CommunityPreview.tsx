@@ -146,7 +146,8 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
 
             <Button
               display={{
-                base: "flex",
+                base: "none",
+                md: "flex",
                 // md: "flex",
               }}
               onClick={(e) => {
