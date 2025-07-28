@@ -118,7 +118,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
             <Divider color="brand.gray.2" />
             <VStack w="full">
               <HStack w="full" justifyContent="space-between">
-                <Text>Price</Text>
+                <Text>Donation</Text>
                 <Text>
                   ${tier.amount}/{lowerCase(tier.tierFrequency?.unit)}
                 </Text>

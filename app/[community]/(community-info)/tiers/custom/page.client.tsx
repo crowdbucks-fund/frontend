@@ -350,7 +350,7 @@ export default function CustomTierClientPage() {
               <Divider color="brand.gray.2" />
               <VStack w="full">
                 <HStack w="full" justifyContent="space-between">
-                  <Text>Price</Text>
+                  <Text>Donation</Text>
                   <Text>
                     ${variables?.amount}
                     {selectedFrequency?.unit !== "one-time" &&
