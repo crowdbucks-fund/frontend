@@ -215,7 +215,7 @@ export const FediverseOauth: FC<{
         <VStack gap="8" w="full">
           <VStack alignItems="start" w="full">
             <Text color="blackAlpha.600" fontSize="12px">
-              Login With...
+              Login with...
             </Text>
             <Text
               fontWeight="bold"
