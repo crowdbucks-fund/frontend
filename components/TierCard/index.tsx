@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import AddIcon from "assets/icons/add-square.svg?react";
+import TickSquare from "assets/icons/tick-square.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +19,7 @@ import { FC } from "react";
 import { LocalUserTier } from "types/Tier";
 
 const DeleteIcon = chakra(TrashIcon);
+const RecommendedIcon = chakra(TickSquare);
 
 export type TierCardProps = {
   tier: LocalUserTier;
@@ -50,8 +52,8 @@ export const TierCard: FC<TierCardProps> = ({
     <VStack
       role="group"
       gap={{ base: 4, md: 5 }}
-      border="2px solid"
-      borderColor={tier.recommended ? "secondary.500" : "transparent"}
+      border="none"
+      // borderColor={tier.recommended ? "secondary.500" : "transparent"}
       color="brand.black.1"
       p={{ md: 8, base: 4 }}
       bg="white"
@@ -63,6 +65,24 @@ export const TierCard: FC<TierCardProps> = ({
       overflow="hidden"
       {...props}
     >
+      {tier.recommended && (
+        <Text
+          fontSize={{ base: "14px", md: "14px" }}
+          fontWeight="bold"
+          bg="secondary.500"
+          display="flex"
+          gap="1"
+          alignItems="center"
+          justifyContent="center"
+          p="2"
+          rounded="8px"
+          color="white"
+          mb="-2"
+        >
+          <RecommendedIcon w="16px" strokeWidth="4px" />
+          Recommended
+        </Text>
+      )}
       <HStack justify="space-between" w="full" overflow="hidden">
         <VStack align="start" overflow="hidden" gap={{ base: 0, md: 3 }}>
           <Text
@@ -113,31 +133,14 @@ export const TierCard: FC<TierCardProps> = ({
         {tier.caption}
       </Text>
       {editable && (
-        <HStack
-          gap={4}
-          justify="space-between"
-          w="full"
-          color={tier.recommended ? "secondary.500" : "primary.500"}
-        >
+        <HStack gap={4} justify="space-between" w="full" color={"primary.500"}>
           <Button
             pointerEvents={format === "preview" ? "none" : "unset"}
             as={format !== "preview" ? NextLink : undefined}
             cursor={format === "preview" ? "default" : "cursor"}
             w="full"
-            colorScheme={
-              format === "preview"
-                ? tier.recommended
-                  ? "secondary"
-                  : "primary"
-                : "gray"
-            }
-            color={
-              format === "preview"
-                ? "white"
-                : tier.recommended
-                ? "secondary.500"
-                : "primary.500"
-            }
+            colorScheme={format === "preview" ? "primary" : "gray"}
+            color={format === "preview" ? "white" : "primary.500"}
             border={format !== "preview" ? "2px solid" : undefined}
             borderColor={format !== "preview" ? "gray.200" : undefined}
             size="lg"
