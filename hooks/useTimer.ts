@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const SECOND = 1_000
 const MINUTE = SECOND * 60
@@ -38,6 +38,15 @@ export default function useTimer(minutes: number, interval = SECOND) {
     restart()
   }, [minutes])
 
+  const setEnded = useCallback((value: boolean) => {
+    setIsEnded(value)
+    if (value) {
+      setTimespan(0)
+    } else {
+      setTimespan(new Date().getTime() + minutes * 60000 - Date.now())
+    }
+  }, [])
+
   return {
     days: Math.floor(timespan / DAY),
     hours: Math.floor((timespan / HOUR) % 24),
@@ -45,5 +54,6 @@ export default function useTimer(minutes: number, interval = SECOND) {
     seconds: Math.floor((timespan / SECOND) % 60),
     restart,
     isEnded,
+    setEnded
   }
 }

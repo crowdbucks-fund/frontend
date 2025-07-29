@@ -9,24 +9,37 @@ import {
   Divider,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
   Input,
+  PinInput,
+  PinInputField,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
+import { PaymentForm } from "components/PaymentForm";
+import { toast } from "components/Toast";
 import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
-import { lowerCase } from "lodash";
+import useTimer from "hooks/useTimer";
+import { api } from "lib/api";
+import { lowerCase, startCase, upperFirst } from "lodash";
 import { usePathname } from "next/navigation";
 import { FC, useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
+import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
+import { z } from "zod";
 
 const CheckIcon = chakra(TickSquare);
 
@@ -58,7 +71,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
 
   const {
     mutate: createStripeIntent,
-    isLoading,
+    isPending: isLoading,
     data: paymentFormData,
     isSuccess: paymentFormReady,
     error,
@@ -67,7 +80,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
   });
 
   useEffect(() => {
-    if (user)
+    if (user?.email)
       createStripeIntent({
         communityId: community.id,
         tierFrequencyId: tier.tierFrequencyId,
@@ -148,40 +161,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
           </VStack>
         </Box>
         <VStack minW={{ base: "unset", md: "400px" }}>
-          {!isLoading && !!user && (
-            <VStack maxW="400px" gap="6">
-              <Text color="brand.black.2">
-                To continue with your donation, please enter your email and
-                agree to the Terms of Service.
-              </Text>
-              <FormControl>
-                <FormLabel>Email</FormLabel>
-                <Input />
-                <FormHelperText>
-                  We’ll only use your email for donation-related communication,
-                  like receipts or refunds.
-                </FormHelperText>
-              </FormControl>
-              <FormControl>
-                <Checkbox size="lg">
-                  <Text fontWeight="normal">
-                    I agree to the{" "}
-                    <Link
-                      href="/tos"
-                      color="blue.500"
-                      textDecoration="underline"
-                      textUnderlineOffset={3}
-                    >
-                      Terms of Service
-                    </Link>
-                  </Text>
-                </Checkbox>
-              </FormControl>
-              <Button w="full" size="lg" colorScheme="primary">
-                Submit
-              </Button>
-            </VStack>
-          )}
+          {!isLoading && !!user && !user.email && <EmailVerificationForm />}
           {isLoading && (
             <HStack justify="center">
               <CircularProgress
@@ -191,8 +171,8 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
               />
             </HStack>
           )}
-          {/* {!!error && <ErrorComponent error={error as Error} />} */}
-          {/* <ErrorBoundary FallbackComponent={ErrorComponent}>
+          {!!error && <ErrorComponent error={error as Error} />}
+          <ErrorBoundary FallbackComponent={ErrorComponent}>
             {paymentFormReady && (
               <PaymentForm
                 {...paymentFormData}
@@ -202,7 +182,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
                 )}?verify`}
               />
             )}
-          </ErrorBoundary> */}
+          </ErrorBoundary>
         </VStack>
       </Flex>
     </CenterLayout>
@@ -234,6 +214,274 @@ const ErrorComponent: FC<{ error: Error | string }> = ({ error }) => {
       <Text color="red.300">
         Please try again later or contact support if the issue persists.
       </Text>
+    </VStack>
+  );
+};
+
+const schema = z.discriminatedUnion("step", [
+  z.object({
+    step: z.literal("email"),
+    email: z.string().email("Invalid email address"),
+    agreeToTerms: z.boolean().refine((val) => val, {
+      message: "You must agree to the Terms of Service",
+    }),
+  }),
+  z.object({
+    step: z.literal("verify"),
+    email: z.string().email("Invalid email address"),
+    token: z.string().min(1, "Token is required"),
+    code: z
+      .string()
+      .min(5, "Code must be exactly 5 characters")
+      .max(5, "Code must be exactly 5 characters"),
+  }),
+]);
+const EmailVerificationForm: FC<{}> = () => {
+  const form = useForm<z.infer<typeof schema>, any, z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      step: "email",
+      email: "",
+      agreeToTerms: false,
+    },
+    mode: "onSubmit",
+  });
+  const { mutate: submit, isPending } = useMutation({
+    mutationFn: async (data: z.infer<typeof schema>) => {
+      if (data.step === "verify") {
+        return await api.verify({
+          email: data.email,
+          token: data.token,
+          code: data.code,
+        });
+      } else if (data.step === "email") {
+        return await api.updateEmail({ email: data.email });
+      }
+      throw new Error("Invalid step");
+    },
+    onSuccess(data, variables) {
+      if (variables.step === "email") {
+        form.reset(
+          {
+            ...variables,
+            step: "verify",
+            email: variables.email,
+            token: data.token,
+          },
+          {
+            keepIsSubmitted: false,
+            keepDefaultValues: true,
+          }
+        );
+        timer.restart();
+        setTimeout(() => {
+          (
+            document.querySelector("#pin-input > input") as HTMLInputElement
+          )?.focus();
+        });
+        toast({
+          status: "success",
+          title: "Verification code sent",
+          description: "Please check your email for the verification code.",
+        });
+      }
+      if (variables.step === "verify") {
+        useAuth.fetchProfile();
+      }
+    },
+    onError(error, variables) {
+      if (variables.step === "verify") {
+        form.setError("code", {
+          message: upperFirst(startCase(error.message).toLowerCase()),
+        });
+        timer.setEnded(true);
+      }
+      if (variables.step === "email") {
+        form.setError("email", {
+          message: upperFirst(startCase(error.message).toLowerCase()),
+        });
+      }
+    },
+  });
+  const timer = useTimer(3);
+  const { mutate: resend, isPending: isResending } = useMutation({
+    mutationFn: async () => {
+      const email = form.getValues("email");
+      if (!email) throw new Error("Email is required to resend code");
+      return await api.resendVerificationCode({ email });
+    },
+    onSuccess() {
+      form.setValue("code", "");
+      form.clearErrors("code");
+      timer.restart();
+      toast({
+        status: "success",
+        title: "Verification code resent",
+        description: "Please check your email for the new verification code.",
+      });
+    },
+  });
+  const step = useWatch({
+    control: form.control,
+    name: "step",
+  });
+
+  return (
+    <VStack
+      maxW="400px"
+      gap="6"
+      as="form"
+      onSubmit={form.handleSubmit((data) => submit(data))}
+    >
+      <Text color="brand.black.2">
+        To continue with your donation, please enter your email and agree to the
+        Terms of Service.
+      </Text>
+      <Controller
+        control={form.control}
+        name="email"
+        render={({ field }) => (
+          <FormControl
+            isInvalid={!!form.formState.errors.email}
+            position="relative"
+          >
+            {step === "verify" && (
+              <Button
+                size="sm"
+                colorScheme="primary"
+                variant="link"
+                onClick={() => {
+                  form.setValue("step", "email");
+                  form.setValue("code", "");
+                }}
+                isDisabled={step !== "verify"}
+                position="absolute"
+                top={1}
+                right={1}
+              >
+                Change Email
+              </Button>
+            )}
+            <FormLabel>Email</FormLabel>
+            <Input {...field} isDisabled={step !== "email"} />
+            <FormHelperText>
+              We’ll only use your email for donation-related communication, like
+              receipts or refunds.
+            </FormHelperText>
+            <FormErrorMessage>
+              {form.formState.errors.email?.message}
+            </FormErrorMessage>
+          </FormControl>
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="agreeToTerms"
+        render={({ field }) => (
+          <FormControl
+            isInvalid={!!(form.formState.errors as any).agreeToTerms}
+          >
+            <Checkbox
+              size="lg"
+              {...field}
+              value={undefined}
+              isChecked={field.value}
+              isInvalid={!!(form.formState.errors as any).agreeToTerms}
+              isDisabled={step !== "email"}
+            >
+              <Text fontWeight="normal">
+                I agree to the{" "}
+                <Link
+                  href="/tos"
+                  color="blue.500"
+                  textDecoration="underline"
+                  textUnderlineOffset={3}
+                >
+                  Terms of Service
+                </Link>
+              </Text>
+            </Checkbox>
+            <FormErrorMessage>
+              {(form.formState.errors as any).agreeToTerms?.message}
+            </FormErrorMessage>
+          </FormControl>
+        )}
+      />
+      {step === "verify" && (
+        <Controller
+          control={form.control}
+          name="code"
+          render={({ field }) => (
+            <FormControl
+              isInvalid={!!(form.formState.errors as any).code}
+              w="full"
+            >
+              <FormLabel>Code</FormLabel>
+              <HStack justifyContent="center" id="pin-input">
+                <PinInput
+                  {...field}
+                  onComplete={() => {
+                    document.getElementById("submit-btn")?.focus();
+                  }}
+                >
+                  <PinInputField />
+                  <PinInputField />
+                  <PinInputField />
+                  <PinInputField />
+                  <PinInputField />
+                </PinInput>
+              </HStack>
+              <FormHelperText>
+                We’ve sent a 5-digit verification code to your email. Please
+                enter it below to continue.
+              </FormHelperText>
+              <HStack justifyContent="space-between" mt={2}>
+                <FormErrorMessage>
+                  {(form.formState.errors as any).code?.message}
+                </FormErrorMessage>
+                {!(form.formState.errors as any).code?.message && <span />}
+                <Button
+                  size="sm"
+                  colorScheme="primary"
+                  variant="ghost"
+                  onClick={() => resend()}
+                  isLoading={isResending}
+                  disabled={!timer.isEnded}
+                  tabIndex={-1}
+                  gap={2}
+                >
+                  {!timer.isEnded ? (
+                    <>
+                      <span>Resend Code</span>
+                      <span>
+                        {timer.minutes > 9
+                          ? timer.minutes
+                          : "0" + timer.minutes}
+                        :
+                        {timer.seconds > 9
+                          ? timer.seconds
+                          : "0" + timer.seconds}
+                      </span>
+                    </>
+                  ) : (
+                    "Resend Code"
+                  )}
+                </Button>
+              </HStack>
+            </FormControl>
+          )}
+        />
+      )}
+      <Button
+        id="submit-btn"
+        w="full"
+        size="lg"
+        colorScheme="primary"
+        type="submit"
+        isLoading={isPending}
+      >
+        {step === "email" ? "Submit" : "Verify"}
+      </Button>
     </VStack>
   );
 };

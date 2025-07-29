@@ -14,7 +14,6 @@ export const useAuth = (options: Omit<UndefinedInitialDataOptions<GetProfileResu
   const [userProfileFromServer, setUserProfile] = useAtom(userProfileSSR);
 
   const {
-    data: user,
     isLoading: loading,
     isFetching,
   } = useQuery<GetProfileResult | null, unknown, GetProfileResult, QueryKey>({

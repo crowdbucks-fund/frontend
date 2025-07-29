@@ -89,3 +89,7 @@ html:has(#public-page) {
     opacity: 1;
   }
 }
+
+div:has(#chakra-modal-add-server-modal) {
+  z-index: 99999;
+}

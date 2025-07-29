@@ -274,8 +274,8 @@ export const FediverseOauth: FC<{
             >
               Sign-in with a different server?
             </Button>
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
+            <Modal isOpen={isOpen} onClose={onClose} id="add-server-modal">
+              <ModalOverlay zIndex={99999} />
               <ModalContent
                 rounded="xl"
                 p="3"
