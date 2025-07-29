@@ -1,6 +1,6 @@
-import { Box, Flex, FlexProps } from "@chakra-ui/react";
+import { chakra, Flex, FlexProps } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { ReactNode, useEffect } from "react";
+import React, { ComponentProps, MouseEvent, ReactNode, useEffect } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -44,28 +44,33 @@ export const ModalOverlay: React.FC<ModalOverlayProps> = ({
   );
 };
 
-export const ModalContent: React.FC<ModalContentProps> = ({
-  children,
-  ...rest
-}) => (
-  <Box
-    mt="auto"
-    mb="auto"
-    bg="white"
-    borderRadius="md"
-    boxShadow="lg"
-    position="relative"
-    maxW="fit-content"
-    w="full"
-    h="fit-content"
-    minH="fit-content"
-    p={6}
-    overflow="auto"
-    {...rest}
-  >
-    {children}
-  </Box>
-);
+const ModalContent = chakra(motion.div, {
+  baseStyle: {
+    mt: "auto",
+    mb: "auto",
+    bg: "white",
+    borderRadius: "md",
+    boxShadow: "lg",
+    position: "relative",
+    maxW: "fit-content",
+    w: "full",
+    h: "fit-content",
+    minH: "fit-content",
+    p: 6,
+    overflow: "auto",
+  },
+  shouldForwardProp(prop) {
+    return [
+      "children",
+      "as",
+      "variants",
+      "transition",
+      "initial",
+      "animate",
+      "exit",
+    ].includes(prop);
+  },
+});
 
 export const Modal: React.FC<ModalProps & FlexProps> = ({
   isOpen,
@@ -94,6 +99,13 @@ export const Modal: React.FC<ModalProps & FlexProps> = ({
             visible: { opacity: 1 },
             exit: { opacity: 0 },
           }}
+          // @ts-ignore
+          transition={
+            {
+              duration: 0.1,
+              ease: "easeOut",
+            } as ComponentProps<typeof motion.div>["transition"]
+          }
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -103,15 +115,28 @@ export const Modal: React.FC<ModalProps & FlexProps> = ({
             {...rest}
             as={motion.div}
             variants={{
-              hidden: { opacity: 0, scale: 0.95 },
+              hidden: { opacity: 0, scale: 0.96 },
               visible: { opacity: 1, scale: 1 },
-              exit: { opacity: 0, scale: 0.95 },
+              exit: { opacity: 0, scale: 0.96 },
             }}
+            // @ts-ignore
+            transition={
+              {
+                opacity: {
+                  duration: 0.1,
+                  ease: "easeOut",
+                },
+                scale: {
+                  duration: 0.2,
+                  ease: [0.33, 1, 0.68, 1],
+                },
+              } as ComponentProps<typeof motion.div>["transition"]
+            }
             initial="hidden"
             animate="visible"
             exit="exit"
             zIndex={1600}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e: MouseEvent) => e.stopPropagation()}
           >
             {children}
           </ModalContent>
