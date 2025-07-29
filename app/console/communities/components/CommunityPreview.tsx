@@ -160,7 +160,7 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
               fontWeight="medium"
               fontSize="20px"
             >
-              {!compact && "Share community"}
+              {!compact && "Share profile"}
             </Button>
           </HStack>
 
@@ -253,7 +253,7 @@ export const CommunityPreviewSlim: FC<{
           >
             <IconButton
               onClick={copy}
-              aria-label="share community"
+              aria-label="share profile"
               variant="ghost"
               width="24px"
               size="sm"
