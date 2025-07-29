@@ -195,6 +195,9 @@ export const UnsubscribeTierModal: FC<{
         title: "Something went wrong, please try again",
       });
     },
+    onSettled() {
+      useAuth.fetchProfile();
+    },
   });
 
   return (
