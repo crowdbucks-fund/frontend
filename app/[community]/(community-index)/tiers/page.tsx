@@ -131,7 +131,7 @@ export default function TierPage() {
           </HStack>
         </VStack>
       )}
-      {community.tiers.length === 0 && (
+      {community.tiers.length === 0 && !community.customAmountsEnabled && (
         <EmptyState>There is no tier defined yet!</EmptyState>
       )}
       {community.tiers.sort(sortTiers).map((tier) => {
