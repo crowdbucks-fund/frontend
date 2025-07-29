@@ -352,6 +352,12 @@ export default function CustomTierClientPage({
               <Divider color="brand.gray.2" />
               <VStack w="full">
                 <HStack w="full" justifyContent="space-between">
+                  <Text>Fundraiser</Text>
+                  <Text color="brand.black.4" fontSize="14px">
+                    {community.handle}
+                  </Text>
+                </HStack>
+                <HStack w="full" justifyContent="space-between">
                   <Text>Donation</Text>
                   <Text>
                     ${variables?.amount}
