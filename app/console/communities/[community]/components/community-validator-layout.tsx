@@ -1,16 +1,13 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import {
-  GetCommunityByUserResult,
-  GetProfileResult,
-} from "@xeronith/granola/core/spi";
+import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import { FullPageLoading } from "components/Loading";
 import { useCommunities } from "hooks/useCommunities";
 import { api } from "lib/api";
-import { queryClient } from "lib/reactQuery";
+import { store } from "lib/jotai";
 import { useParams } from "next/navigation";
-import { PropsWithChildren, createContext, useContext } from "react";
-import { useUserQueryKey } from "states/console/user";
+import { createContext, PropsWithChildren, useContext } from "react";
+import { userProfileSSR } from "states/console/user";
 import { CommunityNotFound } from "./not-found";
 
 export const CurrentCommunityContext = createContext<
@@ -39,12 +36,13 @@ export default function CommunityValidatorLayout({
     staleTime: 1000,
     queryFn: () => {
       if (communityId === "default" && communities) {
-        const user = queryClient.getQueryData(
-          useUserQueryKey
-        ) as GetProfileResult;
+        const user = store.get(userProfileSSR);
         if (user) {
           // @ts-expect-error invalid property
-          communities[0]._handle = communities[0].handle;
+          if (!communities[0]._handle) {
+            // @ts-expect-error invalid property
+            communities[0]._handle = communities[0].handle;
+          }
           communities[0].handle = user.mastodonUsername.replace("@", "");
           communities[0].name = user.mastodonUsername.replace("@", "");
         }
