@@ -1,6 +1,6 @@
 import { AUTH_TOKEN_KEY } from "lib/auth";
 import { decryptCookie } from "lib/cookies";
-import { NextResponse, type NextRequest } from "next/server";
+import { MiddlewareConfig, NextResponse, type NextRequest } from "next/server";
 import { withQuery } from "ufo";
 
 // This function can be marked `async` if using `await` inside
@@ -33,4 +33,4 @@ export const config = {
   matcher: ["/auth/:path*", "/console/:path*"],
   // runtime: "experimental-edge",
   unstable_allowDynamic: ["/node_modules/@protobufjs/**"],
-};
+} as MiddlewareConfig
