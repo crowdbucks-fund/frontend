@@ -429,11 +429,13 @@ const EmailVerificationForm: FC<{}> = () => {
               </HStack>
               <FormHelperText>
                 We’ve sent a 5-digit verification code to your email. Please
-                enter it below to continue.
+                enter it to verify your email address.
               </FormHelperText>
               <HStack justifyContent="space-between" mt={2}>
                 <FormErrorMessage>
-                  {(form.formState.errors as any).code?.message}
+                  {(form.formState.errors as any).code
+                    ? "Invalid code. Please try again."
+                    : ""}
                 </FormErrorMessage>
                 {!(form.formState.errors as any).code?.message && <span />}
                 <Button
