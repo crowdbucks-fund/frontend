@@ -29,16 +29,16 @@ const data = {
   helper: {
     steps: [
       {
-        icon: <UserEdit />,
-        title: "Join CrowdBucks",
+        icon: <ZoomIcon />,
+        title: "Open the fundraiser page you want to support",
       },
       {
-        icon: <ZoomIcon />,
-        title: "Find your favorite fundraiser",
+        icon: <UserEdit />,
+        title: "Sign in with your Fediverse account",
       },
       {
         icon: <HappyIcon />,
-        title: "Help out",
+        title: "Donate",
       },
     ],
     image: HelperImage,
@@ -47,15 +47,15 @@ const data = {
     steps: [
       {
         icon: <UserEdit />,
-        title: "Join CrowdBucks",
+        title: "Join CrowdBucks by signing in with your Fediverse account",
       },
       {
         icon: <Flash />,
-        title: "Share your CrowdBucks page",
+        title: "Share your CrowdBucks profile with your community",
       },
       {
         icon: <UserInfo />,
-        title: "Build sustainable revenue streams",
+        title: "Collect funds and build sustainable revenue streams",
       },
     ],
     image: FundraiserImage,
