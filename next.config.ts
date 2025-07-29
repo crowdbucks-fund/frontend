@@ -105,11 +105,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-store',
-          },
-          {
-            key: 'Vary',
-            value: 'Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
+            value: 'no-store, must-revalidate',
           },
         ],
       },
@@ -120,11 +116,6 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
           },
-
-          {
-            key: 'Vary',
-            value: 'RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
-          },
         ],
       },
       {
@@ -133,11 +124,6 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
-          },
-
-          {
-            key: 'Vary',
-            value: 'RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
           },
         ],
       },
@@ -148,11 +134,6 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
           },
-
-          {
-            key: 'Vary',
-            value: 'RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
-          },
         ],
       },
       {
@@ -160,11 +141,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-store',
-          },
-          {
-            key: 'Vary',
-            value: 'Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch',
+            value: 'no-store, must-revalidate',
           },
         ],
       },
