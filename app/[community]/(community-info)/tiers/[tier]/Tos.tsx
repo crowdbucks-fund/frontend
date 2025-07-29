@@ -57,7 +57,7 @@ export const TOS: FC<{ onAccept: () => void }> = ({ onAccept }) => {
       overflowY="auto"
       alignItems="start"
       maxW="lg"
-      px="1"
+      px={{ base: 1, md: 0 }}
     >
       <Text fontSize="xl" fontWeight="bold" textAlign="center" w="full" pt="4">
         CrowdBucks Terms Of Services!
