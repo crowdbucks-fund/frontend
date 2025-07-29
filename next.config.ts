@@ -83,10 +83,10 @@ const nextConfig: NextConfig = {
         source: '/console/stripe',
         destination: '/console/communities/default/stripe',
       },
-      {
-        source: '/console/edit',
-        destination: '/console/communities/default/edit',
-      },
+      // {
+      //   source: '/console/edit',
+      //   destination: '/console/communities/default/edit',
+      // },
     ]
   }),
   redirects: async () => ([{
