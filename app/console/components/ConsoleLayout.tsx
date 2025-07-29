@@ -14,7 +14,7 @@ export default async function ConsoleLayout({
   authRequired?: boolean;
 }>) {
   const authUser = await getProfilePromise;
-  if (authRequired && !authUser) return redirect("/auth");
+  if (authRequired && !authUser.profile) return redirect("/auth");
   return (
     <ConsoleLayoutClient authUser={authUser} publicPage={publicPage}>
       {children}

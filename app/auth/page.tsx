@@ -22,7 +22,7 @@ export default async function Auth() {
   }))) as { instance: string | null };
 
   const profile = await fetchProfile();
-  if (profile) return redirect("/console");
+  if (profile.profile) return redirect("/console");
 
   return (
     <Suspense>

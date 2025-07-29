@@ -34,9 +34,10 @@ export const queryClient = new QueryClient({
       throwOnError(error) {
         const message = (error as ApiError).message
         if (message === 'unauthorized') {
-          if (window.location.pathname.startsWith('/console'))
+          if (window.location.pathname.startsWith('/console')) {
             window.location.assign(`/auth/logout/`)
-          return false;
+            return false;
+          }
         }
         return true;
       },
