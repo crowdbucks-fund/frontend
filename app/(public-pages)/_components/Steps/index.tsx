@@ -30,7 +30,7 @@ const data = {
     steps: [
       {
         icon: <ZoomIcon />,
-        title: "Open the fundraiser page you want to support",
+        title: "Open a CrowdBucks page",
       },
       {
         icon: <UserEdit />,
@@ -47,15 +47,15 @@ const data = {
     steps: [
       {
         icon: <UserEdit />,
-        title: "Join CrowdBucks by signing in with your Fediverse account",
+        title: "Sign in with your Fediverse account",
       },
       {
         icon: <Flash />,
-        title: "Share your CrowdBucks profile with your community",
+        title: "Share your CrowdBucks page",
       },
       {
         icon: <UserInfo />,
-        title: "Collect funds and build sustainable revenue streams",
+        title: "Collect funds",
       },
     ],
     image: FundraiserImage,
