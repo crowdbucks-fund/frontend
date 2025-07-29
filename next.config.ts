@@ -105,7 +105,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-store, must-revalidate',
+            value: 'no-store, private, must-revalidate',
           },
         ],
       },
@@ -141,7 +141,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'no-store, must-revalidate',
+            value: 'no-store, private, must-revalidate',
           },
         ],
       },
