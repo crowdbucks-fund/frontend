@@ -320,12 +320,14 @@ export default function CustomTierClientPage() {
           w="full"
           gap={8}
           justifyContent="center"
+          align={{ base: "center", md: "start" }}
         >
           <Box
             maxW={{
-              base: "unset",
+              base: "400px",
               md: "340px",
             }}
+            w="full"
             flexGrow={1}
           >
             <VStack

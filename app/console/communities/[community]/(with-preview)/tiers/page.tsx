@@ -1,5 +1,6 @@
 "use client";
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
 import TierIcon from "assets/icons/dollar-square.svg?react";
 import { CreateFirstEntity } from "components/FirstEntity";
@@ -10,7 +11,6 @@ import { api } from "lib/api";
 import { debounce } from "lodash";
 import NextLink from "next/link";
 import { ChangeEvent, useCallback, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteTierModal } from "../../tiers/components/DeleteTierModal";
@@ -37,19 +37,17 @@ export default function TiersPage() {
     []
   );
 
-  const { mutate: enableCustomAmount, isLoading: enableCustomAmountLoading } =
-    useMutation(
-      (enabled: boolean) =>
+  const { mutate: enableCustomAmount, isPending: enableCustomAmountLoading } =
+    useMutation({
+      mutationFn: (enabled: boolean) =>
         api.addOrUpdateCommunityByUser({
           ...community,
           customAmountsEnabled: enabled,
         }),
-      {
-        onSuccess() {
-          queryClient.invalidateQueries({ queryKey: ["COMMUNITY"] });
-        },
-      }
-    );
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: ["COMMUNITY"] });
+      },
+    });
 
   const onCustomAmountChanged = useCallback(
     debounce((e: ChangeEvent<HTMLInputElement>) => {

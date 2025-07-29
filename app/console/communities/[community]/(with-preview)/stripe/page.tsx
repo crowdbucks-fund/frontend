@@ -1,5 +1,6 @@
 "use client";
 import { Button, chakra, CircularProgress, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import LinkIconBase from "assets/icons/link-2.svg?react";
@@ -13,7 +14,6 @@ import { queryClient } from "lib/reactQuery";
 import { isStripeConnected } from "lib/stripe";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
 
@@ -47,14 +47,13 @@ export default function StripePage() {
     },
     []
   );
-  const { mutate: verifyConnection, isLoading: isValidatingUser } = useMutation(
+  const { mutate: verifyConnection, isPending: isValidatingUser } = useMutation(
     {
-      mutationKey: "confirmStripeIntegrationByUser",
       mutationFn: () => {
         return api.confirmStripeIntegrationByUser({});
       },
       onSuccess(data) {
-        queryClient.invalidateQueries(["getProfile"]);
+        queryClient.invalidateQueries({ queryKey: ["getProfile"] });
         router.replace(window.location.href.replace("?verify", ""));
         if (data.chargesEnabled)
           toast({
@@ -72,10 +71,11 @@ export default function StripePage() {
     if (isVerifying) verifyConnection();
   }, [isVerifying]);
 
-  const { mutate: disconnectAccount, isLoading: isDisconnectingAccount } =
-    useMutation(api.disconnectStripeAccountByUser.bind(api), {
+  const { mutate: disconnectAccount, isPending: isDisconnectingAccount } =
+    useMutation({
+      mutationFn: api.disconnectStripeAccountByUser.bind(api),
       onSuccess() {
-        queryClient.invalidateQueries(["getProfile"]);
+        queryClient.invalidateQueries({ queryKey: ["getProfile"] });
         toast({
           status: "success",
           title: "Account disconnected successfully",

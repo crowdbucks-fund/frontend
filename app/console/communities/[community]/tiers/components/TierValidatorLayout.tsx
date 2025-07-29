@@ -1,10 +1,10 @@
 "use client";
+import { useQuery } from "@tanstack/react-query";
 import { GetTierByUserResult } from "@xeronith/granola/core/spi";
 import { FullPageLoading } from "components/Loading";
 import { api } from "lib/api";
 import { useParams } from "next/navigation";
 import { PropsWithChildren, createContext, useContext } from "react";
-import { useQuery } from "react-query";
 import { TierNotFound } from "./not-found";
 
 const CurrentTierContext = createContext<GetTierByUserResult | null>(null);

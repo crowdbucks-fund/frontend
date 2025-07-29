@@ -20,6 +20,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { AuthenticateResult } from "@xeronith/granola/core/spi";
 import FilledCheckMark from "assets/icons/filled-check.svg?react";
 import MastodonIconBase from "assets/icons/Mastodon.svg?react";
@@ -30,8 +31,7 @@ import { parseUrl } from "next/dist/shared/lib/router/utils/parse-url";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
-import { Controller, useForm, useFormContext } from "react-hook-form";
-import { useQuery } from "react-query";
+import { Controller, useForm } from "react-hook-form";
 import { withoutProtocol, withQuery } from "ufo";
 import { z } from "zod";
 
@@ -104,7 +104,7 @@ export const FediverseOauth: FC<{
       setIsLoading(false);
     }
   }, [searchParams.get("error"), isLoading]);
-  const formContext = useFormContext();
+
   const {
     isLoading: isAuthorizing,
     error: verificationError,
@@ -197,7 +197,7 @@ export const FediverseOauth: FC<{
       bg={{ base: "white", md: "transparent" }}
       py={compact ? 0 : 6}
       px={compact ? {} : { base: 4, md: 4 }}
-      w="full"
+      w={compact ? { md: "400px", base: "full" } : "full"}
     >
       <Logo />
       <VStack

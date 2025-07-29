@@ -1,6 +1,8 @@
 "use client";
 
 import { Button, chakra, HStack, Text, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
+import { UserTier } from "@xeronith/granola/core/objects";
 import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
 import { EmptyState } from "app/[community]/(community-index)/EmptyState";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
@@ -8,11 +10,13 @@ import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { TierCard } from "components/TierCard";
+import { toast } from "components/Toast";
 import { usePaymentVerification } from "hooks/usePaymentVerification";
 import { sortTiers } from "hooks/useTiers.server";
+import { api } from "lib/api";
 import { lowerCase } from "lodash";
 import NextLink from "next/link";
-import { useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
 import { joinURL } from "ufo";
@@ -22,13 +26,17 @@ const CheckIcon = chakra(TickSquare);
 
 export default function TierPage() {
   const community = useCurrentCommunity<FindCommunityByUserResult>();
+  const [isUnsubscribeOpen, setIsUnSubscribeOpen] = useState(false);
+  const [unSubscribingTier, setUnSubscribingTier] = useState<
+    UserTier | undefined
+  >(undefined);
+
   const [{ hasPayment, isSuccess }, updatePaymentState] =
     usePaymentVerification();
   const { user } = useAuth();
 
   const isSubscribedToTier = useCallback(
     (tierId: number) => {
-      return false;
       if (!user) return false;
       // @ts-ignore
       return user.subscribedTierIds.includes(tierId);
@@ -50,6 +58,11 @@ export default function TierPage() {
     },
     showConsoleMenu: false,
   });
+
+  const unSubscribeTier = useCallback((tier: UserTier) => {
+    setUnSubscribingTier(tier);
+    setIsUnSubscribeOpen(true);
+  }, []);
 
   return (
     <CenterLayout maxW={{ md: "630px" }} mx="auto" gap={{ base: 4, md: 8 }}>
@@ -143,15 +156,83 @@ export default function TierPage() {
               variant: isSubscribed ? "glass" : "solid",
               colorScheme: tier.recommended ? "secondary" : "primary",
               color: undefined,
-              border: undefined,
-              cursor: isSubscribed ? "not-allowed" : "pointer",
-              pointerEvents: isSubscribed ? "none" : "unset",
-              // opacity: isSubscribed ? ".5" : "1",
-              // isDisabled: isSubscribed,
+              border: isSubscribed ? "1px solid" : undefined,
+              onClick: isSubscribed ? () => unSubscribeTier(tier) : undefined,
             }}
           />
         );
       })}
+      <UnsubscribeTierModal
+        tier={unSubscribingTier}
+        isOpen={isUnsubscribeOpen}
+        onCancel={() => setIsUnSubscribeOpen(false)}
+      />
     </CenterLayout>
   );
 }
+
+export const UnsubscribeTierModal: FC<{
+  tier?: UserTier;
+  isOpen: boolean;
+  onCancel: () => void;
+}> = ({ tier, onCancel, isOpen }) => {
+  const { mutate: unsubscribe, isPending: isLoading } = useMutation({
+    mutationFn: async () => {
+      return api.cancelTierSubscriptionByUser({
+        tierId: tier?.id || 0,
+      });
+    },
+    onSuccess() {
+      toast({
+        status: "success",
+        title: "You've successfully unsubscribed from the tier",
+      });
+      onCancel();
+    },
+    onError() {
+      toast({
+        status: "error",
+        title: "Something went wrong, please try again",
+      });
+    },
+  });
+
+  return (
+    <ResponsiveDialog isOpen={isOpen} onClose={onCancel} title="">
+      <VStack justifyContent="center" w="full" gap={6}>
+        {tier && (
+          <Text fontWeight="bold" fontSize={{ base: "18px", md: "28px" }}>
+            Unsubscribe from “{tier.name}”?
+          </Text>
+        )}
+        {tier && (
+          <Text
+            fontSize={{ base: "14px", md: "20px" }}
+            maxW={"400px"}
+            textAlign={"center"}
+          >
+            Your {lowerCase(tier.tierFrequency?.name)} support of ${tier.amount}{" "}
+            helps a lot. You can unsubscribe for now and rejoin anytime in the
+            future.
+          </Text>
+        )}
+        <HStack flexDir="row-reverse" w="full">
+          <Button
+            size="lg"
+            w="full"
+            colorScheme="primary"
+            variant="outline"
+            onClick={() => unsubscribe()}
+            isLoading={isLoading}
+            loadingText="Unsubscribing..."
+          >
+            Unsubscribe
+          </Button>
+          <Button size="lg" w="full" colorScheme="primary" onClick={onCancel}>
+            Cancel
+          </Button>
+        </HStack>
+      </VStack>
+    </ResponsiveDialog>
+  );
+};

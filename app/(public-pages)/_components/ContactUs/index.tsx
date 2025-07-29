@@ -15,6 +15,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
@@ -27,7 +28,6 @@ import Image from "next/image";
 import { platformInfo } from "platform";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
 import { z } from "zod";
 
 const ChakraNextImage = chakra(Image);
@@ -48,7 +48,8 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
     },
     resolver: zodResolver(schema),
   });
-  const { mutate, isLoading } = useMutation(api.addFeedbackByUser.bind(api), {
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: api.addFeedbackByUser.bind(api),
     onSuccess() {
       toast({
         status: "success",

@@ -1,5 +1,6 @@
 "use client";
 import { Button, Text, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { UserGoal } from "@xeronith/granola/core/objects";
 import WarningIcon from "assets/icons/warning.svg?react";
 import { GoalCard } from "components/GoalCard";
@@ -9,7 +10,6 @@ import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { FC } from "react";
-import { useMutation } from "react-query";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 
 export type DeleteGoalModalProps = {
@@ -26,7 +26,7 @@ export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
   onDeleted,
 }) => {
   const community = useCurrentCommunity();
-  const { mutate: deleteGoal, isLoading } = useMutation({
+  const { mutate: deleteGoal, isPending: isLoading } = useMutation({
     mutationFn: async () =>
       deletingGoal ? api.removeGoalByUser({ id: deletingGoal.id }) : null,
     onSuccess() {
@@ -40,7 +40,7 @@ export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
         community.id,
         currentGoals.filter((goal) => goal.id !== deletingGoal?.id)
       );
-      queryClient.invalidateQueries(["findGoalsByUser"]);
+      queryClient.invalidateQueries({ queryKey: ["findGoalsByUser"] });
       onDeleted && onDeleted();
       onClose();
     },

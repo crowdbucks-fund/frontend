@@ -1,10 +1,10 @@
+import { UndefinedInitialDataOptions, useQuery } from "@tanstack/react-query"
 import { UserGoal } from '@xeronith/granola/core/objects'
 import { sortGoals } from 'hooks/useGoals.server'
 import { api } from 'lib/api'
 import { queryClient } from 'lib/reactQuery'
-import { UseQueryOptions, useQuery } from 'react-query'
 
-export const useGoals = ({ communityId, ...options }: UseQueryOptions<UserGoal[], unknown, UserGoal[], string[]> & { communityId: number }) => {
+export const useGoals = ({ communityId, ...options }: Omit<UndefinedInitialDataOptions<UserGoal[], unknown, UserGoal[], string[]>, 'queryKey'> & { communityId: number }) => {
   return useQuery({
     ...options,
     queryKey: ['findGoalsByUser', communityId.toString()],
@@ -18,7 +18,7 @@ export const useGoals = ({ communityId, ...options }: UseQueryOptions<UserGoal[]
 }
 
 useGoals.invalidateQuery = (communityId: number) => {
-  return queryClient.invalidateQueries(['findGoalsByUser', communityId.toString()])
+  return queryClient.invalidateQueries({ queryKey: ['findGoalsByUser', communityId.toString()] })
 }
 
 useGoals.setData = (communityId: number, data: UserGoal[]) => {

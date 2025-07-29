@@ -33,7 +33,7 @@ import { useHydrateAtoms } from "jotai/utils";
 import { store } from "lib/jotai";
 import NextLink from "next/link";
 import { useSelectedLayoutSegments } from "next/navigation";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, useLayoutEffect, useState } from "react";
 import { breadcrumbLinks } from "states/console/breadcrumb";
 import { sidebarState } from "states/console/sidebar";
 import { useAuth, userProfileSSR } from "states/console/user";
@@ -76,10 +76,12 @@ export default function ConsoleLayoutClient({
   userProfile: GetProfileResult | null;
 }>) {
   useHydrateAtoms([[userProfileSSR, userProfile]], { store });
+  useLayoutEffect(() => {
+    useAuth.setData(userProfile);
+  }, [userProfile]);
+
   useScrollRestoration();
-  const { user, loading, isFetching } = useAuth(
-    publicPage ? { onError() {} } : {}
-  );
+  const { user, loading, isFetching } = useAuth(publicPage ? {} : {});
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);
 
   const [
@@ -101,7 +103,10 @@ export default function ConsoleLayoutClient({
     segments.includes("(with-preview)") ||
     segments.includes("(community-index)");
 
-  const isCommunityPublicPage = segments.includes("(community-index)");
+  const isCommunityPublicPage =
+    segments.includes("(community-index)") ||
+    segments.includes("(community-info)");
+
   if (loading) return <SplashLoading />;
   return (
     <VStack
@@ -110,139 +115,120 @@ export default function ConsoleLayoutClient({
       minH="100svh"
       bg={{ base: "brand.gray.3", md: "brand.gray.4" }}
     >
-      {!isCommunityPublicPage && (
-        <HStack
-          w="full"
-          justify="space-between"
-          py={4}
-          mt={2}
-          position={!!user ? "static" : "relative"}
-        >
-          {user ? (
-            <IconButton
-              colorScheme="blackAlpha"
-              color="black"
-              display={{ base: "none", md: "flex" }}
-              aria-label="Toggle Menu"
-              variant="ghost"
-              onClick={setSidebarOpen.bind(null, !isSidebarOpen)}
-            >
-              <MenuIcon />
-            </IconButton>
-          ) : (
-            <Box h="40px" />
-          )}
-
-          <Box display={{ base: "flex", md: "none" }}>
-            {backButton && user ? (
-              <Button
-                variant="unstyled"
-                display="flex"
-                alignItems="center"
-                color="primary.500"
-                fontWeight="normal"
-                fontSize="14px"
-                textTransform="capitalize"
-                as={NextLink}
-                href={backButton.link}
-              >
-                <Box mr="1">
-                  <ChevronLeftIcon width="22px" />
-                </Box>
-                {backButton.title}
-              </Button>
-            ) : null}
-          </Box>
-
-          <Box
-            position="absolute"
-            left={"50%"}
-            transform="translateX(-50%)"
-            display={{ base: "none", md: "block" }}
+      <HStack
+        w="full"
+        justify="space-between"
+        py={4}
+        mt={2}
+        position={!!user ? "static" : "relative"}
+      >
+        {user ? (
+          <IconButton
+            colorScheme="blackAlpha"
+            color="black"
+            display={{ base: "none", md: "flex" }}
+            aria-label="Toggle Menu"
+            variant="ghost"
+            onClick={setSidebarOpen.bind(null, !isSidebarOpen)}
           >
-            <Image
-              priority
-              src="/logo.svg"
-              alt="CrowdBucks Logo"
-              width={130}
-              height={42}
-            />
-          </Box>
+            <MenuIcon />
+          </IconButton>
+        ) : (
+          <Box h="40px" />
+        )}
 
-          <Box
-            position="absolute"
-            left={!!user ? "50%" : "0"}
-            transform={!!user ? "translateX(-50%)" : undefined}
-            display={{ base: "block", md: "none" }}
-          >
-            {routeTitle ? (
-              <Text
-                fontWeight="bold"
-                fontSize="14px"
-                isTruncated
-                maxW="calc(100vw - 215px)"
-              >
-                {routeTitle}
-              </Text>
-            ) : (
-              <Image
-                priority
-                src="/logo-standalone.svg"
-                alt="CrowdBucks Logo"
-                width={120}
-                height={35}
-              />
-            )}
-          </Box>
-
-          {user ? (
-            <IconButton
-              onClick={setIsMoreDrawerOpen.bind(null, true)}
-              colorScheme="blackAlpha"
-              color="black"
-              display={{ base: "flex", md: "none" }}
-              aria-label="Settings Menu"
-              variant="ghost"
-            >
-              <MoreIcon />
-            </IconButton>
-          ) : (
+        <Box display={{ base: "flex", md: "none" }}>
+          {backButton && user ? (
             <Button
+              variant="unstyled"
+              display="flex"
+              alignItems="center"
+              color="primary.500"
+              fontWeight="normal"
+              fontSize="14px"
+              textTransform="capitalize"
               as={NextLink}
-              href="/auth"
-              size="sm"
-              variant="solid"
-              fontSize={{ base: "10px", md: "14px" }}
-              px={{ base: 2, md: 3 }}
-              h={{ base: "28px", md: "34px" }}
-              fontWeight="bold"
-              colorScheme="primary"
-              rounded="10px"
-              isLoading={isFetching}
-              display={{ base: "flex", md: "none" }}
+              href={backButton.link}
             >
-              {user ? "Get started" : "Join CrowdBucks Now"}
+              <Box mr="1">
+                <ChevronLeftIcon width="22px" />
+              </Box>
+              {backButton.title}
             </Button>
-          )}
-        </HStack>
-      )}
+          ) : null}
+        </Box>
 
-      {isCommunityPublicPage && (
-        <HStack
-          justifyContent="center"
-          py={{ base: 2, md: "4" }}
-          mt={{ base: 4, md: 4 }}
+        <Box
+          position="absolute"
+          left={"50%"}
+          transform="translateX(-50%)"
+          display={{ base: "none", md: "block" }}
         >
           <Image
             priority
-            src="/logo-standalone.svg"
+            src="/logo.svg"
             alt="CrowdBucks Logo"
-            width={120}
-            height={35}
-            h={{ base: "24px", md: "35px" }}
+            width={130}
+            height={42}
           />
-        </HStack>
-      )}
+        </Box>
+
+        <Box
+          position="absolute"
+          left={!!user ? "50%" : "0"}
+          transform={!!user ? "translateX(-50%)" : undefined}
+          display={{ base: "block", md: "none" }}
+        >
+          {routeTitle ? (
+            <Text
+              fontWeight="bold"
+              fontSize="14px"
+              isTruncated
+              maxW="calc(100vw - 215px)"
+            >
+              {routeTitle}
+            </Text>
+          ) : (
+            <Image
+              priority
+              src="/logo-standalone.svg"
+              alt="CrowdBucks Logo"
+              width={120}
+              height={35}
+            />
+          )}
+        </Box>
+
+        {user ? (
+          <IconButton
+            onClick={setIsMoreDrawerOpen.bind(null, true)}
+            colorScheme="blackAlpha"
+            color="black"
+            display={{ base: "flex", md: "none" }}
+            aria-label="Settings Menu"
+            variant="ghost"
+          >
+            <MoreIcon />
+          </IconButton>
+        ) : (
+          <Button
+            as={NextLink}
+            href="/auth"
+            size="sm"
+            variant="solid"
+            fontSize={{ base: "10px", md: "14px" }}
+            px={{ base: 2, md: 3 }}
+            h={{ base: "28px", md: "34px" }}
+            fontWeight="bold"
+            colorScheme="primary"
+            rounded="10px"
+            isLoading={isFetching}
+            display={{ base: "flex", md: "none" }}
+          >
+            {user ? "Get started" : "Join CrowdBucks Now"}
+          </Button>
+        )}
+      </HStack>
 
       {!isCommunityPublicPage && (
         <HStack

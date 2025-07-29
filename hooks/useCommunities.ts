@@ -1,8 +1,8 @@
+import { UndefinedInitialDataOptions, useQuery } from "@tanstack/react-query"
 import { UserCommunity } from '@xeronith/granola/core/objects'
 import { api } from 'lib/api'
-import { UseQueryOptions, useQuery } from 'react-query'
 
-export const useCommunities = (options: UseQueryOptions<UserCommunity[], unknown, UserCommunity[], string[]> = {}) => {
+export const useCommunities = (options: Omit<UndefinedInitialDataOptions<UserCommunity[], unknown, UserCommunity[], string[]>, 'queryKey'> = {}) => {
   return useQuery({
     ...options,
     queryKey: ['getCommunitiesByUser'],

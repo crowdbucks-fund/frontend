@@ -1,6 +1,6 @@
+import { UseQueryOptions, useQuery } from "@tanstack/react-query"
 import { Country } from '@xeronith/granola/core/objects'
 import { api } from 'lib/api'
-import { UseQueryOptions, useQuery } from 'react-query'
 
 export const useCountries = (options: UseQueryOptions<Country[], unknown, Country[], string[]> = {}) => {
   return useQuery({

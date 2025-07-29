@@ -1,8 +1,8 @@
+import { UndefinedInitialDataOptions, useQuery } from "@tanstack/react-query"
 import { GoalFrequency } from '@xeronith/granola/core/objects'
 import { api } from 'lib/api'
-import { UseQueryOptions, useQuery } from 'react-query'
 
-export const useGoalsFrequency = (options: UseQueryOptions<GoalFrequency[], unknown, GoalFrequency[], string[]> = {}) => {
+export const useGoalsFrequency = (options: Omit<UndefinedInitialDataOptions<GoalFrequency[], unknown, GoalFrequency[], string[]>, 'queryKey'> = {}) => {
   return useQuery({
     ...options,
     queryKey: ['getGoalFrequenciesByUser'],

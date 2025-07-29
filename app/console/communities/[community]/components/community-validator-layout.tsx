@@ -1,4 +1,5 @@
 "use client";
+import { useQuery } from "@tanstack/react-query";
 import {
   GetCommunityByUserResult,
   GetProfileResult,
@@ -9,7 +10,6 @@ import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { useParams } from "next/navigation";
 import { PropsWithChildren, createContext, useContext } from "react";
-import { useQuery } from "react-query";
 import { useUserQueryKey } from "states/console/user";
 import { CommunityNotFound } from "./not-found";
 

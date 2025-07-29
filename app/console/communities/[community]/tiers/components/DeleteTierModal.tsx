@@ -1,5 +1,6 @@
 "use client";
 import { Button, Text, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
 import WarningIcon from "assets/icons/warning.svg?react";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
@@ -8,7 +9,6 @@ import { toast } from "components/Toast";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { FC } from "react";
-import { useMutation } from "react-query";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 
 export type DeletePaymentCardProps = {
@@ -25,7 +25,7 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
   onDeleted,
 }) => {
   const community = useCurrentCommunity();
-  const { mutate: deleteBankInfo, isLoading } = useMutation({
+  const { mutate: deleteBankInfo, isPending: isLoading } = useMutation({
     mutationFn: async () =>
       deletingTier ? api.removeTierByUser({ id: deletingTier.id }) : null,
     onSuccess() {
@@ -34,7 +34,7 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
         status: "success",
         title: deletingTier && `The tier was successfully deleted`,
       });
-      queryClient.invalidateQueries(["findTiersByUser"]);
+      queryClient.invalidateQueries({ queryKey: ["findTiersByUser"] });
       onDeleted && onDeleted();
       onClose();
     },

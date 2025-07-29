@@ -1,11 +1,18 @@
 "use client";
+import { Link } from "@chakra-ui/next-js";
 import {
   Box,
+  Button,
   chakra,
+  Checkbox,
   CircularProgress,
   Divider,
   Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
   HStack,
+  Input,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -13,15 +20,12 @@ import { UserTier } from "@xeronith/granola/core/objects";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
-import { PaymentForm } from "components/PaymentForm";
 import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import { lowerCase } from "lodash";
 import { usePathname } from "next/navigation";
 import { FC, useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
-import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 
 const CheckIcon = chakra(TickSquare);
@@ -94,12 +98,14 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
         h="full"
         gap={8}
         justifyContent="center"
+        align={{ base: "center", md: "start" }}
       >
         <Box
           maxW={{
-            base: "unset",
+            base: "400px",
             md: "340px",
           }}
+          w="full"
           flexGrow={1}
         >
           <VStack
@@ -141,7 +147,41 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
             </VStack>
           </VStack>
         </Box>
-        <VStack minW={{ base: "unset", md: "370px" }}>
+        <VStack minW={{ base: "unset", md: "400px" }}>
+          {!isLoading && !!user && (
+            <VStack maxW="400px" gap="6">
+              <Text color="brand.black.2">
+                To continue with your donation, please enter your email and
+                agree to the Terms of Service.
+              </Text>
+              <FormControl>
+                <FormLabel>Email</FormLabel>
+                <Input />
+                <FormHelperText>
+                  We’ll only use your email for donation-related communication,
+                  like receipts or refunds.
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
+                <Checkbox size="lg">
+                  <Text fontWeight="normal">
+                    I agree to the{" "}
+                    <Link
+                      href="/tos"
+                      color="blue.500"
+                      textDecoration="underline"
+                      textUnderlineOffset={3}
+                    >
+                      Terms of Service
+                    </Link>
+                  </Text>
+                </Checkbox>
+              </FormControl>
+              <Button w="full" size="lg" colorScheme="primary">
+                Submit
+              </Button>
+            </VStack>
+          )}
           {isLoading && (
             <HStack justify="center">
               <CircularProgress
@@ -151,8 +191,8 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
               />
             </HStack>
           )}
-          {!!error && <ErrorComponent error={error as Error} />}
-          <ErrorBoundary FallbackComponent={ErrorComponent}>
+          {/* {!!error && <ErrorComponent error={error as Error} />} */}
+          {/* <ErrorBoundary FallbackComponent={ErrorComponent}>
             {paymentFormReady && (
               <PaymentForm
                 {...paymentFormData}
@@ -162,7 +202,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
                 )}?verify`}
               />
             )}
-          </ErrorBoundary>
+          </ErrorBoundary> */}
         </VStack>
       </Flex>
     </CenterLayout>

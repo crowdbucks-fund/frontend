@@ -69,7 +69,7 @@ export default function EditProfilePage() {
   const router = useRouter();
   const errors = form.formState.errors;
 
-  const { mutate: updateProfile, isLoading } = useMutationWithFile(
+  const { mutate: updateProfile, isPending: isLoading } = useMutationWithFile(
     (data) => {
       return api.updateProfile({
         ...data,
@@ -82,7 +82,7 @@ export default function EditProfilePage() {
           status: "success",
           title: "Profile updated successfully",
         });
-        queryClient.invalidateQueries(useUserQueryKey);
+        queryClient.invalidateQueries({ queryKey: useUserQueryKey });
         router.push(`/console/`);
       },
       onError(error) {

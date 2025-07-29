@@ -9,6 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import {
   AddOrUpdateGoalByUserRequest,
   GetGoalByUserResult,
@@ -25,7 +26,6 @@ import { maxBy } from "lodash";
 import { usePathname, useRouter } from "next/navigation";
 import { startTransition, useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useMutation } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { z } from "zod";
 import { useCurrentCommunity } from "../components/community-validator-layout";
@@ -94,12 +94,14 @@ export default function CreateUpdateGoal({
   const errors = form.formState.errors;
   useGoals({
     communityId,
-    onSuccess(data) {
+    enabled: !isEditing,
+    select(data) {
       const lastGoalPriority = maxBy(data, (d) => d.priority)?.priority || 0;
       form.setValue("priority", lastGoalPriority + 1);
+      return data;
     },
-    enabled: !isEditing,
   });
+  useEffect(() => {}, []);
   const { data: currencies, isLoading: currenciesLoading } = useCurrencies();
   const { data: goalsFrequencies, isLoading: frequenciesLoading } =
     useGoalsFrequency({
@@ -125,7 +127,7 @@ export default function CreateUpdateGoal({
 
   const {
     mutate: createUpdateGoal,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = useMutation({
     mutationFn: (data: AddOrUpdateGoalByUserRequest) =>

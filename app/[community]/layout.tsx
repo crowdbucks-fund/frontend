@@ -15,7 +15,7 @@ export const fetchCommunity = async (handle: string) => {
         handle,
         api
           .findCommunityByUser({
-            handle: decodeURIComponent(handle),
+            handleOrAlias: decodeURIComponent(handle),
           })
           .then((res) => {
             res.name = res.handleAlias;
@@ -34,6 +34,7 @@ export const fetchCommunity = async (handle: string) => {
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 export default async function CommunityLayout({
   params,

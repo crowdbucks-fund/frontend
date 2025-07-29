@@ -1,8 +1,8 @@
 'use client'
+import { useMutation } from "@tanstack/react-query"
 import { CompleteStripeAccountDetailsByUserResult, ConnectStripeAccountByUserResult } from '@xeronith/granola/core/spi'
 import { api } from 'lib/api'
 import { platformInfo } from 'platform'
-import { useMutation } from 'react-query'
 import { useAuth } from 'states/console/user'
 import { joinURL, withQuery } from 'ufo'
 
@@ -18,11 +18,13 @@ export const useConnectToStripe: useConnectToStripeType = ({ onSuccess }) => {
     returnUrl: withQuery(returnUrl, { verify: '' }),
     refreshUrl: returnUrl
   }
-  const { mutate: getStripeConnectUrl, isLoading } = useMutation(api.connectStripeAccountByUser.bind(api), {
+  const { mutate: getStripeConnectUrl, isPending: isLoading } = useMutation({
+    mutationFn: api.connectStripeAccountByUser.bind(api),
     onSuccess,
   })
 
-  const { mutate: completeStripeAccountDetails, isLoading: isCompletingStripeAccountDetails } = useMutation(api.completeStripeAccountDetailsByUser.bind(api), {
+  const { mutate: completeStripeAccountDetails, isPending: isCompletingStripeAccountDetails } = useMutation({
+    mutationFn: api.completeStripeAccountDetailsByUser.bind(api),
     onSuccess,
   })
   const connectToStripe = async () => {

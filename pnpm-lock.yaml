@@ -48,9 +48,12 @@ importers:
       '@stripe/stripe-js':
         specifier: ^2.1.11
         version: 2.4.0
+      '@tanstack/react-query':
+        specifier: ^5.83.0
+        version: 5.83.0(react@19.1.0)
       '@xeronith/granola':
-        specifier: ^0.5.21
-        version: 0.5.21
+        specifier: ^0.5.23
+        version: 0.5.23
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -2499,6 +2502,14 @@ packages:
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
     engines: {node: '>=14.16'}
 
+  '@tanstack/query-core@5.83.0':
+    resolution: {integrity: sha512-0M8dA+amXUkyz5cVUm/B+zSk3xkQAcuXuz5/Q/LveT4ots2rBpPTZOzd7yJa2Utsf8D2Upl5KyjhHRY+9lB/XA==}
+
+  '@tanstack/react-query@5.83.0':
+    resolution: {integrity: sha512-/XGYhZ3foc5H0VM2jLSD/NyBRIOK4q9kfeml4+0x2DlL6xVuAcVEW+hTlTapAmejObg0i3eNqhkr2dT+eciwoQ==}
+    peerDependencies:
+      react: ^18 || ^19
+
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
@@ -2718,8 +2729,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@xeronith/granola@0.5.21':
-    resolution: {integrity: sha512-qZK3XQKeOGDj8SlTno/pqRR0HocKT5Y5gYijJ6QioY3AQc1ioLDGU5XSszWiga9Zg+6zK7YBqtC2qTeuM4IuNA==, tarball: https://npm.pkg.github.com/download/@xeronith/granola/0.5.21/5891bc13e68d3eef8b555629e3d6f810b9de4e3c}
+  '@xeronith/granola@0.5.23':
+    resolution: {integrity: sha512-m3nuOFyppAsj8oDtNszSVO4iLu3AjD/9HvhAPxm8zazan1ui0zFqaiQXbARl56/XluPktHH659KeNt44lFyuGg==, tarball: https://npm.pkg.github.com/download/@xeronith/granola/0.5.23/b5194882840347086d46fa7acc29bb2a395628e9}
 
   '@zag-js/dom-query@0.31.1':
     resolution: {integrity: sha512-oiuohEXAXhBxpzzNm9k2VHGEOLC1SXlXSbRPcfBZ9so5NRQUA++zCE7cyQJqGLTZR0t3itFLlZqDbYEXRrefwg==}
@@ -8648,6 +8659,13 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
+  '@tanstack/query-core@5.83.0': {}
+
+  '@tanstack/react-query@5.83.0(react@19.1.0)':
+    dependencies:
+      '@tanstack/query-core': 5.83.0
+      react: 19.1.0
+
   '@trysound/sax@0.2.0': {}
 
   '@tsconfig/node18@1.0.3': {}
@@ -8867,7 +8885,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.8.1':
     optional: true
 
-  '@xeronith/granola@0.5.21':
+  '@xeronith/granola@0.5.23':
     dependencies:
       long: 5.3.2
       lz-string: 1.5.0

@@ -44,19 +44,16 @@ export default function CommunityInfoLayoutClient({
   onAuthorize: (token: string) => Promise<void>;
   oauthInstance: string | null;
 }>) {
-  const { user, isFetching } = useAuth({
-    onError(err) {},
-  });
-  const [isAuthorized, setIsAuthorized] = useState(true);
-  useEffect(() => {
-    if (!user && !isFetching) setIsAuthorized(false);
-  }, [user, isFetching]);
+  const { user } = useAuth();
+  const [isAuthorized, setIsAuthorized] = useState(() => !!user);
 
   const onAuthorized = async (token: string) => {
-    useAuth.fetchProfile();
-    setIsAuthorized(true);
     await onAuthorize(token);
   };
+
+  useEffect(() => {
+    setIsAuthorized(!!user);
+  }, [user]);
 
   return (
     <>

@@ -1,6 +1,6 @@
+import { UseQueryOptions, useQuery } from "@tanstack/react-query"
 import { Currency } from '@xeronith/granola/core/objects'
 import { api } from 'lib/api'
-import { UseQueryOptions, useQuery } from 'react-query'
 
 export const useCurrencies = (options: UseQueryOptions<Currency[], unknown, Currency[], string[]> = {}) => {
   return useQuery({

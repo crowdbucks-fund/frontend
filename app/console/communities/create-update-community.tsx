@@ -15,6 +15,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import CameraIcon from "assets/icons/camera.svg?react";
 import CheckIcon from "assets/icons/tick-circle.svg?react";
@@ -35,7 +36,6 @@ import {
 } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useQuery, useQueryClient } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { Community } from "types/Community";
 import { createFilePath } from "utils/files";
@@ -143,7 +143,7 @@ export default function CreateUpdateCommunityPage({
   const queryClient = useQueryClient();
   const {
     mutate: mutate,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = useMutationWithFile(
     async (data) => {

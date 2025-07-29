@@ -2,6 +2,7 @@
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "components/Toast";
 import { Provider as JotaiProvider } from "jotai";
 import { store } from "lib/jotai";
@@ -9,7 +10,6 @@ import { queryClient } from "lib/reactQuery";
 import "lib/zod";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { QueryClientProvider } from "react-query";
 import theme from "theme/chakra.config";
 
 export function Providers({ children }: { children: React.ReactNode }) {

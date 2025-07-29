@@ -12,6 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
 import ThunderIcon from "assets/icons/Thunder.svg?react";
@@ -21,7 +22,6 @@ import { ApiError, api } from "lib/api";
 import { scrollAnimate } from "lib/framerMotion";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
 import { z } from "zod";
 
 const schema = z.object({
@@ -37,26 +37,24 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
     },
     resolver: zodResolver(schema),
   });
-  const { mutate, isLoading } = useMutation(
-    api.addFundraiserRequestByUser.bind(api),
-    {
-      onSuccess() {
-        form.reset();
-        toast({
-          status: "success",
-          title: "We've received your request",
-          description: "Stay tuned, we will contact you soon!",
-        });
-      },
-      onError(error: ApiError) {
-        console.log(error);
-        toast({
-          status: "error",
-          title: error.message,
-        });
-      },
-    }
-  );
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: api.addFundraiserRequestByUser.bind(api),
+    onSuccess() {
+      form.reset();
+      toast({
+        status: "success",
+        title: "We've received your request",
+        description: "Stay tuned, we will contact you soon!",
+      });
+    },
+    onError(error: ApiError) {
+      console.log(error);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    },
+  });
 
   return (
     <Container py={{ base: "50px", md: "100px" }} pt="50px">

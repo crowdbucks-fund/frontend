@@ -15,6 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useMutation } from "@tanstack/react-query";
 import { UserGoal } from "@xeronith/granola/core/objects";
 import GoalIcon from "assets/icons/cup.svg?react";
 import EditIconBase from "assets/images/edit.svg?react";
@@ -28,7 +29,6 @@ import { queryClient } from "lib/reactQuery";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, useCallback, useMemo, useState } from "react";
-import { useMutation } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
@@ -62,14 +62,15 @@ export default function GoalsPage() {
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
-  const { mutate: updateGoalsPriority, isLoading: isMutatingGoalsPriority } =
-    useMutation(api.updateGoalsPriorityByUser.bind(api), {
+  const { mutate: updateGoalsPriority, isPending: isMutatingGoalsPriority } =
+    useMutation({
+      mutationFn: api.updateGoalsPriorityByUser.bind(api),
       onSuccess: () => {
         toast({
           status: "success",
           title: "Goals priority updated successfully",
         });
-        queryClient.invalidateQueries("findGoalsByUser");
+        queryClient.invalidateQueries({ queryKey: ["findGoalsByUser"] });
       },
     });
 

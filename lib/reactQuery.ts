@@ -1,4 +1,4 @@
-import { QueryClient } from 'react-query';
+import { QueryClient } from "@tanstack/react-query";
 import { ApiError } from './api';
 
 const isNetworkError = (error: unknown): boolean => {

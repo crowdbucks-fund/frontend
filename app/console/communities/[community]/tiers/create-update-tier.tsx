@@ -12,6 +12,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { GetTierByUserResult } from "@xeronith/granola/core/spi";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
@@ -23,7 +24,6 @@ import { zodInputStringPipe } from "lib/zod";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useMutation } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { z } from "zod";
 import { useCurrentCommunity } from "../components/community-validator-layout";
@@ -114,7 +114,7 @@ export default function CreateUpdateTier({
 
   const {
     mutate: createUpdateTier,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = useMutation({
     mutationFn: api.addOrUpdateTierByUser.bind(api),

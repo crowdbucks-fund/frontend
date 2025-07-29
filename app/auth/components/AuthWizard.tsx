@@ -14,6 +14,7 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { FediverseOauth } from "app/auth/components/FediverseOauth";
 import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
 import MisskeyIconBase from "assets/icons/Misskey-outline.svg?react";
@@ -26,7 +27,7 @@ import Logo from "assets/images/logo-xl.svg?react";
 import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { ApiError, api } from "lib/api";
-import { formatErrorMessage, queryClient } from "lib/reactQuery";
+import { formatErrorMessage } from "lib/reactQuery";
 import { find, lowerCase, upperFirst } from "lodash";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
@@ -37,8 +38,6 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { useMutation } from "react-query";
-import { useAuth } from "states/console/user";
 import { handleSubmit } from "utils/formHandler";
 import { maskEmail } from "utils/strings";
 import { z } from "zod";
@@ -94,10 +93,10 @@ type FormType = z.infer<typeof schema>;
 export const AuthWizard: FC<AuthWizardProps> = (props) => {
   const router = useRouter();
   const onComplete = async (token: string) => {
-    useAuth.fetchProfile();
+    // useAuth.fetchProfile();
     if (props.onSignIn) {
       props.onSignIn(token).then(async () => {
-        queryClient.clear();
+        // queryClient.clear();
         router.replace("/console");
       });
     }
@@ -239,15 +238,19 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
     >
       <Box
         maxH={{
-          base: compact ? "230px" : "full",
-          md: compact ? "230px" : "full",
+          base: compact ? "200px" : "full",
+          md: compact ? "200px" : "full",
+        }}
+        marginBottom={{
+          base: "20px",
+          md: "0",
         }}
         h={{
           base: "calc(100vw / 1.4)",
           md: compact ? "calc(100vw / 5.5)" : "auto",
         }}
         minW={{
-          lg: "450px",
+          lg: "400px",
           base: "calc(100% - 460px)",
         }}
       >
@@ -265,7 +268,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
           }}
           w={compact ? "auto" : "full"}
           maxH={{
-            base: compact ? "230px" : "full",
+            base: compact ? "200px" : "full",
           }}
           maxW={{
             base: "85%",
@@ -392,7 +395,7 @@ const Email: FC<StepProps> = ({
 
   const {
     mutate: onSubmit,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = useMutation({
     retry: false,
@@ -417,7 +420,6 @@ const Email: FC<StepProps> = ({
         });
     },
     onError(error: ApiError) {
-      console.log("xyzxyz", error);
       form.setError("email", { message: formatErrorMessage(error) });
     },
   });
@@ -457,15 +459,19 @@ const Email: FC<StepProps> = ({
       >
         <Box
           maxH={{
-            base: props.compact ? "230px" : "full",
-            md: props.compact ? "230px" : "full",
+            base: props.compact ? "200px" : "full",
+            md: props.compact ? "200px" : "full",
+          }}
+          marginBottom={{
+            base: "20px",
+            md: "0",
           }}
           h={{
             base: "calc(100vw / 1.4)",
             md: props.compact ? "calc(100vw / 5.5)" : "auto",
           }}
           minW={{
-            lg: "450px",
+            lg: "400px",
             base: "calc(100% - 460px)",
           }}
         >
@@ -483,7 +489,7 @@ const Email: FC<StepProps> = ({
             }}
             w={props.compact ? "auto" : "full"}
             maxH={{
-              base: props.compact ? "230px" : "full",
+              base: props.compact ? "200px" : "full",
             }}
             maxW={{
               base: "85%",
@@ -619,7 +625,7 @@ const Step2: FC<StepProps> = ({
     }
   }, []);
 
-  const { mutate: resendCode, isLoading: resendCodeLoading } = useMutation({
+  const { mutate: resendCode, isPending: resendCodeLoading } = useMutation({
     mutationFn: async () =>
       api.resendVerificationCode({
         email,
@@ -642,7 +648,7 @@ const Step2: FC<StepProps> = ({
 
   const {
     mutate: onSubmit,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = useMutation({
     retry: false,
@@ -707,15 +713,19 @@ const Step2: FC<StepProps> = ({
     >
       <Box
         maxH={{
-          base: compact ? "230px" : "full",
-          md: compact ? "230px" : "full",
+          base: compact ? "200px" : "full",
+          md: compact ? "200px" : "full",
+        }}
+        marginBottom={{
+          base: "20px",
+          md: "0",
         }}
         h={{
           base: "calc(100vw / 1.4)",
           md: compact ? "calc(100vw / 5.5)" : "auto",
         }}
         minW={{
-          lg: "450px",
+          lg: "400px",
           base: "calc(100% - 460px)",
         }}
       >
@@ -733,7 +743,7 @@ const Step2: FC<StepProps> = ({
           }}
           w={compact ? "auto" : "full"}
           maxH={{
-            base: compact ? "230px" : "full",
+            base: compact ? "200px" : "full",
           }}
           maxW={{
             base: "85%",
@@ -892,7 +902,7 @@ const Step3: FC<StepProps> = ({ onComplete, onChangeStep }) => {
 
   const {
     mutate: onSubmit,
-    isLoading,
+    isPending: isLoading,
     isSuccess,
   } = useMutation({
     retry: false,

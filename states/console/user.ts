@@ -1,26 +1,29 @@
 'use client'
 
+import { QueryKey, UndefinedInitialDataOptions, useQuery } from "@tanstack/react-query"
 import { GetProfileResult } from '@xeronith/granola/core/spi'
 import { atom, useAtom } from 'jotai'
 import { api } from 'lib/api'
+import { store } from 'lib/jotai'
 import { queryClient } from 'lib/reactQuery'
-import { useSelectedLayoutSegment } from 'next/navigation'
-import { QueryKey, UseQueryOptions, useQuery } from 'react-query'
 
 export const useUserQueryKey = ['getProfile']
 export const userProfileSSR = atom<GetProfileResult | null>(null)
 
-export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey> = {}) => {
+export const useAuth = (options: Omit<UndefinedInitialDataOptions<GetProfileResult | null, unknown, GetProfileResult, QueryKey>, 'queryKey'> = {}) => {
   const [userProfileFromServer] = useAtom(userProfileSSR);
-  const layoutSegment = useSelectedLayoutSegment()
-  const isCommunityPublicPage = !!layoutSegment || layoutSegment === '(community-index)' || layoutSegment === null
+
   const {
     data: user,
     isLoading: loading,
     isFetching,
-  } = useQuery<GetProfileResult | undefined, unknown, GetProfileResult, QueryKey>({
+  } = useQuery<GetProfileResult | null, unknown, GetProfileResult, QueryKey>({
     ...options,
-    queryFn: () => api.getProfile({}),
+    queryFn: () => {
+      // return api.getProfile({})
+      // rely only on server data
+      return null
+    },
     queryKey: useUserQueryKey,
     retry: (count, error: unknown) => {
       const errorMessage = ((error as Error)?.message)
@@ -37,21 +40,23 @@ export const useAuth = (options: UseQueryOptions<GetProfileResult | undefined, u
     retryOnMount: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    initialData: userProfileFromServer || undefined,
-    enabled: !!userProfileFromServer || !isCommunityPublicPage
+    initialData: userProfileFromServer,
   })
-
-  return { user, loading, isFetching }
+  return { user: userProfileFromServer, loading, isFetching }
 }
 
 useAuth.invalidateQuery = () => {
-  queryClient.invalidateQueries([useUserQueryKey])
+  queryClient.invalidateQueries({ queryKey: [useUserQueryKey] })
 }
 
 useAuth.setData = (data: GetProfileResult | null) => {
   queryClient.setQueryData<GetProfileResult | null>([useUserQueryKey], data)
+  store.set(userProfileSSR, data)
 }
 
 useAuth.fetchProfile = async () => {
-  useAuth.setData(await api.getProfile({}));
+  await api.getProfile({}).then(data => {
+    useAuth.setData(data)
+    store.set(userProfileSSR, data)
+  })
 }
