@@ -65,12 +65,8 @@ export default function CustomTierClientPage() {
   }, [amount]);
 
   const { data: tierFrequencies, isLoading: isTiersFrequencyLoading } =
-    useTierFrequency({
-      onError(err) {},
-    });
-  const { data: currencies, isLoading: isCurrenciesLoading } = useCurrencies({
-    onError(err) {},
-  });
+    useTierFrequency();
+  const { data: currencies, isLoading: isCurrenciesLoading } = useCurrencies();
 
   useEffect(() => {
     if (!form.getValues("currencyId") && currencies) {
@@ -98,7 +94,7 @@ export default function CustomTierClientPage() {
 
   const {
     mutate: createStripeIntent,
-    isLoading,
+    isPending: isLoading,
     data: paymentFormData,
     isSuccess: paymentFormReady,
     variables,
@@ -283,6 +279,7 @@ export default function CustomTierClientPage() {
                     render={({ field }) => (
                       <Input
                         {...field}
+                        type="number"
                         value={field.value || ""}
                         onChange={(e) => {
                           if (e.target.value) setButtonsDisabled(true);

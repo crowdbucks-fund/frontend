@@ -103,9 +103,8 @@ export default function ConsoleLayoutClient({
     segments.includes("(with-preview)") ||
     segments.includes("(community-index)");
 
-  const isCommunityPublicPage =
-    segments.includes("(community-index)") ||
-    segments.includes("(community-info)");
+  const isCommunityPublicPage = segments.includes("(community-index)");
+  // || segments.includes("(community-info)");
 
   if (loading) return <SplashLoading />;
   return (
