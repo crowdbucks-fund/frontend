@@ -55,6 +55,7 @@ export const ResponsiveDialog: FC<ResponsiveDialogProps> = ({
               variant="ghost"
               top={8}
               right={8}
+              onClick={onClose}
             >
               <XIcon />
             </IconButton>
