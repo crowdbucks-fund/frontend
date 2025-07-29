@@ -42,6 +42,8 @@ export const ResponsiveDialog: FC<ResponsiveDialogProps> = ({
               fontWeight="normal"
               mt="4"
               minH={"24px"}
+              maxW={showCloseButton ? "calc(100% - 40px)" : "100%"}
+              isTruncated
             >
               {title}
             </Text>
