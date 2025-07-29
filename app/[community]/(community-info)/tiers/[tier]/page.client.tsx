@@ -229,7 +229,6 @@ const schema = z.discriminatedUnion("step", [
   z.object({
     step: z.literal("verify"),
     email: z.string().email("Invalid email address"),
-    token: z.string().min(1, "Token is required"),
     code: z
       .string()
       .min(5, "Code must be exactly 5 characters")
@@ -249,9 +248,7 @@ const EmailVerificationForm: FC<{}> = () => {
   const { mutate: submit, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof schema>) => {
       if (data.step === "verify") {
-        return await api.verify({
-          email: data.email,
-          token: data.token,
+        return await api.verifyEmail({
           code: data.code,
         });
       } else if (data.step === "email") {
@@ -266,7 +263,6 @@ const EmailVerificationForm: FC<{}> = () => {
             ...variables,
             step: "verify",
             email: variables.email,
-            token: data.token,
           },
           {
             keepIsSubmitted: false,
