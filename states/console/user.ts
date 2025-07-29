@@ -11,7 +11,7 @@ export const useUserQueryKey = ['getProfile']
 export const userProfileSSR = atom<GetProfileResult | null>(null)
 
 export const useAuth = (options: Omit<UndefinedInitialDataOptions<GetProfileResult | null, unknown, GetProfileResult, QueryKey>, 'queryKey'> = {}) => {
-  const [userProfileFromServer] = useAtom(userProfileSSR);
+  const [userProfileFromServer, setUserProfile] = useAtom(userProfileSSR);
 
   const {
     data: user,
@@ -20,7 +20,10 @@ export const useAuth = (options: Omit<UndefinedInitialDataOptions<GetProfileResu
   } = useQuery<GetProfileResult | null, unknown, GetProfileResult, QueryKey>({
     ...options,
     queryFn: () => {
-      // return api.getProfile({})
+      return api.getProfile({}).then((data) => {
+        setUserProfile(data)
+        return data;
+      })
       // rely only on server data
       return null
     },
