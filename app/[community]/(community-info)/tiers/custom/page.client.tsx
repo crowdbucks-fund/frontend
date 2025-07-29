@@ -3,7 +3,6 @@
 import {
   Box,
   Button,
-  CircularProgress,
   Divider,
   Flex,
   FormControl,
@@ -11,12 +10,11 @@ import {
   FormLabel,
   HStack,
   Input,
-  Select,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
+import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import { PaymentForm } from "components/PaymentForm";
 import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
@@ -42,9 +40,12 @@ const schema = z.object({
     .refine((value) => value <= 999999, "The amount too big"),
 });
 
-export default function CustomTierClientPage() {
+export default function CustomTierClientPage({
+  community,
+}: {
+  community: FindCommunityByUserResult;
+}) {
   const pathname = usePathname();
-  const community = useCurrentCommunity();
   const [isButtonsDisabled, setButtonsDisabled] = useState(false);
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: {
@@ -142,7 +143,7 @@ export default function CustomTierClientPage() {
       {!paymentFormReady && (
         <>
           <VStack
-            maxW={{ base: "unset", md: "370px" }}
+            maxW={{ base: "400px" }}
             w="full"
             justify={{ base: "space-between", md: "start" }}
             flexGrow={{ base: 1, md: 0 }}
@@ -172,34 +173,35 @@ export default function CustomTierClientPage() {
                       control={form.control}
                       name="occurrenceId"
                       render={({ field }) => {
-                        return (
-                          <Select
-                            {...field}
-                            value={field.value || ""}
-                            onChange={(e) =>
-                              field.onChange(parseInt(String(e.target.value)))
-                            }
-                            icon={
-                              isTiersFrequencyLoading ? (
-                                <CircularProgress
-                                  isIndeterminate
-                                  size="25px"
-                                  color="primary.500"
-                                />
-                              ) : undefined
-                            }
-                          >
-                            <option value={0}>One-time</option>
-                            {tierFrequencies &&
-                              tierFrequencies.map((cr, id) => {
-                                return (
-                                  <option key={id} value={cr.id}>
-                                    {cr.name}
-                                  </option>
-                                );
-                              })}
-                          </Select>
-                        );
+                        return <Input {...field} value="One time" isDisabled />;
+                        // return (
+                        //   <Select
+                        //     {...field}
+                        //     value={field.value || ""}
+                        //     onChange={(e) =>
+                        //       field.onChange(parseInt(String(e.target.value)))
+                        //     }
+                        //     icon={
+                        //       isTiersFrequencyLoading ? (
+                        //         <CircularProgress
+                        //           isIndeterminate
+                        //           size="25px"
+                        //           color="primary.500"
+                        //         />
+                        //       ) : undefined
+                        //     }
+                        //   >
+                        //     <option value={0}>One-time</option>
+                        //     {tierFrequencies &&
+                        //       tierFrequencies.map((cr, id) => {
+                        //         return (
+                        //           <option key={id} value={cr.id}>
+                        //             {cr.name}
+                        //           </option>
+                        //         );
+                        //       })}
+                        //   </Select>
+                        // );
                       }}
                     />
                     <FormErrorMessage>
@@ -217,6 +219,7 @@ export default function CustomTierClientPage() {
                           <Input
                             id="currencyId"
                             readOnly
+                            isDisabled
                             value={
                               (currencies &&
                                 currencies?.find(
@@ -370,7 +373,7 @@ export default function CustomTierClientPage() {
               </VStack>
             </VStack>
           </Box>
-          <VStack minW={{ base: "unset", md: "370px" }}>
+          <VStack w="full" maxW="400px">
             <PaymentForm
               {...paymentFormData}
               returnUrl={`${joinURL(

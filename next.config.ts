@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   experimental: {
-    serverComponentsHmrCache: false
+    serverComponentsHmrCache: false,
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule: any) =>
       rule.test?.test?.('.svg'),

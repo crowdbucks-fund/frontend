@@ -1,8 +1,7 @@
 "use client";
-import { Box, chakra, VStack } from "@chakra-ui/react";
+import { chakra, VStack } from "@chakra-ui/react";
 import { CommunityTabLayout } from "app/console/communities/[community]/components/community-layout";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
-import { CommunityPreview } from "app/console/communities/components/CommunityPreview";
 import CupIconBase from "assets/icons/cup.svg?react";
 import TreeIconBase from "assets/icons/tree.svg?react";
 import { usePathname } from "next/navigation";
@@ -24,26 +23,9 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
 
   return (
     <VStack gap={{ base: 2, md: 6 }} w="full">
-      <Box display={{ base: "none", md: "block" }} w="full">
-        <CommunityPreview community={community} />
-      </Box>
-
       <CommunityTabLayout
         community={community}
-        communityPreview={false}
-        beforeTab={
-          <Box
-            pt={{ md: "7" }}
-            w="full"
-            display={{ base: "block", md: "none" }}
-          >
-            <CommunityPreview
-              shareCommunity
-              showSummary
-              community={community}
-            />
-          </Box>
-        }
+        communityPreview={true}
         links={(community) => [
           {
             title: "Tiers",

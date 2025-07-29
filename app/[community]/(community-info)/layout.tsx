@@ -1,11 +1,8 @@
 import { setAuthCookie } from "app/auth/page";
 import { serializeOauthStateCookie } from "app/auth/utils";
+import { fetchProfile } from "app/console/components/ConsoleLayout.server";
 import { PropsWithChildren } from "react";
 import CommunityInfoLayoutClient from "./layout.client";
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
 
 export default async function CommunityInfoLayout({
   children,
@@ -13,11 +10,13 @@ export default async function CommunityInfoLayout({
   const { instance } = (await serializeOauthStateCookie().catch((e) => ({
     instance: null,
   }))) as { instance: string | null };
+  const user = await fetchProfile();
 
   return (
     <CommunityInfoLayoutClient
       onAuthorize={setAuthCookie}
       oauthInstance={instance}
+      user={user}
     >
       {children}
     </CommunityInfoLayoutClient>

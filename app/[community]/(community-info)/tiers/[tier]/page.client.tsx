@@ -21,7 +21,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
-import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
+import {
+  FindCommunityByUserResult,
+  GetProfileResult,
+} from "@xeronith/granola/core/spi";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
 import { PaymentForm } from "components/PaymentForm";
@@ -44,9 +47,15 @@ import { TOS } from "./Tos";
 
 const CheckIcon = chakra(TickSquare);
 
-export default function TierClientPage({ tier }: { tier: UserTier }) {
-  const { user } = useAuth();
-  const community = useCurrentCommunity();
+export default function TierClientPage({
+  tier,
+  community,
+  user,
+}: {
+  tier: UserTier;
+  community: FindCommunityByUserResult;
+  user: GetProfileResult | null;
+}) {
   const pathname = usePathname();
   useUpdateBreadcrumb({
     breadcrumb: [
@@ -161,7 +170,7 @@ export default function TierClientPage({ tier }: { tier: UserTier }) {
             </VStack>
           </VStack>
         </Box>
-        <VStack minW={{ base: "unset", md: "400px" }}>
+        <VStack w="full" maxW="400px">
           {!isLoading && !!user && !user.email && <EmailVerificationForm />}
           {isLoading && (
             <HStack justify="center">

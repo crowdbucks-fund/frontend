@@ -1,7 +1,7 @@
-import { GetProfileResult } from "@xeronith/granola/core/spi";
 import { api } from "lib/api";
 import { AUTH_TOKEN_KEY } from "lib/auth";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 
 export const getAuthTokenFromCookie = async () => {
@@ -10,22 +10,17 @@ export const getAuthTokenFromCookie = async () => {
   return token;
 };
 
-let _profilePromise: Promise<GetProfileResult | null> = null!;
-const getUserProfile = async (token: string) => {
-  if (_profilePromise) return await _profilePromise;
-  _profilePromise = api
+
+const getUserProfile = async (token?: string) => {
+  if (!token)
+    return null;
+  return api
     .getProfile({}, { token })
     .catch(() => null)
-    .finally(() => {
-      _profilePromise = null!;
-    });
-  return await _profilePromise;
 };
 
-export const fetchProfile = async () => {
+export const fetchProfile = cache(async () => {
   const currentAuthToken = await getAuthTokenFromCookie();
-  const userProfile = currentAuthToken
-    ? await getUserProfile(currentAuthToken)
-    : null;
+  const userProfile = await getUserProfile(currentAuthToken)
   return userProfile;
-}
+})

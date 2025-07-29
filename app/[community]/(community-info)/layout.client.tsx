@@ -1,8 +1,8 @@
 "use client";
+import { GetProfileResult } from "@xeronith/granola/core/spi";
 import { AuthWizardContent } from "app/auth/components/AuthWizard";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { useAuth } from "states/console/user";
 
 const SignInModal: FC<{
   isOpen: boolean;
@@ -40,11 +40,12 @@ export default function CommunityInfoLayoutClient({
   children,
   onAuthorize,
   oauthInstance,
+  user,
 }: PropsWithChildren<{
   onAuthorize: (token: string) => Promise<void>;
   oauthInstance: string | null;
+  user: GetProfileResult | null;
 }>) {
-  const { user } = useAuth();
   const [isAuthorized, setIsAuthorized] = useState(() => !!user);
 
   const onAuthorized = async (token: string) => {

@@ -70,18 +70,17 @@ export const SplashLoading: FC = () => {
 export default function ConsoleLayoutClient({
   children,
   publicPage = false,
-  userProfile,
+  user,
 }: PropsWithChildren<{
   publicPage?: boolean;
-  userProfile: GetProfileResult | null;
+  user: GetProfileResult | null;
 }>) {
-  useHydrateAtoms([[userProfileSSR, userProfile]], { store });
+  useHydrateAtoms([[userProfileSSR, user]], { store });
   useLayoutEffect(() => {
-    useAuth.setData(userProfile);
-  }, [userProfile]);
+    useAuth.setData(user);
+  }, [user]);
 
   useScrollRestoration();
-  const { user, loading, isFetching } = useAuth(publicPage ? {} : {});
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);
 
   const [
@@ -106,7 +105,6 @@ export default function ConsoleLayoutClient({
   const isCommunityPublicPage = segments.includes("(community-index)");
   // || segments.includes("(community-info)");
 
-  if (loading) return <SplashLoading />;
   return (
     <VStack
       w="full"
@@ -221,7 +219,6 @@ export default function ConsoleLayoutClient({
             fontWeight="bold"
             colorScheme="primary"
             rounded="10px"
-            isLoading={isFetching}
             display={{ base: "flex", md: "none" }}
           >
             {user ? "Get started" : "Join CrowdBucks Now"}
@@ -237,14 +234,14 @@ export default function ConsoleLayoutClient({
           display={{ base: "none", md: "flex" }}
         >
           <HStack gap={2}>
-            {user && !loading && (
+            {user && (
               <Text fontWeight="bold" fontSize="16px" color="brand.black.1">
                 {user.displayName
                   ? `${user.displayName}'s Console`
                   : `Your Console`}
               </Text>
             )}
-            {!user && !loading && (
+            {!user && (
               <Button
                 as={NextLink}
                 href="/auth"
@@ -256,7 +253,6 @@ export default function ConsoleLayoutClient({
                 fontWeight="bold"
                 colorScheme="primary"
                 rounded="10px"
-                isLoading={isFetching}
               >
                 {user ? "Get started" : "Join CrowdBucks Now"}
               </Button>
