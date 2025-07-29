@@ -48,7 +48,16 @@ export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
   return (
     <ResponsiveDialog isOpen={isOpen} onClose={onClose} title="Delete Goal">
       <VStack gap={{ base: 4, md: 6 }} w="full">
-        <VStack w="full" justify="center" textAlign="center">
+        <VStack
+          w="full"
+          justify="center"
+          textAlign="center"
+          gap={{ base: 1, md: 2 }}
+          minW={{
+            base: "full",
+            md: "400px",
+          }}
+        >
           <WarningIcon />
           <Text fontWeight="bold" fontSize="24px">
             This goal is about to be deleted
@@ -61,6 +70,7 @@ export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
             goal={deletingGoal}
             border="2px solid"
             borderColor={"brand.gray.1"}
+            p={5}
           />
         )}
         <Button

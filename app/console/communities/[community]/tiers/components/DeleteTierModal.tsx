@@ -47,6 +47,10 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
           justify="center"
           textAlign="center"
           gap={{ base: 1, md: 2 }}
+          minW={{
+            base: "full",
+            md: "400px",
+          }}
         >
           <WarningIcon />
           <Text fontWeight="bold" fontSize={{ base: "18px", md: "24px" }}>
@@ -63,6 +67,7 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
             tier={deletingTier}
             border="2px solid"
             borderColor={"brand.gray.1"}
+            p={5}
           />
         )}
         <Button
