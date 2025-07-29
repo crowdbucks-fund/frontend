@@ -21,7 +21,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
-import { TOS } from "app/[community]/(community-info)/tiers/[tier]/tos";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
@@ -41,6 +40,7 @@ import { useAuth } from "states/console/user";
 import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 import { z } from "zod";
+import { TOS } from "./Tos";
 
 const CheckIcon = chakra(TickSquare);
 
