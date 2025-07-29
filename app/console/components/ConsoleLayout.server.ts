@@ -22,5 +22,9 @@ const getUserProfile = async (token?: string) => {
 export const fetchProfile = cache(async () => {
   const currentAuthToken = await getAuthTokenFromCookie();
   const userProfile = await getUserProfile(currentAuthToken)
-  return userProfile;
+
+  return { profile: userProfile, token: currentAuthToken };
 })
+
+
+export type AuthUser = Awaited<ReturnType<typeof fetchProfile>>;

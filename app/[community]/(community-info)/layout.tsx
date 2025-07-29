@@ -16,7 +16,7 @@ export default async function CommunityInfoLayout({
     <CommunityInfoLayoutClient
       onAuthorize={setAuthCookie}
       oauthInstance={instance}
-      user={user}
+      user={user.profile}
     >
       {children}
     </CommunityInfoLayoutClient>

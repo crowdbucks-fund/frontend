@@ -1,8 +1,8 @@
-import { UseQueryOptions, useQuery } from "@tanstack/react-query"
+import { UndefinedInitialDataOptions, useQuery } from "@tanstack/react-query"
 import { UserBankInfo } from '@xeronith/granola/core/objects'
 import { api } from 'lib/api'
 
-export const useBankInfos = (options: UseQueryOptions<UserBankInfo[], unknown, UserBankInfo[], string[]> = {}) => {
+export const useBankInfos = (options: Omit<UndefinedInitialDataOptions<UserBankInfo[], unknown, UserBankInfo[], string[]>, 'queryKey'> = {}) => {
   return useQuery({
     ...options,
     queryKey: ['getBankInfosByUser'],

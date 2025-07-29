@@ -7,5 +7,5 @@ export default async function GoalsPage({ params }: { params: Params }) {
   const user = await fetchProfile();
   const community = await fetchCommunity(communityHandle.toString())!;
 
-  return <GoalsClientPage user={user} community={community} />;
+  return <GoalsClientPage user={user.profile} community={community} />;
 }

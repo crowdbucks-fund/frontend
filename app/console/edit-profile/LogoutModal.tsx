@@ -12,7 +12,12 @@ export type LogoutModalProps = {
 
 export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
-  const { mutate: logout, isLoading, isSuccess, isError } = useLogout(router);
+  const {
+    mutate: logout,
+    isPending: isLoading,
+    isSuccess,
+    isError,
+  } = useLogout(router);
   const close = () => {
     if (!isLoading && !isSuccess) onClose();
   };

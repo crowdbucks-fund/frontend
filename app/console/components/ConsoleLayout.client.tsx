@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { GetProfileResult } from "@xeronith/granola/core/spi";
+import { AuthUser } from "app/console/components/ConsoleLayout.server";
 import LogoutIcon from "assets/icons/logout.svg?react";
 import MenuIcon from "assets/icons/menu M.svg?react";
 import MoreIcon from "assets/icons/more-circle.svg?react";
@@ -26,6 +27,7 @@ import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
 import { AnimatePresence, motion } from "framer-motion";
+import { logout } from "hooks/useLogout.server";
 import { useScrollRestoration } from "hooks/useScrollRestoration";
 import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { useAtom, useSetAtom } from "jotai";
@@ -33,7 +35,13 @@ import { useHydrateAtoms } from "jotai/utils";
 import { store } from "lib/jotai";
 import NextLink from "next/link";
 import { useSelectedLayoutSegments } from "next/navigation";
-import { FC, PropsWithChildren, useLayoutEffect, useState } from "react";
+import {
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { breadcrumbLinks } from "states/console/breadcrumb";
 import { sidebarState } from "states/console/sidebar";
 import { useAuth, userProfileSSR } from "states/console/user";
@@ -70,15 +78,21 @@ export const SplashLoading: FC = () => {
 export default function ConsoleLayoutClient({
   children,
   publicPage = false,
-  user,
+  authUser,
 }: PropsWithChildren<{
   publicPage?: boolean;
-  user: GetProfileResult | null;
+  authUser: AuthUser;
 }>) {
+  const user = authUser.profile;
   useHydrateAtoms([[userProfileSSR, user]], { store });
   useLayoutEffect(() => {
     useAuth.setData(user);
   }, [user]);
+  useEffect(() => {
+    if (authUser.token && !authUser.profile) {
+      logout();
+    }
+  }, [authUser]);
 
   useScrollRestoration();
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);

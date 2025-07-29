@@ -31,12 +31,14 @@ export const queryClient = new QueryClient({
           return true
         return false
       },
-      onError(error) {
+      throwOnError(error) {
         const message = (error as ApiError).message
         if (message === 'unauthorized') {
           if (window.location.pathname.startsWith('/console'))
             window.location.assign(`/auth/logout/`)
+          return false;
         }
+        return true;
       },
     },
     mutations: {

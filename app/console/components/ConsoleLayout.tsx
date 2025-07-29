@@ -1,4 +1,4 @@
-import { GetProfileResult } from "@xeronith/granola/core/spi";
+import { AuthUser } from "app/console/components/ConsoleLayout.server";
 import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 import ConsoleLayoutClient from "./ConsoleLayout.client";
@@ -10,13 +10,13 @@ export default async function ConsoleLayout({
   authRequired = false,
 }: PropsWithChildren<{
   publicPage?: boolean;
-  getProfilePromise: Promise<GetProfileResult | null>;
+  getProfilePromise: Promise<AuthUser>;
   authRequired?: boolean;
 }>) {
-  const user = await getProfilePromise;
-  if (authRequired && !user) return redirect("/auth");
+  const authUser = await getProfilePromise;
+  if (authRequired && !authUser) return redirect("/auth");
   return (
-    <ConsoleLayoutClient user={user} publicPage={publicPage}>
+    <ConsoleLayoutClient authUser={authUser} publicPage={publicPage}>
       {children}
     </ConsoleLayoutClient>
   );

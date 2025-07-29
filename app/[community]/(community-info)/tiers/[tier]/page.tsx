@@ -29,7 +29,11 @@ export default async function TierPage({ params }: { params: Params }) {
   );
   if (currentTier && currentTier.belongsToCommunity)
     return (
-      <TierClientPage tier={currentTier} community={community} user={user} />
+      <TierClientPage
+        tier={currentTier}
+        community={community}
+        user={user.profile}
+      />
     );
   return notFound();
 }

@@ -52,7 +52,7 @@ export default function OauthList() {
         </Alert>
       )}
       <HStack></HStack>
-      {verify.isSuccess && verify.data && (
+      {verify.isSuccess && !!verify.data && (
         <pre className="">{JSON.stringify(verify.data, null, 2)}</pre>
       )}
     </VStack>

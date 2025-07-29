@@ -7,5 +7,5 @@ export default async function TierPage({ params }: { params: Params }) {
   const user = await fetchProfile();
   const community = await fetchCommunity(communityHandle.toString())!;
 
-  return <TiersList user={user} community={community} />;
+  return <TiersList user={user.profile} community={community} />;
 }
