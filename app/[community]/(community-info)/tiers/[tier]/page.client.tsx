@@ -1,5 +1,4 @@
 "use client";
-import { Link } from "@chakra-ui/next-js";
 import {
   Box,
   Button,
@@ -22,17 +21,19 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
+import { TOS } from "app/[community]/(community-info)/tiers/[tier]/tos";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
 import { PaymentForm } from "components/PaymentForm";
+import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { toast } from "components/Toast";
 import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import useTimer from "hooks/useTimer";
 import { api } from "lib/api";
 import { lowerCase, startCase, upperFirst } from "lodash";
 import { usePathname } from "next/navigation";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
@@ -321,7 +322,11 @@ const EmailVerificationForm: FC<{}> = () => {
     control: form.control,
     name: "step",
   });
-
+  const [tosModalOpen, setOpenTosModal] = useState(false);
+  const onAccept = () => {
+    setOpenTosModal(false);
+    form.setValue("agreeToTerms", true);
+  };
   return (
     <VStack
       maxW="400px"
@@ -387,14 +392,15 @@ const EmailVerificationForm: FC<{}> = () => {
             >
               <Text fontWeight="normal">
                 I agree to the{" "}
-                <Link
-                  href="/tos"
+                <Button
                   color="blue.500"
+                  onClick={setOpenTosModal.bind(null, true)}
                   textDecoration="underline"
+                  variant="link"
                   textUnderlineOffset={3}
                 >
                   Terms of Service
-                </Link>
+                </Button>
               </Text>
             </Checkbox>
             <FormErrorMessage>
@@ -478,6 +484,14 @@ const EmailVerificationForm: FC<{}> = () => {
       >
         {step === "email" ? "Submit" : "Verify"}
       </Button>
+
+      <ResponsiveDialog
+        isOpen={tosModalOpen}
+        onClose={setOpenTosModal.bind(null, false)}
+        title="Terms Of Services"
+      >
+        <TOS onAccept={onAccept} />
+      </ResponsiveDialog>
     </VStack>
   );
 };
