@@ -96,6 +96,8 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           key="bottomsheet-content"
           ref={contentRef}
           tabIndex={-1}
+          display="flex"
+          justifyContent="center"
           role="dialog"
           aria-modal="true"
           onClick={(e: MouseEvent) => e.stopPropagation()}

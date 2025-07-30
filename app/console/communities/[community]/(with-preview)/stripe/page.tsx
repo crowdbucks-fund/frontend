@@ -1,11 +1,18 @@
 "use client";
-import { Button, chakra, CircularProgress, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  chakra,
+  CircularProgress,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import LinkIconBase from "assets/icons/link-2.svg?react";
 import StripeLogo from "assets/images/Stripe.svg";
 import { CreateFirstEntity } from "components/FirstEntity";
+import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { StripeCard } from "components/StripeCard";
 import { toast } from "components/Toast";
 import { useConnectToStripe } from "hooks/useConnectToStripe";
@@ -20,6 +27,7 @@ import { useAuth } from "states/console/user";
 const LinkIcon = chakra(LinkIconBase);
 
 export default function StripePage() {
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const {
     user,
@@ -157,12 +165,55 @@ export default function StripePage() {
             fontSize={{ base: "12px", md: "20px" }}
             isLoading={isDisconnectingAccount}
             loadingText="Disconnecting account"
-            onClick={disconnectAccount}
+            onClick={setCancelModalOpen.bind(null, true)}
           >
             Request payment cancelation
           </Button>
         </VStack>
       )}
+      <ResponsiveDialog
+        isOpen={cancelModalOpen}
+        onClose={() => setCancelModalOpen(false)}
+        title="Request payment cancelation"
+      >
+        <VStack
+          spacing={4}
+          align="start"
+          maxW="500px"
+          alignItems="center"
+          w="full"
+        >
+          <Text fontWeight="bold" fontSize={{ base: "18px", md: "28px" }}>
+            Disconnect Stripe Account?
+          </Text>
+          <VStack gap={0}>
+            <Text fontSize={{ base: "14px", md: "20px" }} textAlign="center">
+              Are you sure you want to disconnect your Stripe account?
+            </Text>
+            <Text fontSize={{ base: "14px", md: "20px" }} textAlign="center">
+              You won’t be able to receive donations until you connect it again.
+            </Text>
+          </VStack>
+          <VStack w="full" flexDir={{ base: "column", sm: "row-reverse" }}>
+            <Button
+              size="lg"
+              w="full"
+              colorScheme="red"
+              onClick={disconnectAccount}
+            >
+              Confirm Cancelation
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              w="full"
+              onClick={() => setCancelModalOpen(false)}
+            >
+              Not now
+            </Button>
+          </VStack>
+        </VStack>
+      </ResponsiveDialog>
     </CenterLayout>
   );
 }
