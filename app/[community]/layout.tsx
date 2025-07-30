@@ -18,7 +18,8 @@ export const fetchCommunity = cache(async (handle: string) => {
       res.handle = res.handleAlias;
       res.goals.sort(sortGoals);
       return res;
-    });
+    })
+    .catch(() => null);
 });
 
 export default async function CommunityLayout({
