@@ -96,6 +96,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           key="bottomsheet-content"
           ref={contentRef}
           tabIndex={-1}
+          outline={"none"}
           display="flex"
           justifyContent="center"
           role="dialog"
