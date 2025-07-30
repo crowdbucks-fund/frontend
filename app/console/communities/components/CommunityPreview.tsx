@@ -48,6 +48,8 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
   shareCommunity = false,
   ...props
 }) => {
+  showSummary = false;
+
   const { onCopy, hasCopied } = useCopyCommunityLink(community);
   return (
     <Box {...props} w="full">
