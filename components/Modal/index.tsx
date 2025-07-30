@@ -13,11 +13,6 @@ interface ModalOverlayProps extends FlexProps {
   [key: string]: any;
 }
 
-interface ModalContentProps extends FlexProps {
-  children: ReactNode;
-  [key: string]: any;
-}
-
 export const ModalOverlay: React.FC<ModalOverlayProps> = ({
   children,
   ...rest
@@ -60,15 +55,7 @@ const ModalContent = chakra(motion.div, {
     overflow: "auto",
   },
   shouldForwardProp(prop) {
-    return [
-      "children",
-      "as",
-      "variants",
-      "transition",
-      "initial",
-      "animate",
-      "exit",
-    ].includes(prop);
+    return true;
   },
 });
 
@@ -113,7 +100,6 @@ export const Modal: React.FC<ModalProps & FlexProps> = ({
         >
           <ModalContent
             {...rest}
-            as={motion.div}
             variants={{
               hidden: { opacity: 0, scale: 0.96 },
               visible: { opacity: 1, scale: 1 },
@@ -136,7 +122,10 @@ export const Modal: React.FC<ModalProps & FlexProps> = ({
             animate="visible"
             exit="exit"
             zIndex={1600}
-            onClick={(e: MouseEvent) => e.stopPropagation()}
+            onClick={(e: MouseEvent) => {
+              console.log("here");
+              e.stopPropagation();
+            }}
           >
             {children}
           </ModalContent>
