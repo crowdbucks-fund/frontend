@@ -16,6 +16,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FindCommunityByUserResult } from "@xeronith/granola/core/spi";
 import { CenterLayout } from "app/console/components/CenterLayout";
+import { AuthUser } from "app/console/components/ConsoleLayout.server";
 import { PaymentForm } from "components/PaymentForm";
 import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import { useCurrencies } from "hooks/useCurrencies";
@@ -42,8 +43,10 @@ const schema = z.object({
 
 export default function CustomTierClientPage({
   community,
+  auth,
 }: {
   community: FindCommunityByUserResult;
+  auth: AuthUser;
 }) {
   const pathname = usePathname();
   const [isButtonsDisabled, setButtonsDisabled] = useState(false);
@@ -65,9 +68,12 @@ export default function CustomTierClientPage({
     if (!amount) setButtonsDisabled(false);
   }, [amount]);
 
-  const { data: tierFrequencies, isLoading: isTiersFrequencyLoading } =
-    useTierFrequency();
-  const { data: currencies, isLoading: isCurrenciesLoading } = useCurrencies();
+  const { data: tierFrequencies } = useTierFrequency({
+    enabled: !!auth.profile,
+  });
+  const { data: currencies } = useCurrencies({
+    enabled: !!auth.profile,
+  });
 
   useEffect(() => {
     if (!form.getValues("currencyId") && currencies) {
@@ -149,6 +155,7 @@ export default function CustomTierClientPage({
             flexGrow={{ base: 1, md: 0 }}
             h="full"
             as="form"
+            noValidate
             onSubmit={form.handleSubmit(handleSubmit)}
             gap={8}
           >
