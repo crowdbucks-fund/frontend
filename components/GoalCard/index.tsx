@@ -123,7 +123,7 @@ export const GoalCard: FC<GoalCardProps> = ({
             )}
             {goal.name}
           </Text>
-          (
+
           <Text fontSize="16px">
             <Text
               fontSize={{
@@ -249,8 +249,9 @@ export const GoalCard: FC<GoalCardProps> = ({
                   e.stopPropagation();
                   onDelete && onDelete();
                 }}
+                gap="2"
               >
-                <DeleteIcon width={{ base: "18px", md: "24px" }} />
+                <DeleteIcon width={{ base: "18px", md: "24px" }} /> Delete goal
               </Button>
             </Tooltip>
           )}
@@ -294,6 +295,7 @@ export const GoalCard: FC<GoalCardProps> = ({
               {...buttonProps}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
+              gap="2"
             >
               {btnText}
             </Button>

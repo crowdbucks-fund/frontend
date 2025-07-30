@@ -32,10 +32,9 @@ import { FullPageLoading } from "components/Loading";
 import { toast } from "components/Toast";
 import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
-import { queryClient } from "lib/reactQuery";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
@@ -77,20 +76,11 @@ export default function GoalsPage() {
           status: "success",
           title: "Goals priority updated successfully",
         });
-        queryClient.invalidateQueries({ queryKey: ["findGoalsByUser"] });
+        // queryClient.invalidateQueries({ queryKey: ["findGoalsByUser"] });
       },
     });
 
-  const [order, setOrder] = useState(() => goals?.map((goal) => goal.id) || []);
-  useEffect(() => {
-    if (goals) {
-      const newOrder = goals.map((goal) => goal.id);
-      if (JSON.stringify(newOrder) !== JSON.stringify(order)) {
-        setOrder(newOrder);
-      }
-    }
-  }, [goals]);
-  const handleDragEnd = useCallback((event: any) => {
+  const handleDragOver = useCallback((event: any) => {
     const goals = useGoals.getData(community.id);
     if (!goals) return;
     const { active, over } = event;
@@ -98,9 +88,9 @@ export default function GoalsPage() {
       const oldIndex = goals.findIndex((goal) => goal.id === active.id);
       const newIndex = goals.findIndex((goal) => goal.id === over.id);
       const newArr = arrayMove(goals, oldIndex, newIndex);
-      setOrder(newArr.map((goal) => goal.id));
+      useGoals.setData(community.id, newArr);
       updateGoalsPriority({
-        goalPriorities: newArr.map((goal, i) => ({
+        goalPriorities: useGoals.getData(community.id)!.map((goal, i) => ({
           id: goal.id,
           priority: i + 1,
         })),
@@ -138,6 +128,8 @@ export default function GoalsPage() {
     }
     return null;
   }, [goals]);
+
+  const orders = useMemo(() => goals?.map((goal) => goal.id) || [], [goals]);
 
   if (isLoading) return <FullPageLoading />;
 
@@ -186,11 +178,12 @@ export default function GoalsPage() {
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
+            onDragEnd={handleDragOver}
             modifiers={[restrictToVerticalAxis]}
           >
             <SortableContext
-              items={order}
+              items={orders}
+              disabled={isMutatingGoalsPriority}
               strategy={verticalListSortingStrategy}
             >
               {goals.map((goal, i) => {
@@ -249,6 +242,7 @@ const DraggableGoalCard: FC<
     transform,
     transition,
     isDragging,
+    isSorting,
   } = useSortable({
     id: goal.id,
     disabled: goalPriorityLoading,
@@ -256,7 +250,7 @@ const DraggableGoalCard: FC<
   });
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: isSorting ? transition : undefined,
     zIndex: isDragging ? 999 : undefined,
   };
   return (
@@ -277,13 +271,16 @@ const DraggableGoalCard: FC<
       attributes={attributes}
       listeners={listeners}
       btnText={
-        <EditIcon
-          width={{ base: "18px", md: "24px" }}
-          height={{ base: "18px", md: "24px" }}
-        />
+        <>
+          <EditIcon
+            width={{ base: "18px", md: "24px" }}
+            height={{ base: "18px", md: "24px" }}
+          />
+          Edit goal
+        </>
       }
       buttonProps={{
-        w: "auto",
+        w: "full",
         title: "Edit goal",
       }}
     />

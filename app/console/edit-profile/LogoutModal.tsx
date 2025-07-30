@@ -17,10 +17,12 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
     isPending: isLoading,
     isSuccess,
     isError,
-  } = useLogout(router);
+    isIdle,
+  } = useLogout(router, onClose);
   const close = () => {
     if (!isLoading && !isSuccess) onClose();
   };
+
   return (
     <>
       <ResponsiveDialog isOpen={isOpen} onClose={close} title="Log out">

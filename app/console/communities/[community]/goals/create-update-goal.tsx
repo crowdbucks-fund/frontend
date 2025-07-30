@@ -96,8 +96,10 @@ export default function CreateUpdateGoal({
     communityId,
     enabled: !isEditing,
     select(data) {
-      const lastGoalPriority = maxBy(data, (d) => d.priority)?.priority || 0;
-      form.setValue("priority", lastGoalPriority + 1);
+      if (!isEditing) {
+        const lastGoalPriority = maxBy(data, (d) => d.priority)?.priority || 0;
+        form.setValue("priority", lastGoalPriority + 1);
+      }
       return data;
     },
   });

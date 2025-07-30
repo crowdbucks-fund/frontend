@@ -184,10 +184,12 @@ export default function ConsoleLayoutClient({
         </Box>
 
         <Box
-          position="absolute"
-          left={!!user ? "50%" : "0"}
-          transform={!!user ? "translateX(-50%)" : undefined}
-          display={{ base: "block", md: "none" }}
+          // position="absolute"
+          // left={!!user ? "50%" : "0"}
+          // transform={!!user ? "translateX(-50%)" : undefined}
+          display={{ base: "flex", md: "none" }}
+          justifyContent="center"
+          w="full"
         >
           {routeTitle ? (
             <Text
@@ -212,7 +214,7 @@ export default function ConsoleLayoutClient({
           )}
         </Box>
 
-        {user ? (
+        {user && (
           <IconButton
             onClick={setIsMoreDrawerOpen.bind(null, true)}
             colorScheme="blackAlpha"
@@ -223,22 +225,6 @@ export default function ConsoleLayoutClient({
           >
             <MoreIcon />
           </IconButton>
-        ) : (
-          <Button
-            as={NextLink}
-            href="/auth"
-            size="sm"
-            variant="solid"
-            fontSize={{ base: "10px", md: "14px" }}
-            px={{ base: 2, md: 3 }}
-            h={{ base: "28px", md: "34px" }}
-            fontWeight="bold"
-            colorScheme="primary"
-            rounded="10px"
-            display={{ base: "flex", md: "none" }}
-          >
-            {user ? "Get started" : "Join CrowdBucks Now"}
-          </Button>
         )}
       </HStack>
 

@@ -117,7 +117,10 @@ export const MoreOptionsBottomDrawer = () => {
                   leftIcon={<LogoutIcon width="18px" />}
                   title="Log out"
                   aria-label="Log out"
-                  onClick={setIsLogoutModalOpen.bind(null, true)}
+                  onClick={() => {
+                    setIsLogoutModalOpen(true);
+                    setIsMoreDrawerOpen(false);
+                  }}
                 >
                   Log out
                 </Button>

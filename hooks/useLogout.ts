@@ -5,12 +5,13 @@ import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export const useLogout = (router: AppRouterInstance) =>
+export const useLogout = (router: AppRouterInstance, callback?: () => void | Promise<void>) =>
   useMutation({
     mutationFn: async () => {
       return Promise.allSettled([logout(), api.logout({})]).finally(() => {
         queryClient.clear()
-        router.push("/auth/logout");
+        router.refresh()
+        callback && callback()
       })
     }
   });

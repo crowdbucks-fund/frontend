@@ -148,7 +148,7 @@ export default function TiersClientPage({
                 size="lg"
                 w="full"
               >
-                Pay now
+                Donate now
               </Button>
             </VStack>
           </HStack>
@@ -177,7 +177,7 @@ export default function TiersClientPage({
                 ? undefined
                 : joinURL(getCommunityTiersLink(community), String(tier.id)),
               variant: isSubscribed ? "glass" : "solid",
-              colorScheme: tier.recommended ? "secondary" : "primary",
+              colorScheme: "primary",
               color: undefined,
               border: isSubscribed ? "1px solid" : undefined,
               onClick: isSubscribed ? () => unSubscribeTier(tier) : undefined,
