@@ -10,6 +10,8 @@ import {
   FormLabel,
   HStack,
   Input,
+  NumberInput,
+  NumberInputField,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -287,15 +289,16 @@ export default function CustomTierClientPage({
                     control={form.control}
                     name="amount"
                     render={({ field }) => (
-                      <Input
+                      <NumberInput
                         {...field}
-                        type="number"
                         value={field.value || ""}
-                        onChange={(e) => {
-                          if (e.target.value) setButtonsDisabled(true);
-                          field.onChange(e);
+                        onChange={(_, valueAsNumber) => {
+                          if (valueAsNumber) setButtonsDisabled(true);
+                          field.onChange(valueAsNumber);
                         }}
-                      />
+                      >
+                        <Input as={NumberInputField} />
+                      </NumberInput>
                     )}
                   />
                   <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
