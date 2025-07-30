@@ -68,6 +68,13 @@ export default function TiersClientPage({
     setIsUnSubscribeOpen(true);
   }, []);
 
+  const customAmount = {
+    helpers: community.helpers,
+    accumulatedFunds: community.tiers?.reduce((accumulatedFunds, tier) => {
+      return accumulatedFunds - tier.accumulatedFunds;
+    }, community.accumulatedFunds),
+  };
+
   return (
     <CenterLayout maxW={{ md: "630px" }} mx="auto" gap={{ base: 4, md: 8 }}>
       <ResponsiveDialog
@@ -109,14 +116,30 @@ export default function TiersClientPage({
               gap={{ base: 4, md: 6 }}
               w="full"
             >
-              <Text
-                fontSize={{ base: "14px", md: "20px" }}
-                fontWeight={{ base: "normal", md: "bold" }}
-                isTruncated
-                maxW="100%"
-              >
-                Custom amount
-              </Text>
+              <VStack align="start">
+                <Text
+                  fontSize={{ base: "14px", md: "20px" }}
+                  fontWeight={{ base: "normal", md: "bold" }}
+                  isTruncated
+                  maxW="100%"
+                >
+                  Custom amount
+                </Text>
+
+                <Text fontSize={{ base: "12px", md: "16px" }}>
+                  {String(customAmount.helpers)} people helping{" "}
+                  <Text
+                    as="span"
+                    ml="2"
+                    pl="2"
+                    borderLeft="2px solid"
+                    borderLeftColor="primary.500"
+                    textTransform="lowercase"
+                  >
+                    {String(customAmount.accumulatedFunds)} total amount
+                  </Text>
+                </Text>
+              </VStack>
               <Button
                 as={NextLink}
                 href={joinURL(getCommunityTiersLink(community), "custom")}

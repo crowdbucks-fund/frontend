@@ -22,7 +22,12 @@ import { UserGoal } from "@xeronith/granola/core/objects";
 import GoalIcon from "assets/icons/cup.svg?react";
 import EditIconBase from "assets/images/edit.svg?react";
 import { CreateFirstEntity } from "components/FirstEntity";
-import { CreateGoalCard, GoalCard, GoalCardProps } from "components/GoalCard";
+import {
+  CreateGoalCard,
+  GoalCard,
+  GoalCardProps,
+  TotalDonationCard,
+} from "components/GoalCard";
 import { FullPageLoading } from "components/Loading";
 import { toast } from "components/Toast";
 import { useGoals } from "hooks/useGoals";
@@ -135,19 +140,24 @@ export default function GoalsPage() {
   }, [goals]);
 
   if (isLoading) return <FullPageLoading />;
+
   if (goals && !goals.length)
     return (
-      <CreateFirstEntity
-        mobileButtonText={
-          <HStack>
-            <GoalIcon width="20px" />
-            <span>Create a goal</span>
-          </HStack>
-        }
-        title="Make dreams come true"
-        btnText="Create your first goal"
-        link={`/console/goals/create`}
-      />
+      <VStack maxW={{ md: "630px" }} mx="auto" w="full">
+        <CreateFirstEntity
+          noEntityTitle="There’s no goal defined yet!"
+          mobileButtonText={
+            <HStack>
+              <GoalIcon width="20px" />
+              <span>Create a goal</span>
+            </HStack>
+          }
+          title="Make dreams come true"
+          btnText="Create your first goal"
+          link={`/console/goals/create`}
+        />
+        <TotalDonationCard community={community} />
+      </VStack>
     );
 
   if (goals) {
@@ -216,6 +226,7 @@ export default function GoalsPage() {
               }}
             />
           )}
+          <TotalDonationCard community={community} />
           <CreateGoalCard />
           <DeleteGoalModal
             isOpen={!!deletingGoal}

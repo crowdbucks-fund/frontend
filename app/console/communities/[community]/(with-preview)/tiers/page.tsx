@@ -103,6 +103,7 @@ export default function TiersPage() {
               <span>Create a tier</span>
             </HStack>
           }
+          noEntityTitle="There’s no tier defined yet!"
           icon={<></>}
           title="Start growing tiers"
           btnText="Create your first tier"
@@ -110,6 +111,12 @@ export default function TiersPage() {
         />
       </Box>
     );
+  const customAmount = {
+    helpers: community.helpers,
+    accumulatedFunds: tiers?.reduce((accumulatedFunds, tier) => {
+      return accumulatedFunds - tier.accumulatedFunds;
+    }, community.accumulatedFunds),
+  };
   if (tiers)
     return (
       <Box position="relative">
@@ -193,6 +200,19 @@ export default function TiersPage() {
                     maxW="100%"
                   >
                     Custom amount
+                  </Text>
+                  <Text fontSize={{ base: "12px", md: "16px" }}>
+                    {String(customAmount.helpers)} people helping{" "}
+                    <Text
+                      as="span"
+                      ml="2"
+                      pl="2"
+                      borderLeft="2px solid"
+                      borderLeftColor="primary.500"
+                      textTransform="lowercase"
+                    >
+                      {String(customAmount.accumulatedFunds)} total amount
+                    </Text>
                   </Text>
                 </VStack>
               </HStack>

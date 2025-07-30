@@ -26,6 +26,7 @@ export default function CommunitiesPage() {
       {isLoading && <FullPageLoading />}
       {communities && communities.length === 0 && (
         <CreateFirstEntity
+          noEntityTitle="There’s no community defined yet!"
           mobileButtonText="Create Community"
           title="Start your journey now"
           btnText="Create your first community to start"

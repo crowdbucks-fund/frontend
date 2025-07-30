@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "gen:theme-typings": "chakra-cli tokens theme/chakra.config.ts",
-    "postinstall": "pnpm gen:theme-typings"
+    "postinstall": "pnpm gen:theme-typings && pnpm cf-typegen"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.2.2",
@@ -29,7 +29,7 @@
     "@stripe/react-stripe-js": "^2.3.1",
     "@stripe/stripe-js": "^2.1.11",
     "@tanstack/react-query": "^5.83.0",
-    "@xeronith/granola": "^0.5.24",
+    "@xeronith/granola": "^0.5.27",
     "clsx": "^2.0.0",
     "cookie-es": "^2.0.0",
     "date-fns": "^2.30.0",

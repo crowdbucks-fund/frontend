@@ -123,7 +123,6 @@ export const Modal: React.FC<ModalProps & FlexProps> = ({
             exit="exit"
             zIndex={1600}
             onClick={(e: MouseEvent) => {
-              console.log("here");
               e.stopPropagation();
             }}
           >

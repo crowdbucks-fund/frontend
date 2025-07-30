@@ -18,13 +18,12 @@ import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
 import { ApiError, api } from "lib/api";
 import { mutateOnSubmit, useMutationWithFile } from "lib/file";
-import { queryClient } from "lib/reactQuery";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
-import { useAuth, useUserQueryKey } from "states/console/user";
+import { useAuth } from "states/console/user";
 import { createFilePath } from "utils/files";
 import { z } from "zod";
 import { LogoutModal } from "./LogoutModal";
@@ -82,8 +81,7 @@ export default function EditProfilePage() {
           status: "success",
           title: "Profile updated successfully",
         });
-        queryClient.invalidateQueries({ queryKey: useUserQueryKey });
-        router.push(`/console/`);
+        router.refresh();
       },
       onError(error) {
         const { message } = (error as ApiError) || {};

@@ -365,3 +365,53 @@ export const CreateGoalCard: FC = () => {
     </VStack>
   );
 };
+
+export const TotalDonationCard: FC<{ community: GetCommunityByUserResult }> = ({
+  community,
+}) => (
+  <VStack
+    role="group"
+    gap={{ base: 4, md: 7 }}
+    p={{ md: 8, base: 4 }}
+    bg="white"
+    borderRadius={{ base: "12px", md: "18px" }}
+    w="full"
+    align="start"
+  >
+    <HStack justify="space-between" w="full" overflow="hidden">
+      <VStack align="start" overflow="hidden" w="full">
+        <Text
+          fontSize={{ base: "14px", md: "20px" }}
+          fontWeight={{ base: "normal", md: "bold" }}
+          isTruncated
+          maxW="100%"
+        >
+          Total Collected Donation
+        </Text>
+        <Text fontSize={{ base: "12px", md: "16px" }}>
+          {String(community.helpers)} people helping{" "}
+          <Text
+            as="span"
+            ml="2"
+            pl="2"
+            borderLeft="2px solid"
+            borderLeftColor="primary.500"
+            textTransform="lowercase"
+          >
+            {String(community.accumulatedFunds)} total amount
+          </Text>
+        </Text>
+      </VStack>
+    </HStack>
+    <Text
+      fontSize={{ base: "14px", md: "md" }}
+      isTruncated
+      noOfLines={3}
+      whiteSpace="normal"
+      wordBreak="break-word"
+      maxW="100%"
+    >
+      Total donation amount paid by donors are shown here
+    </Text>
+  </VStack>
+);
