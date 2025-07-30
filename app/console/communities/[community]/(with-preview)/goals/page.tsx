@@ -8,9 +8,11 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   SortableContext,
   arrayMove,
+  defaultAnimateLayoutChanges,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
@@ -28,7 +30,7 @@ import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
@@ -74,6 +76,15 @@ export default function GoalsPage() {
       },
     });
 
+  const [order, setOrder] = useState(() => goals?.map((goal) => goal.id) || []);
+  useEffect(() => {
+    if (goals) {
+      const newOrder = goals.map((goal) => goal.id);
+      if (JSON.stringify(newOrder) !== JSON.stringify(order)) {
+        setOrder(newOrder);
+      }
+    }
+  }, [goals]);
   const handleDragEnd = useCallback((event: any) => {
     const goals = useGoals.getData(community.id);
     if (!goals) return;
@@ -82,7 +93,7 @@ export default function GoalsPage() {
       const oldIndex = goals.findIndex((goal) => goal.id === active.id);
       const newIndex = goals.findIndex((goal) => goal.id === over.id);
       const newArr = arrayMove(goals, oldIndex, newIndex);
-      useGoals.setData(community.id, newArr);
+      setOrder(newArr.map((goal) => goal.id));
       updateGoalsPriority({
         goalPriorities: newArr.map((goal, i) => ({
           id: goal.id,
@@ -166,9 +177,10 @@ export default function GoalsPage() {
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
+            modifiers={[restrictToVerticalAxis]}
           >
             <SortableContext
-              items={goals.map((goal) => goal.id)}
+              items={order}
               strategy={verticalListSortingStrategy}
             >
               {goals.map((goal, i) => {
@@ -226,15 +238,13 @@ const DraggableGoalCard: FC<
     transform,
     transition,
     isDragging,
-    isSorting,
-  } = useSortable({ id: goal.id, disabled: goalPriorityLoading });
+  } = useSortable({
+    id: goal.id,
+    disabled: goalPriorityLoading,
+    animateLayoutChanges: defaultAnimateLayoutChanges,
+  });
   const style = {
-    transform: CSS.Transform.toString({
-      x: isSorting ? 0 : transform?.x ?? 0,
-      y: transform?.y ?? 0,
-      scaleX: transform?.scaleX ?? 1,
-      scaleY: transform?.scaleY ?? 1,
-    }),
+    transform: CSS.Transform.toString(transform),
     transition,
     zIndex: isDragging ? 999 : undefined,
   };
