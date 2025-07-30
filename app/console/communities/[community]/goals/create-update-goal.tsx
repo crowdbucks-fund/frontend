@@ -237,7 +237,7 @@ export default function CreateUpdateGoal({
                       <Input
                         tabIndex={-1}
                         id="currencyId"
-                        defaultValue={field.value?.name}
+                        defaultValue={field.value?.code}
                         readOnly
                         isDisabled
                       />

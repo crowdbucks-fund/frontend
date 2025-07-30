@@ -59,6 +59,7 @@ export const tierZodSchema = z.object({
     .object({
       name: z.string(),
       id: z.number(),
+      code: z.string(),
     })
     .optional(),
   tierFrequency: z
@@ -239,7 +240,7 @@ export default function CreateUpdateTier({
                       id="currencyId"
                       readOnly
                       isDisabled
-                      value={field.value?.name}
+                      value={field.value?.code}
                     />
                   );
                 }}
