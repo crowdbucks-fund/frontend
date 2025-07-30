@@ -398,7 +398,7 @@ export const TotalDonationCard: FC<{ community: GetCommunityByUserResult }> = ({
             borderLeftColor="primary.500"
             textTransform="lowercase"
           >
-            {String(community.accumulatedFunds)} total amount
+            ${String(community.accumulatedFunds)} total amount
           </Text>
         </Text>
       </VStack>

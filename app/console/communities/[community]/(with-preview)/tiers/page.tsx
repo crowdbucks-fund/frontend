@@ -211,7 +211,7 @@ export default function TiersPage() {
                       borderLeftColor="primary.500"
                       textTransform="lowercase"
                     >
-                      {String(customAmount.accumulatedFunds)} total amount
+                      ${String(customAmount.accumulatedFunds)} total amount
                     </Text>
                   </Text>
                 </VStack>
