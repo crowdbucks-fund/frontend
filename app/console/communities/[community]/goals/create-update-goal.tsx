@@ -239,7 +239,7 @@ export default function CreateUpdateGoal({
                         id="currencyId"
                         defaultValue={field.value?.name}
                         readOnly
-                        isDisabled={isEditing}
+                        isDisabled
                       />
                     );
                   }}
