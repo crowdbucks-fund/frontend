@@ -238,7 +238,7 @@ export default function CreateUpdateTier({
                     <Input
                       id="currencyId"
                       readOnly
-                      isDisabled={isEditing}
+                      isDisabled
                       value={field.value?.name}
                     />
                   );
