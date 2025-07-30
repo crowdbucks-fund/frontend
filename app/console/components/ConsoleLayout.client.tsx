@@ -28,7 +28,6 @@ import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
 import { AnimatePresence, motion } from "framer-motion";
 import { logout } from "hooks/useLogout.server";
-import { useScrollRestoration } from "hooks/useScrollRestoration";
 import { useUserAuthProvider } from "hooks/useUserAuthProvider";
 import { useAtom, useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
@@ -94,7 +93,7 @@ export default function ConsoleLayoutClient({
     }
   }, [authUser]);
 
-  useScrollRestoration();
+  // useScrollRestoration();
   const [isSidebarOpen, setSidebarOpen] = useAtom(sidebarState);
 
   const [
