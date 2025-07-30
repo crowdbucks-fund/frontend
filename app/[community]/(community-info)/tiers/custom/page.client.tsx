@@ -89,7 +89,7 @@ export default function CustomTierClientPage({
     title: "Custom amount",
     back: {
       link: getCommunityLink(community),
-      title: `${community.name}`,
+      title: `Tiers`,
     },
   });
 

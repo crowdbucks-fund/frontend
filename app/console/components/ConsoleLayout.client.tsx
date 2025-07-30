@@ -196,6 +196,9 @@ export default function ConsoleLayoutClient({
               fontSize="14px"
               isTruncated
               maxW="calc(100vw - 215px)"
+              bg="brand.gray.3"
+              px="2"
+              boxSizing="content-box"
             >
               {routeTitle}
             </Text>
