@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import { logout } from "hooks/useLogout.server";
 import { ApiError } from './api';
 
 const isNetworkError = (error: unknown): boolean => {
@@ -21,39 +22,47 @@ export const formatErrorMessage = (error: unknown): string => {
   return 'An unexpected error occurred.';
 }
 
+const isAuthError = (error: unknown): boolean => {
+  const message = (error as ApiError).message
+  return (message === 'unauthorized')
+}
+
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
       retry: (count, error: unknown) => {
+        if (isAuthError(error)) {
+          logout()
+          return false;
+        }
         if (isNetworkError(error))
           return true
         return false
       },
       throwOnError(error) {
-        const message = (error as ApiError).message
-        if (message === 'unauthorized') {
-          if (window.location.pathname.startsWith('/console')) {
-            window.location.assign(`/auth/logout/`)
-            return false;
-          }
+        if (isAuthError(error)) {
+          return false;
         }
         return true;
       },
     },
     mutations: {
       retry: (count, error: unknown) => {
+        if (isAuthError(error)) {
+          logout()
+          return false;
+        }
         if (isNetworkError(error))
           return true
         return false
       },
-      onError(error) {
-        const message = (error as ApiError).message
-        if (message === 'unauthorized') {
-          if (window.location.pathname.startsWith('/console'))
-            window.location.assign(`/auth/logout/`)
+      throwOnError(error) {
+        if (isAuthError(error)) {
+          return false;
         }
+        return true;
       },
     },
   },
