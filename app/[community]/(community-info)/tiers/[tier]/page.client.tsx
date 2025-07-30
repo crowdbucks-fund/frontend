@@ -34,12 +34,11 @@ import { useCreateStripeIntent } from "hooks/useCreateStripeIntent";
 import useTimer from "hooks/useTimer";
 import { api } from "lib/api";
 import { lowerCase, startCase, upperFirst } from "lodash";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
-import { useAuth } from "states/console/user";
 import { joinURL } from "ufo";
 import { getCommunityLink, getCommunityTiersLink } from "utils/community";
 import { z } from "zod";
@@ -261,6 +260,7 @@ const EmailVerificationForm: FC<{}> = () => {
     },
     mode: "onSubmit",
   });
+  const router = useRouter();
   const { mutate: submit, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof schema>) => {
       if (data.step === "verify") {
@@ -298,7 +298,8 @@ const EmailVerificationForm: FC<{}> = () => {
         });
       }
       if (variables.step === "verify") {
-        useAuth.fetchProfile();
+        // useAuth.fetchProfile();
+        router.refresh();
       }
     },
     onError(error, variables) {
