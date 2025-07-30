@@ -24,48 +24,50 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
   return (
     <>
       <ResponsiveDialog isOpen={isOpen} onClose={close} title="Log out">
-        <VStack
-          w="full"
-          justify="center"
-          textAlign="center"
-          color="#343333"
-          pb={{ base: 8, md: 0 }}
-          gap={1}
-        >
-          <Text fontWeight="bold" fontSize={{ base: "18px", md: "28px" }}>
-            Are you sure you want to log out?
-          </Text>
-          {/* <Text fontSize={{ base: "14px", md: "20px" }}>
+        <VStack w="full">
+          <VStack
+            w="full"
+            justify="center"
+            textAlign="center"
+            color="#343333"
+            pb={{ base: 8, md: 0 }}
+            gap={1}
+          >
+            <Text fontWeight="bold" fontSize={{ base: "18px", md: "28px" }}>
+              Are you sure you want to log out?
+            </Text>
+            {/* <Text fontSize={{ base: "14px", md: "20px" }}>
             You can log back in anytime using your connected account.
-          </Text> */}
+            </Text> */}
+          </VStack>
+          <HStack justify="space-between" w="full">
+            <Button
+              onClick={close}
+              isDisabled={isLoading || isSuccess || isError}
+              size="lg"
+              flexGrow={1}
+              w="full"
+              variant="outline"
+              colorScheme="gray"
+              borderColor="brand.gray.1"
+              bg="brand.gray.3"
+            >
+              Not now
+            </Button>
+            <Button
+              onClick={() => logout()}
+              isLoading={isLoading || isSuccess || isError}
+              loadingText="Logging out..."
+              size="lg"
+              flexGrow={1}
+              w="full"
+              variant="solid"
+              colorScheme="primary"
+            >
+              Yes, log out
+            </Button>
+          </HStack>
         </VStack>
-        <HStack justify="space-between" w="full">
-          <Button
-            onClick={close}
-            isDisabled={isLoading || isSuccess || isError}
-            size="lg"
-            flexGrow={1}
-            w="full"
-            variant="outline"
-            colorScheme="gray"
-            borderColor="brand.gray.1"
-            bg="brand.gray.3"
-          >
-            Not now
-          </Button>
-          <Button
-            onClick={() => logout()}
-            isLoading={isLoading || isSuccess || isError}
-            loadingText="Logging out..."
-            size="lg"
-            flexGrow={1}
-            w="full"
-            variant="solid"
-            colorScheme="primary"
-          >
-            Yes, log out
-          </Button>
-        </HStack>
       </ResponsiveDialog>
       {/* <Modal isOpen={isOpen} onClose={close} size="lg" isCentered>
         <ModalOverlay />
