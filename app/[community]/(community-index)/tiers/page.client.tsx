@@ -249,35 +249,3 @@ export const UnsubscribeTierModal: FC<{
     </ResponsiveDialog>
   );
 };
-
-export const SuccessDialog = () => {
-  const [{ hasPayment, isSuccess }, updatePaymentState] =
-    usePaymentVerification();
-
-  return (
-    isSuccess && (
-      <ResponsiveDialog
-        isOpen={isSuccess}
-        onClose={updatePaymentState.bind(null, {
-          hasPayment: false,
-          isSuccess: false,
-        })}
-        title=""
-      >
-        <VStack
-          justify="center"
-          textAlign="center"
-          gap={4}
-          py={4}
-          mt={{
-            base: 0,
-            md: 6,
-          }}
-        >
-          <CheckIcon color="primary.500" w={{ base: "42px", md: "52px" }} />
-          <Text textStyle="modalTitle">Thanks a lot for your contribution</Text>
-        </VStack>
-      </ResponsiveDialog>
-    )
-  );
-};
