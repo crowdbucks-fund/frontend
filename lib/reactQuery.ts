@@ -45,7 +45,7 @@ export const queryClient = new QueryClient({
         if (isAuthError(error)) {
           return false;
         }
-        return true;
+        return false;
       },
     },
     mutations: {
@@ -62,7 +62,7 @@ export const queryClient = new QueryClient({
         if (isAuthError(error)) {
           return false;
         }
-        return true;
+        return false;
       },
     },
   },
