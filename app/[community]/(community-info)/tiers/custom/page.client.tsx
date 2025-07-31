@@ -39,8 +39,8 @@ const schema = z.object({
   occurrenceId: z.number(),
   currencyId: z.number(),
   amount: requiredNumericString
-    .refine((value) => value >= 1, "The amount too low")
-    .refine((value) => value <= 999999, "The amount too big"),
+    .refine((value) => value >= 1, "The amount is too low")
+    .refine((value) => value <= 999999, "The amount is too big"),
 });
 
 export default function CustomTierClientPage({
