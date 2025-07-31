@@ -174,7 +174,7 @@ export default function StripePage() {
       <ResponsiveDialog
         isOpen={cancelModalOpen}
         onClose={() => setCancelModalOpen(false)}
-        title="Request payment cancelation"
+        title="Disconnect Stripe"
       >
         <VStack
           spacing={4}
@@ -183,17 +183,21 @@ export default function StripePage() {
           alignItems="center"
           w="full"
         >
-          <Text fontWeight="bold" fontSize={{ base: "18px", md: "28px" }}>
-            Disconnect Stripe Account?
+          <Text
+            fontWeight="bold"
+            fontSize={{ base: "18px", md: "28px" }}
+            textAlign="center"
+          >
+            Are you sure you want to disconnect your Stripe account?
           </Text>
-          <VStack gap={0}>
+          {/* <VStack gap={0}>
             <Text fontSize={{ base: "14px", md: "20px" }} textAlign="center">
               Are you sure you want to disconnect your Stripe account?
             </Text>
             <Text fontSize={{ base: "14px", md: "20px" }} textAlign="center">
               You won’t be able to receive donations until you connect it again.
             </Text>
-          </VStack>
+          </VStack> */}
           <VStack w="full" flexDir={{ base: "column", sm: "row-reverse" }}>
             <Button
               size="lg"
@@ -201,7 +205,7 @@ export default function StripePage() {
               colorScheme="red"
               onClick={disconnectAccount}
             >
-              Confirm Cancelation
+              Disconnect
             </Button>
             <Button
               variant="outline"
