@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
+import MastodonIcon from "assets/icons/Mastodon-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
 import MoneyBinImage from "assets/images/woman has a successful contract.svg";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
@@ -219,23 +220,43 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                 maxHeight="350px"
                 objectFit="contain"
               />
-              <HStack gap="2.5">
-                <EnvelopeIcon />,
-                <Divider
-                  orientation="vertical"
-                  borderColor="primary.500"
-                  w="1px"
-                  h="20px"
-                />
-                <Text
-                  color="brand.black.1"
-                  textStyle="regular16"
-                  as="a"
-                  href={`mailto:${platformInfo.contact.email}`}
-                >
-                  {platformInfo.contact.email}
-                </Text>
-              </HStack>
+              <VStack align="start">
+                <HStack gap="2.5">
+                  <EnvelopeIcon />,
+                  <Divider
+                    orientation="vertical"
+                    borderColor="primary.500"
+                    w="1px"
+                    h="20px"
+                  />
+                  <Text
+                    color="brand.black.1"
+                    textStyle="regular16"
+                    as="a"
+                    href={`mailto:${platformInfo.contact.email}`}
+                  >
+                    {platformInfo.contact.email}
+                  </Text>
+                </HStack>
+                <HStack gap="2.5">
+                  <MastodonIcon />,
+                  <Divider
+                    orientation="vertical"
+                    borderColor="primary.500"
+                    w="1px"
+                    h="20px"
+                  />
+                  <Text
+                    color="brand.black.1"
+                    textStyle="regular16"
+                    as="a"
+                    href={platformInfo.contact.mastodon.handle}
+                    target="_blank"
+                  >
+                    {platformInfo.contact.mastodon.handle}
+                  </Text>
+                </HStack>
+              </VStack>
               {/* <Text
                 pt={{
                   base: "66px",
