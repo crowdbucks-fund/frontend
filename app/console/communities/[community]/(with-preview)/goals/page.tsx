@@ -34,7 +34,7 @@ import { useGoals } from "hooks/useGoals";
 import { api } from "lib/api";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, ReactNode, useCallback, useMemo, useState } from "react";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteGoalModal } from "../../goals/components/DeleteGoalModal";
@@ -131,8 +131,12 @@ export default function GoalsPage() {
 
   const orders = useMemo(() => goals?.map((goal) => goal.id) || [], [goals]);
 
-  if (isLoading) return <FullPageLoading />;
+  const totalAccumulatedFunds = useMemo(
+    () => community.accumulatedFunds,
+    [community]
+  );
 
+  if (isLoading) return <FullPageLoading />;
   if (goals && !goals.length)
     return (
       <VStack maxW={{ md: "630px" }} mx="auto" w="full">
@@ -186,18 +190,31 @@ export default function GoalsPage() {
               disabled={isMutatingGoalsPriority}
               strategy={verticalListSortingStrategy}
             >
-              {goals.map((goal, i) => {
-                return (
-                  <DraggableGoalCard
-                    key={goal.id}
-                    index={i}
-                    goal={goal}
-                    community={community}
-                    onDelete={setIsDeletingGoal.bind(null, goal)}
-                    goalPriorityLoading={isMutatingGoalsPriority}
-                  />
-                );
-              })}
+              {
+                goals.reduce<[number, ReactNode[]]>(
+                  ([remainingAcFunds, renderingGoals], goal, i) => {
+                    goal.accumulatedFunds =
+                      remainingAcFunds > goal.amount
+                        ? goal.amount
+                        : remainingAcFunds;
+                    renderingGoals.push(
+                      <DraggableGoalCard
+                        key={goal.id}
+                        index={i}
+                        goal={goal}
+                        community={community}
+                        onDelete={setIsDeletingGoal.bind(null, goal)}
+                        goalPriorityLoading={isMutatingGoalsPriority}
+                      />
+                    );
+                    return [
+                      (remainingAcFunds -= goal.accumulatedFunds),
+                      renderingGoals,
+                    ];
+                  },
+                  [totalAccumulatedFunds, []] as const
+                )[1]
+              }
             </SortableContext>
           </DndContext>
           {extraGoal && (
@@ -233,7 +250,10 @@ export default function GoalsPage() {
 }
 
 const DraggableGoalCard: FC<
-  GoalCardProps & { goalPriorityLoading: boolean; index: number }
+  GoalCardProps & {
+    goalPriorityLoading: boolean;
+    index: number;
+  }
 > = ({ goal, community, onDelete, goalPriorityLoading, index }) => {
   const {
     attributes,
@@ -260,10 +280,10 @@ const DraggableGoalCard: FC<
       goal={{
         ...goal,
         priority: index + 1,
-        accumulatedFunds:
-          goal.accumulatedFunds > goal.amount
-            ? goal.amount
-            : goal.accumulatedFunds,
+        accumulatedFunds: Math.min(goal.accumulatedFunds, goal.amount),
+        // goal.accumulatedFunds > goal.amount
+        // ? goal.amount
+        // : goal.accumulatedFunds,
       }}
       style={style}
       community={community}
