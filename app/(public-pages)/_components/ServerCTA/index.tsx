@@ -79,7 +79,7 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
               }}
               textAlign="center"
             >
-              Part of the Fediverse? So are we.
+              Part of the Fediverse? So are we
             </Text>
             <Text
               textStyle={{
