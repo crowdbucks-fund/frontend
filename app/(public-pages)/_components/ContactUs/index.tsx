@@ -250,7 +250,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     color="brand.black.1"
                     textStyle="regular16"
                     as="a"
-                    href={platformInfo.contact.mastodon.handle}
+                    href={platformInfo.contact.mastodon.link}
                     target="_blank"
                   >
                     {platformInfo.contact.mastodon.handle}

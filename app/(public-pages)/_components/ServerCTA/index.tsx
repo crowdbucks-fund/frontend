@@ -79,7 +79,7 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
               }}
               textAlign="center"
             >
-              For you, who runs a server all by themselves!
+              Part of the Fediverse? So are we.
             </Text>
             <Text
               textStyle={{
@@ -87,9 +87,11 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
                 md: "regular16",
               }}
               textAlign="center"
+              maxW="670px"
             >
-              We’re here to help! Leave your email and we’ll reach out if you
-              have any questions or need support.
+              Join our newsletter for updates, fundraising tips, and inspiring
+              stories from creators, developers, server admins, and communities
+              like yours.
             </Text>
           </VStack>
           <Box

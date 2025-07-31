@@ -39,10 +39,23 @@ export const DemoCTA = () => {
             base: "35px",
             md: "60px",
           }}
+          paddingRight={{
+            md: "0",
+          }}
+          paddingBottom={{
+            base: 0,
+            md: "60px",
+          }}
           position="relative"
           zIndex={99}
         >
-          <VStack gap="2" alignItems="start">
+          <VStack
+            gap="2"
+            alignItems={{
+              base: "center",
+              md: "start",
+            }}
+          >
             <Text
               textStyle={{ base: "bold30", md: "bold58" }}
               textAlign={{ base: "center", md: "left" }}
@@ -56,7 +69,16 @@ export const DemoCTA = () => {
                 md: "left",
               }}
             >
-              Join CrowdBucks and help others grow on Fediverse
+              You build the Fediverse — let your supporters fund it.
+            </Text>
+            <Text
+              textStyle="regular20"
+              textAlign={{
+                base: "center",
+                md: "left",
+              }}
+            >
+              Set up your CrowdBucks page and start receiving donations.
             </Text>
           </VStack>
 
