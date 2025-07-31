@@ -31,7 +31,7 @@ export default async function TierPage({ params }: { params: Params }) {
     return (
       <TierClientPage
         tier={currentTier}
-        community={community}
+        community={community!}
         user={user.profile}
       />
     );

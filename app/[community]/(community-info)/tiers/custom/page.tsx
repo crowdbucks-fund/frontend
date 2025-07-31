@@ -8,5 +8,5 @@ export default async function CustomTierPage({ params }: { params: Params }) {
     fetchCommunity(communityHandle.toString())!,
     fetchProfile(),
   ]);
-  return <CustomTierClientPage community={community} auth={auth} />;
+  return <CustomTierClientPage community={community!} auth={auth} />;
 }
