@@ -203,7 +203,10 @@ export default function StripePage() {
               size="lg"
               w="full"
               colorScheme="red"
-              onClick={disconnectAccount}
+              onClick={() => {
+                disconnectAccount({});
+                setCancelModalOpen(false);
+              }}
             >
               Disconnect
             </Button>
