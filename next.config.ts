@@ -98,6 +98,11 @@ const nextConfig: NextConfig = {
     source: '/console/tiers',
     destination: '/console',
     permanent: true,
+  },
+  {
+    source: '/about',
+    destination: '/',
+    permanent: true,
   },]),
   async headers() {
     return [
@@ -119,15 +124,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      {
-        source: '/about',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
-          },
-        ],
-      },
+      // {
+      //   source: '/about',
+      //   headers: [
+      //     {
+      //       key: 'Cache-Control',
+      //       value: 'public, s-maxage=31536000, max-age=86400, must-revalidate',
+      //     },
+      //   ],
+      // },
       {
         source: '/contact-us',
         headers: [
