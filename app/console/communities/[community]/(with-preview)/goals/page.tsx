@@ -132,8 +132,8 @@ export default function GoalsPage() {
   const orders = useMemo(() => goals?.map((goal) => goal.id) || [], [goals]);
 
   const totalAccumulatedFunds = useMemo(
-    () => community.accumulatedFunds,
-    [community]
+    () => goals?.reduce((fund, goal) => fund + goal.accumulatedFunds, 0) || 0,
+    [goals]
   );
 
   if (isLoading) return <FullPageLoading />;
