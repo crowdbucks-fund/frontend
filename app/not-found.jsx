@@ -4,8 +4,10 @@ import emptyWallet1 from "assets/images/empty-wallet-1.png";
 import emptyWallet2 from "assets/images/empty-wallet-2.png";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function notFoundPage() {
+export default function NotFoundPage() {
+  const pathname = usePathname();
   return (
     <VStack
       id="not-found"
@@ -116,9 +118,9 @@ export default function notFoundPage() {
               colorScheme="black"
               size="lg"
               as={Link}
-              href="/"
+              href={pathname.startsWith("/console") ? "/console" : "/"}
             >
-              Go Back To Main Page
+              Go Back To {pathname.startsWith("/console") ? "Console" : "Home"}
             </Button>
           </VStack>
         </VStack>
