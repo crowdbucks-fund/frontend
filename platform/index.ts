@@ -1,6 +1,6 @@
 export const platformInfo = {
   name: 'Crowdbucks',
-  url: process.env.NODE_ENV === 'production' ? 'https://crowdbucks.fund' : 'http://localhost:3000',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://crowdbucks.fund',
   communityPrefix: '/',
   contact: {
     email: 'support@crowdbucks.fund',
