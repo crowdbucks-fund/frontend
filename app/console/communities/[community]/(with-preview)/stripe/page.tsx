@@ -16,6 +16,7 @@ import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { StripeCard } from "components/StripeCard";
 import { toast } from "components/Toast";
 import { useConnectToStripe } from "hooks/useConnectToStripe";
+import type { ApiError } from "lib/api";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { isStripeConnected } from "lib/stripe";
@@ -96,6 +97,20 @@ export default function StripePage() {
       onSuccess(data) {
         setIsRedirecting(true);
         router.push(data.url);
+      },
+      onError(error) {
+        if ((error as ApiError).message) {
+          toast({
+            status: "error",
+            title: (error as ApiError).message,
+          });
+        } else {
+          toast({
+            status: "error",
+            title: "An error occurred while connecting to Stripe",
+            description: "Please try again later.",
+          });
+        }
       },
     }
   );
