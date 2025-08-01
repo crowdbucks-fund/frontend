@@ -78,7 +78,7 @@ const ToastDrawer = (props: {
               <WarningIcon width="40px" height="40px" />
             )}
           </Text>
-          <Text fontSize="16px" fontWeight="bold">
+          <Text fontSize="16px" fontWeight="bold" textAlign="center">
             {props.title}
           </Text>
           {props.description && (
