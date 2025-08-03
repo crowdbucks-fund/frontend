@@ -339,7 +339,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             disabled={true}
           >
             <PixelfedIcon />
-            Sign in With Pixelfex
+            Sign in With Pixelfed
           </Button>
           <Button
             colorScheme="primary"
