@@ -69,7 +69,7 @@ export default function TiersClientPage({
   }, []);
 
   const customAmount = {
-    helpers: community.helpers,
+    helpers: community.helpers - community.subscribers,
     accumulatedFunds: community.tiers?.reduce((accumulatedFunds, tier) => {
       return accumulatedFunds - tier.accumulatedFunds;
     }, community.accumulatedFunds),

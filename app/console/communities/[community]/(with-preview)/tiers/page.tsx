@@ -112,7 +112,7 @@ export default function TiersPage() {
       </Box>
     );
   const customAmount = {
-    helpers: community.helpers,
+    helpers: community.helpers - community.subscribers,
     accumulatedFunds: tiers?.reduce((accumulatedFunds, tier) => {
       return accumulatedFunds - tier.accumulatedFunds;
     }, community.accumulatedFunds),
