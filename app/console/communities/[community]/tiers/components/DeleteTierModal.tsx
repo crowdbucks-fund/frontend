@@ -41,7 +41,7 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
   });
   return (
     <ResponsiveDialog isOpen={isOpen} onClose={onClose} title="Delete Tier">
-      <VStack gap={6} w="full">
+      <VStack gap={6} w="full" maxW={{ md: "450px" }}>
         <VStack
           w="full"
           justify="center"
