@@ -161,6 +161,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
         p={{ md: "6" }}
         display="flex"
         flexDir="column"
+        position="relative"
       >
         {children}
       </Box>

@@ -99,6 +99,22 @@ export default function TiersClientPage({
           <Text textStyle="modalTitle">Thanks a lot for your contribution</Text>
         </VStack>
       </ResponsiveDialog>
+      <Button
+        size="lg"
+        colorScheme="primary"
+        position="absolute"
+        top="-81px"
+        right="0"
+        as={NextLink}
+        href={joinURL(getCommunityTiersLink(community), "custom")}
+        zIndex={100}
+        display={{
+          base: "none",
+          md: "flex",
+        }}
+      >
+        Donate Now
+      </Button>
       {community.customAmountsEnabled && (
         <VStack
           role="group"
