@@ -154,7 +154,7 @@ export default function TierClientPage({
               <HStack w="full" justifyContent="space-between">
                 <Text>Fundraiser</Text>
                 <Text color="brand.black.4" fontSize="14px">
-                  {community.handle}
+                  @{community.handle}
                 </Text>
               </HStack>
               <HStack w="full" justifyContent="space-between">

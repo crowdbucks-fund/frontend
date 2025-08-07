@@ -235,7 +235,7 @@ export const CommunityPreviewSlim: FC<{
               <HStack>
                 <Text textStyle="bold20">{community.name}</Text>
                 <Box w="2.5px" rounded="full" h="18px" bg="secondary.500" />
-                <Text textStyle="regular20">{community.handle}</Text>
+                <Text textStyle="regular20">@{community.handle}</Text>
               </HStack>
               <Text
                 textStyle="hint"
