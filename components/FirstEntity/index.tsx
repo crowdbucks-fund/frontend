@@ -88,7 +88,11 @@ export const CreateFirstEntity: FC<FirstEntityProps> = ({
           >
             {btnText}
           </Button>
-          <Text display={{ base: "flex", md: "none" }} fontSize="16px">
+          <Text
+            display={{ base: "flex", md: "none" }}
+            fontSize="16px"
+            textAlign="center"
+          >
             {btnText}
           </Text>
         </VStack>
