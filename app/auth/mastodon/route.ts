@@ -91,6 +91,9 @@ export async function GET(request: NextRequest, res: NextResponse) {
     );
     return response;
   } catch (error: any) {
+    error.message = error.message.replace('Invariant failed: ', '').trim();
+    if (!error.message)
+      error.message = 'Something went wrong, please try again later.';
     if (request.headers.get('accept')?.includes('application/json')) {
       return NextResponse.json({ error: error.message }, {
         status: 400

@@ -53,6 +53,10 @@ export async function POST(req: Request) {
       instance,
     })
   } catch (error: any) {
+    error.message = error.message.replace('Invariant failed: ', '').trim();
+    if (!error.message)
+      error.message = 'Something went wrong, please try again later.';
+
     return NextResponse.json({ error: error.message }, {
       status: 400
     });
