@@ -103,7 +103,13 @@ const nextConfig: NextConfig = {
     source: '/about',
     destination: '/',
     permanent: true,
-  },]),
+  },
+  {
+    source: '/console/edit-profile',
+    destination: '/console',
+    permanent: true,
+  },
+  ]),
   async headers() {
     return [
       {

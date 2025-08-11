@@ -11,7 +11,6 @@ import {
   Divider,
   Flex,
   HStack,
-  Icon,
   IconButton,
   Text,
   VStack,
@@ -22,7 +21,6 @@ import { AuthUser } from "app/console/components/ConsoleLayout.server";
 import LogoutIcon from "assets/icons/logout.svg?react";
 import MenuIcon from "assets/icons/menu M.svg?react";
 import MoreIcon from "assets/icons/more-circle.svg?react";
-import UserEditIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { consoleMenu, sideBarMenu } from "constants/console";
@@ -377,12 +375,16 @@ export default function ConsoleLayoutClient({
                 <Button
                   display="flex"
                   justifyContent="space-between"
-                  as={ActiveLink}
                   _hover={{
                     bg: "blackAlpha.100",
                   }}
                   variant="ghost"
-                  href="/console/edit-profile"
+                  pointerEvents="none"
+                  // as={ActiveLink}
+                  // href="/console/edit-profile"
+                  // activeProps={{
+                  //   color: "brand.black.1",
+                  // }}
                   p="4"
                   w="full"
                   h="auto"
@@ -390,9 +392,6 @@ export default function ConsoleLayoutClient({
                   rounded="10px"
                   color="brand.black.1"
                   gap={2}
-                  activeProps={{
-                    color: "brand.black.1",
-                  }}
                   overflow="hidden"
                 >
                   <HStack overflow="hidden" flexGrow={1}>
@@ -435,9 +434,9 @@ export default function ConsoleLayoutClient({
                       </Text>
                     </VStack>
                   </HStack>
-                  <Icon p={0} width="24px" h="24px">
+                  {/* <Icon p={0} width="24px" h="24px">
                     <UserEditIcon />
-                  </Icon>
+                  </Icon> */}
                 </Button>
                 <VStack w="full">
                   {sideBarMenu.map((menuItem) => {
