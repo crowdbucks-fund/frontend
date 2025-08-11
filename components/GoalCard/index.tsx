@@ -22,7 +22,6 @@ import AddIcon from "assets/icons/add-square.svg?react";
 import LinkIconBase from "assets/icons/link-2.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
 import { format as dateFormat } from "date-fns";
-import { useDesktop } from "hooks/useDesktop";
 import { MenuIcon } from "lucide-react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -68,7 +67,6 @@ export const GoalCard: FC<GoalCardProps> = ({
   ...props
 }) => {
   const router = useRouter();
-  const isDesktop = useDesktop();
   const currentCommunity = useCurrentCommunity();
   const { onCopy: copyGoalLink, hasCopied: goalLinkCoppied } = useClipboard(
     getCommunityGoalsLink(currentCommunity, true) + `#goal-${goal.id}`
@@ -94,13 +92,6 @@ export const GoalCard: FC<GoalCardProps> = ({
       overflow="hidden"
       position="relative"
       {...props}
-      {...(!isDesktop
-        ? {
-            ...attributes,
-            ...listeners,
-          }
-        : {})}
-      ref={!isDesktop ? dragRef : undefined}
     >
       <HStack
         justify="space-between"
@@ -169,10 +160,10 @@ export const GoalCard: FC<GoalCardProps> = ({
               aria-label="Drag the goal to change its priority"
               variant="ghost"
               size="sm"
-              display={{
-                base: "none",
-                md: "flex",
-              }}
+              // display={{
+              //   base: "none",
+              //   md: "flex",
+              // }}
               colorScheme="blackAlpha"
               {...attributes}
               {...listeners}
