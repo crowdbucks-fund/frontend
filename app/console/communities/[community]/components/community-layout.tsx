@@ -98,6 +98,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
           rounded="md"
           p={{ base: 1, md: 0 }}
           w="full"
+          mt={{ base: 3, md: 0 }}
           gap={{ base: 1, md: 4 }}
         >
           {links(community!).map((tab) => {
