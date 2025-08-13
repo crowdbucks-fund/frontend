@@ -3,6 +3,7 @@
  * @typedef {import('posthog-node').PostHog} PostHog
  * @typedef {import('http').IncomingMessage | Request} AnyRequest
  */
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { PostHog } from "posthog-node";
 let posthogInstance = null;
 
