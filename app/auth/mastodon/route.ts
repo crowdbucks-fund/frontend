@@ -4,10 +4,22 @@ import { serialize } from 'cookie-es';
 import { encryptCookie } from "lib/cookies";
 import invariant from 'lib/invariant';
 import { headers } from "next/headers";
-import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from "next/server";
 import { platformInfo } from "platform";
 import { joinURL, stringifyParsedURL, withQuery } from "ufo";
+
+
+const appendCookie = async (response: NextResponse, name: string, data: Object) => {
+  response.headers.append("Set-Cookie",
+    serialize(name, await encryptCookie(data), {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    }),
+  );
+}
+
 
 export async function GET(request: NextRequest, res: NextResponse) {
   try {
@@ -47,7 +59,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
           return await res.json() as { client_id: string, client_secret: string };
         throw await res.json();
       }).catch(() => {
-        throw new Error('Something went wrong in connecting to instance, please try again later.', {
+        throw new Error(`Something went wrong in connecting to "${instance}" instance, please try again later.`, {
           cause: {
             instance,
             instanceUrl,
@@ -86,26 +98,12 @@ export async function GET(request: NextRequest, res: NextResponse) {
     });
 
     const response = NextResponse.redirect(oauthUrl, 302);
-    response.headers.append("Set-Cookie",
-      serialize('oauth_state', await encryptCookie({
-        instance,
-      }), {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-      }),
-    );
-    response.headers.append("Set-Cookie",
-      serialize('redirect_url', await encryptCookie({
-        redirectUrl: redirectUrlAfterLogin
-      }), {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-      }),
-    );
+    await appendCookie(response, 'oauth_state', {
+      instance
+    });
+    await appendCookie(response, 'redirect_url', {
+      redirectUrl: redirectUrlAfterLogin
+    });
     return response;
   } catch (error: any) {
     await captureException(error, request)
@@ -118,6 +116,13 @@ export async function GET(request: NextRequest, res: NextResponse) {
         status: 400
       });
     }
-    return redirect(withQuery('/auth', { error: error.message, step: 'mastodon' }))
+    const redirectResponse = NextResponse.redirect(
+      joinURL(request.nextUrl.origin, withQuery('/auth', { error: error.message, step: 'mastodon' })),
+      302
+    );
+    await appendCookie(redirectResponse, 'oauth_state', {
+      instance: request.nextUrl.searchParams.get('instance')
+    });
+    return redirectResponse;
   }
 }
