@@ -1,13 +1,15 @@
 "use client";
+import { Image } from "@chakra-ui/next-js";
 import { Box, Button, Text, VStack } from "@chakra-ui/react";
 import emptyWallet1 from "assets/images/empty-wallet-1.png";
 import emptyWallet2 from "assets/images/empty-wallet-2.png";
-import Image from "next/image";
+import { useCaptureException } from "hooks/useCaptureException";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function NotFoundPage() {
   const pathname = usePathname();
+  useCaptureException(new Error("page not found"));
   return (
     <VStack
       id="not-found"
@@ -29,7 +31,6 @@ export default function NotFoundPage() {
         }}
       >
         <Image
-          as={Image}
           priority
           src="/logo.svg"
           alt="CrowdBucks Logo"

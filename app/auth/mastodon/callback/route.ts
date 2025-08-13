@@ -1,7 +1,7 @@
 import { deleteOauthStateCookie, getInstanceCredentials, getRedirectUrl, serializeOauthStateCookie } from "app/auth/utils";
+import invariant from "lib/invariant";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import invariant from "tiny-invariant";
 import { joinURL, stringifyParsedURL } from "ufo";
 
 
@@ -13,12 +13,21 @@ export async function POST(req: Request) {
       '/auth',
       "mastodon"
     );
-    const { instance, } = await serializeOauthStateCookie()
-    invariant(!!instance, "Invalid oauth state");
+    const cookieOAuthState = await serializeOauthStateCookie()
+    const { instance, } = cookieOAuthState;
+    invariant(!!instance, "Invalid oauth state", {
+      data,
+      cookieOAuthState
+    });
     await deleteOauthStateCookie()
 
     const credentials = await getInstanceCredentials(instance, callbackUrl);
-    invariant(credentials, "Something went wrong, please try again later.");
+    invariant(credentials, "Mastodon o-auth verification failed, please try again later.", {
+      cookieOAuthState,
+      instance,
+      callbackUrl,
+      data,
+    });
 
     const { client_id: clientId, client_secret: clientSecret } = credentials;
 
