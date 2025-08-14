@@ -28,25 +28,25 @@ export function getPostHogServer() {
  * @returns {Promise<void>}
  */
 export const captureException = async (err, request) => {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    const posthog = await getPostHogServer();
-    const cookie = request.headers.cookie || request.headers?.get?.("cookie");
-    let distinctId = null;
-    if (cookie) {
-      const postHogCookieMatch = cookie.match(/ph_phc_.*?_posthog=([^;]+)/);
+  // if (process.env.NEXT_RUNTIME === "nodejs") {
+  const posthog = await getPostHogServer();
+  const cookie = request.headers.cookie || request.headers?.get?.("cookie");
+  let distinctId = null;
+  if (cookie) {
+    const postHogCookieMatch = cookie.match(/ph_phc_.*?_posthog=([^;]+)/);
 
-      if (postHogCookieMatch && postHogCookieMatch[1]) {
-        try {
-          const decodedCookie = decodeURIComponent(postHogCookieMatch[1]);
-          const postHogData = JSON.parse(decodedCookie);
-          distinctId = postHogData.distinct_id;
-        } catch (e) {
-          console.error("Error parsing PostHog cookie:", e);
-        }
+    if (postHogCookieMatch && postHogCookieMatch[1]) {
+      try {
+        const decodedCookie = decodeURIComponent(postHogCookieMatch[1]);
+        const postHogData = JSON.parse(decodedCookie);
+        distinctId = postHogData.distinct_id;
+      } catch (e) {
+        console.error("Error parsing PostHog cookie:", e);
       }
     }
-    getCloudflareContext().ctx.waitUntil(
-      posthog.captureExceptionImmediate(err, distinctId || undefined, err.cause)
-    );
   }
+  getCloudflareContext().ctx.waitUntil(
+    posthog.captureExceptionImmediate(err, distinctId || undefined, err.cause)
+  );
+  // }
 };
