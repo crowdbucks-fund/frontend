@@ -3,6 +3,7 @@
  * @typedef {import('posthog-node').PostHog} PostHog
  * @typedef {import('http').IncomingMessage | Request} AnyRequest
  */
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { PostHog } from "posthog-node";
 let posthogInstance = null;
 
@@ -13,8 +14,8 @@ export function getPostHogServer() {
   if (!posthogInstance) {
     posthogInstance = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
       host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-      flushAt: 1,
-      flushInterval: 0, // Because server-side functions in Next.js can be short-lived we flush regularly
+      flushAt: 1, // Send events immediately in edge environment
+      flushInterval: 0, // Don't wait for interval
     });
   }
   return posthogInstance;
@@ -44,12 +45,8 @@ export const captureException = async (err, request) => {
       }
     }
   }
-  // getCloudflareContext().ctx.waitUntil(
-  await posthog.captureExceptionImmediate(
-    err,
-    distinctId || undefined,
-    err.cause
+  getCloudflareContext().ctx.waitUntil(
+    posthog.captureExceptionImmediate(err, distinctId || undefined, err.cause)
   );
-  // );
   // }
 };
