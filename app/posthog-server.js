@@ -3,7 +3,6 @@
  * @typedef {import('posthog-node').PostHog} PostHog
  * @typedef {import('http').IncomingMessage | Request} AnyRequest
  */
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { PostHog } from "posthog-node";
 let posthogInstance = null;
 
@@ -45,8 +44,12 @@ export const captureException = async (err, request) => {
       }
     }
   }
-  getCloudflareContext().ctx.waitUntil(
-    posthog.captureExceptionImmediate(err, distinctId || undefined, err.cause)
+  // getCloudflareContext().ctx.waitUntil(
+  await posthog.captureExceptionImmediate(
+    err,
+    distinctId || undefined,
+    err.cause
   );
+  // );
   // }
 };
