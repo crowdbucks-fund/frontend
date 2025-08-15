@@ -27,6 +27,6 @@ export const onRequestError = async (err, request, context) => {
       }
     }
 
-    await posthog.captureException(err, distinctId || undefined);
+    await posthog.captureExceptionImmediate(err, distinctId || undefined);
   }
 };

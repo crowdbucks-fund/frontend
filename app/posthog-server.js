@@ -48,5 +48,7 @@ export const captureException = async (err, request) => {
   getCloudflareContext().ctx.waitUntil(
     posthog.captureExceptionImmediate(err, distinctId || undefined, err.cause)
   );
+
+  getCloudflareContext().ctx.waitUntil(posthog.flush());
   // }
 };
