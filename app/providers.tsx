@@ -9,24 +9,10 @@ import { store } from "lib/jotai";
 import { queryClient } from "lib/reactQuery";
 import "lib/zod";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
-import theme from "theme/chakra.config";
-
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
-
-export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-      api_host:
-        process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
-      person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
-      defaults: "2025-05-24",
-    });
-  }, []);
-
-  return <PHProvider client={posthog}>{children}</PHProvider>;
-}
+import { useEffect } from "react";
+import theme from "theme/chakra.config";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -40,7 +26,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("resize", appHeight);
   }, [path]);
   return (
-    <PostHogProvider>
+    <PHProvider client={posthog}>
       <QueryClientProvider client={queryClient}>
         <CacheProvider>
           <JotaiProvider store={store}>
@@ -49,6 +35,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         </CacheProvider>
         <ToastContainer />
       </QueryClientProvider>
-    </PostHogProvider>
+    </PHProvider>
   );
 }
