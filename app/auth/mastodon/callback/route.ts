@@ -1,4 +1,5 @@
 import { deleteOauthStateCookie, getInstanceCredentials, getRedirectUrl, serializeOauthStateCookie } from "app/auth/utils";
+import { captureException } from "app/posthog-server";
 import invariant from "lib/invariant";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -53,7 +54,14 @@ export async function POST(req: Request) {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to verify OAuth state, please try again.");
+      throw new Error("Failed to verify OAuth state, please try again.", {
+        cause: {
+          instance,
+          instanceUrl,
+          callbackUrl,
+          code: data.code,
+        }
+      });
     }
 
     const token = await response.json() as { access_token: string };
@@ -62,6 +70,8 @@ export async function POST(req: Request) {
       instance,
     })
   } catch (error: any) {
+    await captureException(error, req)
+
     error.message = error.message.replace('Invariant failed: ', '').trim();
     if (!error.message)
       error.message = 'Something went wrong, please try again later.';

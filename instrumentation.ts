@@ -1,17 +1,19 @@
 // instrumentation.js
 
+import { Instrumentation } from "next";
+
 export function register() {
   // No-op for initialization
 }
 
-export const onRequestError = async (err, request, context) => {
+export const onRequestError: Instrumentation.onRequestError = async (err, request) => {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { getPostHogServer } = require("./app/posthog-server.js");
-    const posthog = await getPostHogServer();
+    const { getPostHogServer } = await import("./app/posthog-server");
+    const posthog = getPostHogServer();
 
     let distinctId = null;
     if (request.headers.cookie) {
-      const cookieString = request.headers.cookie;
+      const cookieString = request.headers.cookie.toString();
       const postHogCookieMatch = cookieString.match(
         /ph_phc_.*?_posthog=([^;]+)/
       );
