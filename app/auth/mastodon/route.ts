@@ -1,3 +1,4 @@
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { getInstanceCredentials, getRedirectUrl, storeInstanceCredentials } from 'app/auth/utils';
 import { captureException } from 'app/posthog-server';
 import { serialize } from 'cookie-es';
@@ -106,7 +107,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
     });
     return response;
   } catch (error: any) {
-    await captureException(error, request)
+    getCloudflareContext().ctx.waitUntil(captureException(error, request))
 
     error.message = error.message.replace('Invariant failed: ', '').trim();
     if (!error.message)

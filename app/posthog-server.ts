@@ -1,5 +1,4 @@
 
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest } from "next/server";
 import { PostHog } from "posthog-node";
 
@@ -9,14 +8,14 @@ export function getPostHogServer() {
   if (!posthogInstance) {
     posthogInstance = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
       host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-      fetch
+      flushAt: 1,
+      flushInterval: 0,
     });
   }
   return posthogInstance;
 }
 
 export const captureException = async (err: unknown, request?: NextRequest | Request) => {
-  // if (process.env.NEXT_RUNTIME === "nodejs") {
   const posthog = getPostHogServer();
   const cookie = request?.headers?.get?.("cookie");
   let distinctId = null;
@@ -32,10 +31,10 @@ export const captureException = async (err: unknown, request?: NextRequest | Req
       }
     }
   }
-  getCloudflareContext().ctx.waitUntil(
-    posthog.captureExceptionImmediate(
-      err,
-      distinctId || undefined,
-      (err as Error).cause || undefined
-    ))
+
+  await posthog.captureExceptionImmediate(
+    err,
+    distinctId || undefined,
+    (err as Error).cause || undefined
+  )
 };
