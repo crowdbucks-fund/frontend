@@ -94,7 +94,8 @@ export const TierCard: FC<TierCardProps> = ({
             {tier.name}
           </Text>
           <Text fontSize={{ base: "12px", md: "16px" }}>
-            {tier.subscribers || "0"} people helping{" "}
+            {tier.subscribers || "0"} subscriber
+            {tier.subscribers > 1 ? "s" : ""}{" "}
             <Text
               as="span"
               ml="2"
@@ -186,7 +187,7 @@ export const CreateTierCard: FC = () => {
             New tier
           </Text>
           <Text fontSize="16px">
-            0 people helping{" "}
+            0 subscriber{" "}
             <Text
               as="span"
               ml="3"
