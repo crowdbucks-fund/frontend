@@ -250,6 +250,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     color="brand.black.1"
                     textStyle="regular16"
                     as="a"
+                    rel="me"
                     href={platformInfo.contact.mastodon_support.link}
                     target="_blank"
                   >
@@ -268,6 +269,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     color="brand.black.1"
                     textStyle="regular16"
                     as="a"
+                    rel="me"
                     href={platformInfo.contact.mastodon.link}
                     target="_blank"
                   >
