@@ -52,7 +52,17 @@ export async function POST(req: Request) {
           code: data.code,
         }),
       }
-    );
+    ).catch((e) => {
+      throw new Error("Fetch failed on verifying the oAuth code to generate token", {
+        cause: {
+          errorMessage: e?.message,
+          instance,
+          instanceUrl,
+          callbackUrl,
+          code: data.code,
+        }
+      });
+    })
 
     if (!response.ok) {
       throw new Error("Failed to verify OAuth state, please try again.", {
@@ -64,7 +74,6 @@ export async function POST(req: Request) {
         }
       });
     }
-
     const token = await response.json() as { access_token: string };
     return NextResponse.json({
       token: token.access_token,
