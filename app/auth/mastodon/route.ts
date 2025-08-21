@@ -59,9 +59,10 @@ export async function GET(request: NextRequest, res: NextResponse) {
         if (res.ok)
           return await res.json() as { client_id: string, client_secret: string };
         throw await res.json();
-      }).catch(() => {
+      }).catch((e) => {
         throw new Error(`Something went wrong in connecting to "${instance}" instance, please try again later.`, {
           cause: {
+            errorMessage: e?.message,
             instance,
             instanceUrl,
             callbackUrl
