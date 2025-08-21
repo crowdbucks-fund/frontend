@@ -1,4 +1,5 @@
 
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NextRequest } from "next/server";
 import { PostHog } from "posthog-node";
 
@@ -37,4 +38,8 @@ export const captureException = async (err: unknown, request?: NextRequest | Req
     distinctId || undefined,
     (err as Error).cause || undefined
   )
+
+  // temporary fix to ensure the request is not closed before the error is captured
+  // this is needed because the PostHog Node SDK async captureException is not working fine
+  getCloudflareContext().ctx.waitUntil(new Promise(resolve => setTimeout(resolve, 1000)))
 };
