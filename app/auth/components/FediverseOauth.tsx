@@ -94,8 +94,8 @@ export const FediverseOauth: FC<{
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   useEffect(() => {
-    if (isLoading && !!searchParams.get("error")) {
-      setServerError(searchParams.get("error") || null);
+    if (!!searchParams.get("error")) {
+      setServerError(searchParams.get("error"));
       router.replace(
         withQuery(parseUrl(window.location.href).pathname, {
           step: changeRouteOnCompleteSteps ? platformKey : undefined,

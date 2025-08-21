@@ -152,7 +152,7 @@ export default function TierHistoryClientPage() {
           }}
           color="brand.black.3"
         >
-          {tier.subscribers || "0"} people helping{" "}
+          {tier.subscribers || "0"} subscriber{tier.subscribers > 1 ? "s" : ""}{" "}
           <Text
             textStyle={{
               base: "regular12",

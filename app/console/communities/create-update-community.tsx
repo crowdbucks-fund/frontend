@@ -77,7 +77,7 @@ export default function CreateUpdateCommunityPage({
   const schema = z
     .object({
       id: z.number(),
-      name: requiredString.trim().max(128),
+      name: requiredString.trim().max(75),
       handle: handleSchema,
       summary: requiredString.trim().max(512),
       banner: z.any().nullable(), // TODO: z.instanceof(File)

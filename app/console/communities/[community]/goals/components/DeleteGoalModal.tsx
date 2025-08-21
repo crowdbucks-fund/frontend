@@ -47,7 +47,7 @@ export const DeleteGoalModal: FC<DeleteGoalModalProps> = ({
   });
   return (
     <ResponsiveDialog isOpen={isOpen} onClose={onClose} title="Delete Goal">
-      <VStack gap={{ base: 4, md: 6 }} w="full">
+      <VStack gap={{ base: 4, md: 6 }} w="full" maxW={{ md: "450px" }}>
         <VStack
           w="full"
           justify="center"

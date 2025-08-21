@@ -250,6 +250,26 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     color="brand.black.1"
                     textStyle="regular16"
                     as="a"
+                    rel="me"
+                    href={platformInfo.contact.mastodon_support.link}
+                    target="_blank"
+                  >
+                    {platformInfo.contact.mastodon_support.handle}
+                  </Text>
+                </HStack>
+                <HStack gap="2.5">
+                  <MastodonIcon />,
+                  <Divider
+                    orientation="vertical"
+                    borderColor="primary.500"
+                    w="1px"
+                    h="20px"
+                  />
+                  <Text
+                    color="brand.black.1"
+                    textStyle="regular16"
+                    as="a"
+                    rel="me"
                     href={platformInfo.contact.mastodon.link}
                     target="_blank"
                   >

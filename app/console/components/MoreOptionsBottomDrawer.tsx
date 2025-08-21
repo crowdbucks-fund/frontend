@@ -8,14 +8,12 @@ import {
   DrawerContent,
   DrawerOverlay,
   HStack,
-  IconButton,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { LogoutModal } from "app/console/edit-profile/LogoutModal";
 import LogoutIcon from "assets/icons/logout.svg?react";
-import UserEditIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { mobileSidebarMenu } from "constants/console";
 import { useUserAuthProvider } from "hooks/useUserAuthProvider";
@@ -46,15 +44,15 @@ export const MoreOptionsBottomDrawer = () => {
               <HStack w="full">
                 <VStack w="full" gap={2}>
                   <Avatar
-                    as={NextLink}
-                    href="/console/edit-profile"
+                    // as={NextLink}
+                    // href="/console/edit-profile"
+                    // onClick={setIsMoreDrawerOpen.bind(null, false)}
                     width="70px"
                     height="70px"
                     src={user?.avatar || defaultAvatar.src}
-                    onClick={setIsMoreDrawerOpen.bind(null, false)}
                   />
                   <HStack>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="Edit User"
                       variant="ghost"
                       as={NextLink}
@@ -62,7 +60,7 @@ export const MoreOptionsBottomDrawer = () => {
                       onClick={setIsMoreDrawerOpen.bind(null, false)}
                     >
                       <UserEditIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <Text fontWeight="bold" fontSize="16px">
                       {user?.displayName}
                     </Text>

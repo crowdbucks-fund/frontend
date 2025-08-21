@@ -38,7 +38,7 @@ export const goalZodSchema = z.object({
     .min(1)
     .transform((s) => parseInt(s))
     .or(z.number()),
-  name: z.string().trim().min(1).max(128),
+  name: z.string().trim().min(1).max(75),
   currencyId: z
     .string()
     .min(1)

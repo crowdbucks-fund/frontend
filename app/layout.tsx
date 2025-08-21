@@ -10,7 +10,6 @@ export const metadata: Metadata = {
       ? "http://localhost:3000"
       : platformInfo.url
   ),
-
   title: "CrowdBucks",
 };
 

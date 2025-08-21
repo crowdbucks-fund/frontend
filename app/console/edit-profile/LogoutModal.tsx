@@ -64,7 +64,7 @@ export const LogoutModal: FC<LogoutModalProps> = ({ isOpen, onClose }) => {
               flexGrow={1}
               w="full"
               variant="solid"
-              colorScheme="primary"
+              colorScheme="red"
             >
               Yes, log out
             </Button>

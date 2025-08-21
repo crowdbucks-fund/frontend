@@ -9,6 +9,8 @@ import { store } from "lib/jotai";
 import { queryClient } from "lib/reactQuery";
 import "lib/zod";
 import { usePathname } from "next/navigation";
+import posthog from "posthog-js";
+import { PostHogProvider as PHProvider } from "posthog-js/react";
 import { useEffect } from "react";
 import theme from "theme/chakra.config";
 
@@ -24,13 +26,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("resize", appHeight);
   }, [path]);
   return (
-    <QueryClientProvider client={queryClient}>
-      <CacheProvider>
-        <JotaiProvider store={store}>
-          <ChakraProvider theme={theme}>{children}</ChakraProvider>
-        </JotaiProvider>
-      </CacheProvider>
-      <ToastContainer />
-    </QueryClientProvider>
+    <PHProvider client={posthog}>
+      <QueryClientProvider client={queryClient}>
+        <CacheProvider>
+          <JotaiProvider store={store}>
+            <ChakraProvider theme={theme}>{children}</ChakraProvider>
+          </JotaiProvider>
+        </CacheProvider>
+        <ToastContainer />
+      </QueryClientProvider>
+    </PHProvider>
   );
 }

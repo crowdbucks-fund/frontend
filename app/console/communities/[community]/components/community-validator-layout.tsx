@@ -44,7 +44,7 @@ export default function CommunityValidatorLayout({
             communities[0]._handle = communities[0].handle;
           }
           communities[0].handle = user.mastodonUsername.replace("@", "");
-          communities[0].name = user.mastodonUsername.replace("@", "");
+          communities[0].name = "@" + user.mastodonUsername.replace("@", "");
         }
         return communities[0];
       }

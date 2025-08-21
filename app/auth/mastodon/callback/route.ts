@@ -1,7 +1,9 @@
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { deleteOauthStateCookie, getInstanceCredentials, getRedirectUrl, serializeOauthStateCookie } from "app/auth/utils";
+import { captureException } from "app/posthog-server";
+import invariant from "lib/invariant";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import invariant from "tiny-invariant";
 import { joinURL, stringifyParsedURL } from "ufo";
 
 
@@ -13,12 +15,21 @@ export async function POST(req: Request) {
       '/auth',
       "mastodon"
     );
-    const { instance, } = await serializeOauthStateCookie()
-    invariant(!!instance, "Invalid oauth state");
+    const cookieOAuthState = await serializeOauthStateCookie()
+    const { instance, } = cookieOAuthState;
+    invariant(!!instance, "Invalid oauth state", {
+      data,
+      cookieOAuthState
+    });
     await deleteOauthStateCookie()
 
     const credentials = await getInstanceCredentials(instance, callbackUrl);
-    invariant(credentials, "Something went wrong, please try again later.");
+    invariant(credentials, "Mastodon o-auth verification failed, please try again later.", {
+      cookieOAuthState,
+      instance,
+      callbackUrl,
+      data,
+    });
 
     const { client_id: clientId, client_secret: clientSecret } = credentials;
 
@@ -44,7 +55,14 @@ export async function POST(req: Request) {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to verify OAuth state, please try again.");
+      throw new Error("Failed to verify OAuth state, please try again.", {
+        cause: {
+          instance,
+          instanceUrl,
+          callbackUrl,
+          code: data.code,
+        }
+      });
     }
 
     const token = await response.json() as { access_token: string };
@@ -53,6 +71,12 @@ export async function POST(req: Request) {
       instance,
     })
   } catch (error: any) {
+    getCloudflareContext().ctx.waitUntil(captureException(error, req))
+
+    error.message = error.message.replace('Invariant failed: ', '').trim();
+    if (!error.message)
+      error.message = 'Something went wrong, please try again later.';
+
     return NextResponse.json({ error: error.message }, {
       status: 400
     });

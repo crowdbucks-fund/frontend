@@ -37,7 +37,7 @@ export const tierZodSchema = z.object({
     .transform((s) => parseInt(s))
     .or(z.number()),
   recommended: z.boolean(),
-  name: z.string().trim().min(1).max(128),
+  name: z.string().trim().min(1).max(75),
   currencyId: z
     .string()
     .min(1)

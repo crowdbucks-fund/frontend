@@ -117,12 +117,12 @@ export default function StripePage() {
               />
             )
           }
-          btnText={"Connect to Stripe to collect money"}
+          btnText={"Connect your Stripe account to collect money"}
           link={"#"}
           disabled={loading}
           onClick={connectToStripe}
           mobileButtonText="Connect to Stripe"
-          title=""
+          title="Start fundraising"
         />
       ) : (
         <VStack

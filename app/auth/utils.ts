@@ -1,9 +1,9 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { decryptCookie } from "lib/cookies";
+import invariant from "lib/invariant";
 import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
 import { cookies } from "next/headers";
 import { hash } from 'ohash';
-import invariant from "tiny-invariant";
 import { stringifyParsedURL, withQuery } from "ufo";
 
 export const getRedirectUrl = (headers: ReadonlyHeaders, oauthCallbackPath: string, step?: string) => {
@@ -20,7 +20,9 @@ export const getRedirectUrl = (headers: ReadonlyHeaders, oauthCallbackPath: stri
 export const serializeOauthStateCookie = async () => {
   const cookie = await cookies()
   const oauthStateCookie = cookie.get("oauth_state")?.value;
-  invariant(!!oauthStateCookie, "Invalid state");
+  invariant(!!oauthStateCookie, "Invalid state", {
+    cause: "OAuth state cookie is missing or invalid."
+  });
   return await decryptCookie(oauthStateCookie)
 }
 
