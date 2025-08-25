@@ -4,6 +4,7 @@ import { CommunityTabLayout } from "app/console/communities/[community]/componen
 import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import CupIconBase from "assets/icons/cup.svg?react";
 import TreeIconBase from "assets/icons/tree.svg?react";
+import { CommunityMetaTags } from "components/CommunityVerificationLinks";
 import { usePathname } from "next/navigation";
 import { FC, PropsWithChildren } from "react";
 import {
@@ -20,7 +21,6 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
 }) => {
   const community = useCurrentCommunity();
   const pathname = usePathname();
-
   return (
     <VStack gap={{ base: 2, md: 6 }} w="full">
       <CommunityTabLayout
@@ -50,6 +50,7 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
       >
         {children}
       </CommunityTabLayout>
+      <CommunityMetaTags communityHandle={community.handle} />
     </VStack>
   );
 };
