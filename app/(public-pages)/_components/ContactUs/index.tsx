@@ -36,7 +36,7 @@ const ChakraNextImage = chakra(Image);
 const schema = z.object({
   name: z.string().trim().min(1),
   email: z.string().email(),
-  comment: z.string().min(10),
+  comment: z.string().min(10).max(512),
 });
 export const ContactUs: FC<{ showShapes?: boolean }> = ({
   showShapes = false,
