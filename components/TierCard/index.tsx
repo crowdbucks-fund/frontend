@@ -95,7 +95,7 @@ export const TierCard: FC<TierCardProps> = ({
           </Text>
           <Text fontSize={{ base: "12px", md: "16px" }}>
             {tier.subscribers || "0"} subscriber
-            {tier.subscribers > 1 ? "s" : ""}{" "}
+            {tier.subscribers != 1 ? "s" : ""}{" "}
             <Text
               as="span"
               ml="2"
