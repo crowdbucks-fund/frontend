@@ -1,19 +1,27 @@
 "use client";
 import { GetProfileResult } from "@xeronith/granola/core/spi";
 import { AuthWizardContent } from "app/auth/components/AuthWizard";
+import { useCurrentCommunity } from "app/console/communities/[community]/components/community-validator-layout";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
+import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { getCommunityLink } from "utils/community";
 
 const SignInModal: FC<{
   isOpen: boolean;
   onSignin: (token: string) => Promise<void>;
   oauthInstance: string | null;
 }> = ({ isOpen, onSignin, oauthInstance }) => {
+  const community = useCurrentCommunity();
+  const router = useRouter();
+
   return (
     <ResponsiveDialog
-      showCloseButton={false}
+      showCloseButton={true}
       isOpen={isOpen}
-      onClose={() => {}}
+      onClose={() => {
+        router.replace(getCommunityLink(community));
+      }}
       title=""
       showTitleOnMobile={false}
     >

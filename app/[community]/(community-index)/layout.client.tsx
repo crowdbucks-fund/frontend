@@ -39,13 +39,21 @@ export const CommunityPublicPageLayoutWithDetails: FC<PropsWithChildren> = ({
                 pathname === getCommunityTiersLink(community),
             },
           },
-          {
-            title: "Goals",
-            icon: (
-              <CupIcon width="24px" display={{ base: "none", md: "block" }} />
-            ),
-            href: getCommunityGoalsLink(community),
-          },
+          // @ts-expect-error goal exists but not fully typed
+          ...(community.goals.length
+            ? [
+                {
+                  title: "Goals",
+                  icon: (
+                    <CupIcon
+                      width="24px"
+                      display={{ base: "none", md: "block" }}
+                    />
+                  ),
+                  href: getCommunityGoalsLink(community),
+                },
+              ]
+            : []),
         ]}
       >
         {children}
