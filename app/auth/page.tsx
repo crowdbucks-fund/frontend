@@ -17,9 +17,9 @@ export const setAuthCookie = async (token: string) => {
 };
 
 export default async function Auth() {
-  const { instance } = (await serializeOauthStateCookie().catch(() => ({
+  const { instance } = ((await serializeOauthStateCookie().catch(() => ({
     instance: null,
-  }))) as { instance: string | null };
+  }))) as { instance: string | null }) || { instance: null };
 
   const profile = await fetchProfile();
   if (profile.profile) return redirect("/console");

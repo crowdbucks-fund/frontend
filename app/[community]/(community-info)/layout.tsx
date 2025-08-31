@@ -7,9 +7,9 @@ import CommunityInfoLayoutClient from "./layout.client";
 export default async function CommunityInfoLayout({
   children,
 }: PropsWithChildren) {
-  const { instance } = (await serializeOauthStateCookie().catch((e) => ({
+  const { instance } = ((await serializeOauthStateCookie().catch((e) => ({
     instance: null,
-  }))) as { instance: string | null };
+  }))) as { instance: string | null }) || { instance: null };
   const user = await fetchProfile();
 
   return (
