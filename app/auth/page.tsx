@@ -17,7 +17,7 @@ export const setAuthCookie = async (token: string) => {
 };
 
 export default async function Auth() {
-  const { instance } = (await serializeOauthStateCookie().catch((e) => ({
+  const { instance } = (await serializeOauthStateCookie().catch(() => ({
     instance: null,
   }))) as { instance: string | null };
 

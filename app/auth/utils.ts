@@ -1,5 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { decryptCookie } from "lib/cookies";
+import { verifyCookie } from "lib/cookies";
 import invariant from "lib/invariant";
 import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
 import { cookies } from "next/headers";
@@ -23,7 +23,7 @@ export const serializeOauthStateCookie = async () => {
   invariant(!!oauthStateCookie, "Invalid state", {
     cause: "OAuth state cookie is missing or invalid."
   });
-  return await decryptCookie(oauthStateCookie)
+  return await verifyCookie(oauthStateCookie)
 }
 
 export const deleteOauthStateCookie = async () => {

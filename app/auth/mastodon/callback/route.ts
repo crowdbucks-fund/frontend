@@ -15,8 +15,8 @@ export async function POST(req: Request) {
       '/auth',
       "mastodon"
     );
-    const cookieOAuthState = await serializeOauthStateCookie()
-    const { instance, } = cookieOAuthState;
+    const cookieOAuthState = await serializeOauthStateCookie().catch(() => ({ instance: null }));
+    const { instance } = cookieOAuthState;
     invariant(!!instance, "Invalid oauth state", {
       data,
       cookieOAuthState

@@ -72,9 +72,6 @@ importers:
       framer-motion:
         specifier: ^10.16.5
         version: 10.18.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      jose:
-        specifier: ^6.0.11
-        version: 6.0.11
       jotai:
         specifier: ^2.3.1
         version: 2.12.5(@types/react@19.1.8)(react@19.1.0)
@@ -94,8 +91,8 @@ importers:
         specifier: ^1.259.0
         version: 1.259.0
       posthog-node:
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^5.8.1
+        version: 5.8.1
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -2045,6 +2042,9 @@ packages:
     resolution: {integrity: sha512-2jwT1Lzu0Z/o9Vuup5tkbuLJpaoZ6XB8pehDzY7G7W8DSxvSrAVuVMT/e0yP54WI86ge9u/0tTLUBfJtMIUu3g==}
     engines: {node: '>=14', npm: '>=6'}
     hasBin: true
+
+  '@posthog/core@1.0.2':
+    resolution: {integrity: sha512-hWk3rUtJl2crQK0WNmwg13n82hnTwB99BT99/XI5gZSvIlYZ1TPmMZE8H2dhJJ98J/rm9vYJ/UXNzw3RV5HTpQ==}
 
   '@posthog/nextjs-config@1.1.2':
     resolution: {integrity: sha512-ZKn2Ic/CFxrHL0Rjc6a+Qea8q1N0DzDZcRf5LHA1PQdP79dlxq9UuzMPeOJk320zALpd5X8lTx+Hog0LZoD1KQ==}
@@ -4155,9 +4155,6 @@ packages:
     resolution: {integrity: sha512-zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ==}
     engines: {node: 20 || >=22}
 
-  jose@6.0.11:
-    resolution: {integrity: sha512-QxG7EaliDARm1O1S8BGakqncGT9s25bKL1WSf6/oa17Tkqwi8D2ZNglqCF+DsYF88/rV66Q/Q2mFAy697E1DUg==}
-
   jotai@2.12.5:
     resolution: {integrity: sha512-G8m32HW3lSmcz/4mbqx0hgJIQ0ekndKWiYP7kWVKi0p6saLXdSoye+FZiOFyonnd7Q482LCzm8sMDl7Ar1NWDw==}
     engines: {node: '>=12.20.0'}
@@ -4672,8 +4669,8 @@ packages:
       rrweb-snapshot:
         optional: true
 
-  posthog-node@5.6.0:
-    resolution: {integrity: sha512-MVXxKmqAYp2cPBrN1YMhnhYsJYIu6yc6wumbHz1dbo67wZBf2WtMm67Uh+4VCrp07049qierWlxQqz1W5zGDeg==}
+  posthog-node@5.8.1:
+    resolution: {integrity: sha512-YJYlYnlpItVjHqM9IhvZx8TzK8gnx2nU+0uhiog4RN47NnV0Z0K1AdC4ul+O8VuvS/jHqKCQvL8iAONRA37+0A==}
     engines: {node: '>=20'}
 
   preact@10.27.0:
@@ -8144,6 +8141,8 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  '@posthog/core@1.0.2': {}
+
   '@posthog/nextjs-config@1.1.2(next@15.3.5(@babel/core@7.27.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
     dependencies:
       '@posthog/cli': 0.3.7
@@ -10728,8 +10727,6 @@ snapshots:
     dependencies:
       '@isaacs/cliui': 8.0.2
 
-  jose@6.0.11: {}
-
   jotai@2.12.5(@types/react@19.1.8)(react@19.1.0):
     optionalDependencies:
       '@types/react': 19.1.8
@@ -11186,7 +11183,9 @@ snapshots:
       preact: 10.27.0
       web-vitals: 4.2.4
 
-  posthog-node@5.6.0: {}
+  posthog-node@5.8.1:
+    dependencies:
+      '@posthog/core': 1.0.2
 
   preact@10.27.0: {}
 
