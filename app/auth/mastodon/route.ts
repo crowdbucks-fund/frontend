@@ -2,7 +2,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { getInstanceCredentials, getRedirectUrl, storeInstanceCredentials } from 'app/auth/utils';
 import { captureException } from 'app/posthog-server';
 import { serialize } from 'cookie-es';
-import { encryptCookie } from "lib/cookies";
+import { signCookie } from "lib/cookies";
 import invariant from 'lib/invariant';
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,9 +10,9 @@ import { platformInfo } from "platform";
 import { joinURL, stringifyParsedURL, withQuery } from "ufo";
 
 
-const appendCookie = async (response: NextResponse, name: string, data: Object) => {
+const appendCookie = async (response: NextResponse, name: string, data: Object, signing: boolean = true) => {
   response.headers.append("Set-Cookie",
-    serialize(name, await encryptCookie(data), {
+    serialize(name, signing ? await signCookie(data) : JSON.stringify(data), {
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
@@ -23,8 +23,8 @@ const appendCookie = async (response: NextResponse, name: string, data: Object) 
 
 
 export async function GET(request: NextRequest, res: NextResponse) {
+  const instance = request.nextUrl.searchParams.get('instance');
   try {
-    const instance = request.nextUrl.searchParams.get('instance');
     invariant(!!instance, "Instance is not provided");
     const redirectUrlAfterLogin = request.nextUrl.searchParams.get('redirect_url');
 
@@ -103,9 +103,10 @@ export async function GET(request: NextRequest, res: NextResponse) {
     await appendCookie(response, 'oauth_state', {
       instance
     });
-    await appendCookie(response, 'redirect_url', {
-      redirectUrl: redirectUrlAfterLogin
-    });
+    if (redirectUrlAfterLogin)
+      await appendCookie(response, 'redirect_url', {
+        redirectUrl: redirectUrlAfterLogin
+      }, false);
     return response;
   } catch (error: any) {
     getCloudflareContext().ctx.waitUntil(captureException(error, request))
@@ -122,9 +123,10 @@ export async function GET(request: NextRequest, res: NextResponse) {
       joinURL(request.nextUrl.origin, withQuery('/auth', { error: error.message, step: 'mastodon' })),
       302
     );
-    await appendCookie(redirectResponse, 'oauth_state', {
-      instance: request.nextUrl.searchParams.get('instance')
-    });
+    if (instance)
+      await appendCookie(redirectResponse, 'oauth_state', {
+        instance
+      });
     return redirectResponse;
   }
 }
