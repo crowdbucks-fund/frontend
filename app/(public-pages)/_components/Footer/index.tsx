@@ -21,7 +21,15 @@ export const Footer = () => {
             color="brand.gray.4"
           >
             {/* © {new Date().getFullYear()} CrowdBucks All rights&rsquo; Reserved */}
-            {platformInfo.footerInfo}
+            ⚡️ Powered By{" "}
+            <Text
+              as="a"
+              textDecor="underline"
+              textUnderlineOffset="4px"
+              href="https://crowdbucks.org"
+            >
+              CrowdBucks
+            </Text>
           </Text>
           <HStack gap="4">
             {/* <Location
