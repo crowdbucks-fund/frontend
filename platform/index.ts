@@ -13,5 +13,4 @@ export const platformInfo = {
       link: 'https://mastodon.social/@crowdbucks'
     }
   },
-  footerInfo: process.env.NEXT_PUBLIC_PLATFORM_FOOTER_INFO || '⚡️ Powered By CrowdBucks',
 }
