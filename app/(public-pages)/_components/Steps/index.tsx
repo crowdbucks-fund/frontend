@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   chakra,
-  Image as ChakraImage,
   Divider,
   Flex,
   HStack,
@@ -18,8 +17,8 @@ import Flash from "assets/icons/flash.svg?react";
 import ZoomIcon from "assets/icons/search-normal.svg?react";
 import UserEdit from "assets/icons/user-edit.svg?react";
 import UserInfo from "assets/icons/user-tag.svg?react";
-import Coin from "assets/images/coin.png";
-import MoneyManagementImage from "assets/images/money-management.png";
+import HelperImage from "assets/images/woman invests.svg";
+import FundraiserImage from "assets/images/woman received dividend payments 2.svg";
 import { scrollAnimate } from "lib/framerMotion";
 import Image from "next/image";
 import { Fragment, useState } from "react";
@@ -27,34 +26,40 @@ import { Fragment, useState } from "react";
 const ChakraNextImage = chakra(Image);
 
 const data = {
-  helper: [
-    {
-      icon: <UserEdit />,
-      title: "Join CrowdBucks",
-    },
-    {
-      icon: <ZoomIcon />,
-      title: "Find your favorite fundraiser",
-    },
-    {
-      icon: <HappyIcon />,
-      title: "Help out",
-    },
-  ],
-  fundraiser: [
-    {
-      icon: <UserEdit />,
-      title: "Join CrowdBucks",
-    },
-    {
-      icon: <Flash />,
-      title: "Share your CrowdBucks page",
-    },
-    {
-      icon: <UserInfo />,
-      title: "Build sustainable revenue streams",
-    },
-  ],
+  helper: {
+    steps: [
+      {
+        icon: <ZoomIcon />,
+        title: "Open a CrowdBucks page",
+      },
+      {
+        icon: <UserEdit />,
+        title: "Sign in with your Fediverse account",
+      },
+      {
+        icon: <HappyIcon />,
+        title: "Donate",
+      },
+    ],
+    image: HelperImage,
+  },
+  fundraiser: {
+    steps: [
+      {
+        icon: <UserEdit />,
+        title: "Sign in with your Fediverse account",
+      },
+      {
+        icon: <Flash />,
+        title: "Share your CrowdBucks page",
+      },
+      {
+        icon: <UserInfo />,
+        title: "Collect funds",
+      },
+    ],
+    image: FundraiserImage,
+  },
 };
 
 export const Steps = () => {
@@ -140,7 +145,7 @@ export const Steps = () => {
             w="full"
             {...scrollAnimate("fadeInBottom", "resetDelayed1")}
           >
-            {data[selectedRole].map((row) => {
+            {data[selectedRole].steps.map((row) => {
               return (
                 <HStack
                   key={row.title}
@@ -188,7 +193,7 @@ export const Steps = () => {
           {...scrollAnimate("fadeInRight", "resetDelayed1")}
         >
           <ChakraNextImage
-            src={MoneyManagementImage}
+            src={data[selectedRole].image}
             priority
             objectFit="cover"
             objectPosition="10%"
@@ -205,29 +210,6 @@ export const Steps = () => {
             md: "none",
           }}
         />
-        <ChakraImage
-          src={Coin.src}
-          display={{
-            md: "block",
-            base: "none",
-          }}
-          position="absolute"
-          right={10}
-          top="70px"
-          width="23px"
-        />
-        <ChakraImage
-          src={Coin.src}
-          display={{
-            md: "block",
-            base: "none",
-          }}
-          position="absolute"
-          right="200px"
-          bottom="-100px"
-          width="40px"
-        />
-
         <Ellipsis
           position="absolute"
           bottom={{ md: "-160%" }}

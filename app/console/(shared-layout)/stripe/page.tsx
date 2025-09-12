@@ -1,23 +1,24 @@
 "use client";
-import { Button, CircularProgress, VStack } from "@chakra-ui/react";
+import { Button, chakra, CircularProgress, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { CenterLayout } from "app/console/components/CenterLayout";
-import LinkIcon from "assets/icons//link-2.svg?react";
+import LinkIconBase from "assets/icons/link-2.svg?react";
 import StripeLogo from "assets/images/Stripe.svg";
 import { CreateFirstEntity } from "components/FirstEntity";
 import { StripeCard } from "components/StripeCard";
 import { toast } from "components/Toast";
 import { useConnectToStripe } from "hooks/useConnectToStripe";
-import { useDesktop } from "hooks/useDesktop";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { isStripeConnected } from "lib/stripe";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
 
+const LinkIcon = chakra(LinkIconBase);
+
 export default function StripePage() {
-  const isDesktop = useDesktop();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const {
     user,
@@ -26,15 +27,21 @@ export default function StripePage() {
   } = useAuth();
   const router = useRouter();
   const isVerifying = useSearchParams().get("verify") !== null;
-
-  const { mutate: verifyConnection, isLoading: isValidatingUser } = useMutation(
+  useUpdateBreadcrumb({
+    breadcrumb: [
+      {
+        title: "Stripe",
+        link: "/console/stripe",
+      },
+    ],
+  });
+  const { mutate: verifyConnection, isPending: isValidatingUser } = useMutation(
     {
-      mutationKey: "confirmStripeIntegrationByUser",
       mutationFn: () => {
         return api.confirmStripeIntegrationByUser({});
       },
       onSuccess(data) {
-        queryClient.invalidateQueries(["getProfile"]);
+        queryClient.invalidateQueries({ queryKey: ["getProfile"] });
         router.replace(window.location.href.replace("?verify", ""));
         if (data.chargesEnabled)
           toast({
@@ -52,10 +59,11 @@ export default function StripePage() {
     if (isVerifying) verifyConnection();
   }, [isVerifying]);
 
-  const { mutate: disconnectAccount, isLoading: isDisconnectingAccount } =
-    useMutation(api.disconnectStripeAccountByUser.bind(api), {
+  const { mutate: disconnectAccount, isPending: isDisconnectingAccount } =
+    useMutation({
+      mutationFn: api.disconnectStripeAccountByUser.bind(api),
       onSuccess() {
-        queryClient.invalidateQueries(["getProfile"]);
+        queryClient.invalidateQueries({ queryKey: ["getProfile"] });
         toast({
           status: "success",
           title: "Account disconnected successfully",
@@ -93,22 +101,28 @@ export default function StripePage() {
                 isIndeterminate
                 size="18px"
                 p="3px"
-                color={isDesktop ? "primary.500" : "black"}
+                __css={{
+                  color: {
+                    md: "primary.500",
+                    base: "black",
+                  },
+                }}
               />
-            ) : !isDesktop ? (
-              <LinkIcon />
-            ) : undefined
+            ) : (
+              <LinkIcon
+                display={{
+                  base: "none",
+                  md: "block",
+                }}
+              />
+            )
           }
-          btnText={
-            isDesktop
-              ? "Connect your Stripe account to collect money"
-              : "Connect to Stripe to collect money"
-          }
+          btnText={"Connect your Stripe account to collect money"}
           link={"#"}
           disabled={loading}
           onClick={connectToStripe}
           mobileButtonText="Connect to Stripe"
-          title=""
+          title="Start fundraising"
         />
       ) : (
         <VStack
@@ -119,7 +133,6 @@ export default function StripePage() {
           gap={{ base: 4, md: 6 }}
         >
           <StripeCard
-            name={user?.stripeAccountInfo?.displayName || ""}
             stripeUrl="https://dashboard.stripe.com/"
             partiallyConnect={!user?.stripeAccountInfo?.chargesEnabled}
           />

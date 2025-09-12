@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, HStack, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useMutation } from "react-query";
 
 export default function OauthList() {
   const searchParams = useSearchParams();
@@ -52,7 +52,7 @@ export default function OauthList() {
         </Alert>
       )}
       <HStack></HStack>
-      {verify.isSuccess && verify.data && (
+      {verify.isSuccess && !!verify.data && (
         <pre className="">{JSON.stringify(verify.data, null, 2)}</pre>
       )}
     </VStack>

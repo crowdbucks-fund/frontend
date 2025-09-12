@@ -76,7 +76,7 @@ export const Navbar = () => {
             >
               Contact Us
             </ActiveLink>
-            <ActiveLink
+            {/* <ActiveLink
               href="/about"
               prefetch={false}
               activeProps={{
@@ -87,7 +87,7 @@ export const Navbar = () => {
               fontWeight="medium"
             >
               About CrowdBucks
-            </ActiveLink>
+            </ActiveLink> */}
           </VStack>
         </Container>
       </Box>

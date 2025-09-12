@@ -1,8 +1,8 @@
+import { UndefinedInitialDataOptions, useQuery } from "@tanstack/react-query"
 import { PaymentMethod } from '@xeronith/granola/core/objects'
 import { api } from 'lib/api'
-import { UseQueryOptions, useQuery } from 'react-query'
 
-export const usePaymentMethods = (options: UseQueryOptions<PaymentMethod[], unknown, PaymentMethod[], string[]> = {}) => {
+export const usePaymentMethods = (options: Omit<UndefinedInitialDataOptions<PaymentMethod[], unknown, PaymentMethod[], string[]>, 'queryKey'> = {}) => {
   return useQuery({
     ...options,
     queryKey: ['getPaymentMethodsByUser'],

@@ -1,21 +1,30 @@
 "use client";
 
-import { Box, Button, HStack, VStack } from "@chakra-ui/react";
-import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
-import CupIcon from "assets/icons/cup.svg?react";
-import HomeIcon from "assets/icons/home NB.svg?react";
-import TreeIcon from "assets/icons/tree.svg?react";
-import { ActiveLink } from "components/Link";
-import { useDesktop } from "hooks/useDesktop";
-import { FC, PropsWithChildren, ReactNode } from "react";
-import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import {
-  CommunityPreview,
-  CommunityPreviewSlim,
-} from "../../components/CommunityPreview";
+  Box,
+  Button,
+  ButtonProps,
+  chakra,
+  HStack,
+  VStack,
+} from "@chakra-ui/react";
+import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
+import CupIconBase from "assets/icons/cup.svg?react";
+import DollarIconBase from "assets/icons/dollar-square.svg?react";
+import HomeIconBase from "assets/icons/home NB.svg?react";
+import TreeIconBase from "assets/icons/tree.svg?react";
+import { ActiveLink, ActiveLinkProps } from "components/Link";
+import { FC, PropsWithChildren, ReactElement, ReactNode } from "react";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
+import { CommunityPreview } from "../../components/CommunityPreview";
 import CommunityValidatorLayout, {
   useCurrentCommunity,
 } from "./community-validator-layout";
+
+const HomeIcon = chakra(HomeIconBase);
+const DollarIcon = chakra(DollarIconBase);
+const TreeIcon = chakra(TreeIconBase);
+const CupIcon = chakra(CupIconBase);
 
 export default function CommunityLayout({ children }: PropsWithChildren) {
   return (
@@ -42,7 +51,6 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
   communityPreview = true,
   beforeTab,
 }) => {
-  const isDesktop = useDesktop();
   return (
     <VStack flexGrow={{ base: 1, md: "unset" }} w="full">
       <Box
@@ -63,7 +71,12 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
         {communityPreview && (
           <>
             <Box display={{ base: "none", md: "block" }} w="full" pb="6">
-              <CommunityPreviewSlim community={community} />
+              <CommunityPreview
+                community={community}
+                showSummary
+                shareCommunity
+                // editButton
+              />
             </Box>
             <Box
               pt={{ md: "7" }}
@@ -73,6 +86,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
               <CommunityPreview
                 shareCommunity
                 showSummary
+                // editButton
                 community={community}
               />
             </Box>
@@ -84,6 +98,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
           rounded="md"
           p={{ base: 1, md: 0 }}
           w="full"
+          mt={{ base: 3, md: 0 }}
           gap={{ base: 1, md: 4 }}
         >
           {links(community!).map((tab) => {
@@ -124,10 +139,10 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
                     },
                   },
                 }}
-                leftIcon={isDesktop ? tab.icon : undefined}
-                href={tab.href}
+                leftIcon={tab.icon}
                 scroll={false}
                 {...(tab.props || {})}
+                href={tab.href}
               >
                 {tab.title}
               </Button>
@@ -147,6 +162,7 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
         p={{ md: "6" }}
         display="flex"
         flexDir="column"
+        position="relative"
       >
         {children}
       </Box>
@@ -154,22 +170,70 @@ export const CommunityTabLayout: FC<CommunityTabLayoutProps> = ({
   );
 };
 
-const links = (community: GetCommunityByUserResult) => [
-  {
-    title: "Home",
-    icon: <HomeIcon width="24px" strokeWidth="2.7px" />,
-    href: `/console/communities/${community.id}`,
-    props: {},
-  },
+const links = (
+  community: GetCommunityByUserResult
+): {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  props?: Omit<ButtonProps & ActiveLinkProps, "href">;
+}[] => [
+  // {
+  //   title: "Home",
+  //   icon: (
+  //     <HomeIcon
+  //       display={{
+  //         base: "none",
+  //         md: "block",
+  //       }}
+  //       width="24px"
+  //       strokeWidth="2.7px"
+  //     />
+  //   ),
+  //   href: `/console/communities/${community.id}`,
+  //   props: {},
+  // },
   {
     title: "Tiers",
-    icon: <TreeIcon width="24px" />,
-    href: `/console/communities/${community.id}/tiers`,
+    icon: (
+      <TreeIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+      />
+    ),
+    // href: `/console/communities/${community.id}/tiers`,
+    href: `/console`,
   },
   {
     title: "Goals",
-    icon: <CupIcon width="24px" />,
-    href: `/console/communities/${community.id}/goals`,
+    icon: (
+      <CupIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+      />
+    ),
+    // href: `/console/communities/${community.id}/goals`,
+    href: `/console/goals`,
+  },
+  {
+    title: "Stripe",
+    icon: (
+      <DollarIcon
+        display={{
+          base: "none",
+          md: "block",
+        }}
+        width="24px"
+      />
+    ),
+    // href: `/console/communities/${community.id}/goals`,
+    href: `/console/stripe`,
   },
 ];
 const CommunityLayoutComponents: FC<PropsWithChildren<CommunityPageProps>> = ({
@@ -180,16 +244,17 @@ const CommunityLayoutComponents: FC<PropsWithChildren<CommunityPageProps>> = ({
     {
       breadcrumb: [
         {
-          title: `${community!.name} community`,
-          link: `/console/communities/${community!.id}`,
+          title: `${community!.name}`,
+          // link: `/console/communities/${community!.id}`,
+          link: `/console`,
           startsWith: true,
         },
       ],
       title: community.name,
-      back: {
-        title: "communities",
-        link: "/console/communities",
-      },
+      // back: {
+      //   title: "communities",
+      //   link: "/console/communities",
+      // },
     },
     []
   );

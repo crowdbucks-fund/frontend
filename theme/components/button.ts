@@ -40,6 +40,17 @@ export const Button = defineStyleConfig({
       borderColor: 'brand.gray.1',
       bg: 'brand.gray.3',
     },
+    'glass': {
+      colorScheme: "primary-glass",
+      color: "primary.500",
+      _hover: { bg: "primary-glass.500", borderColor: "primary.500" },
+      _active: { bg: "primary-glass.500", borderColor: "primary.500", },
+      borderWidth: "1px",
+      borderColor: "primary.500",
+      size: "lg",
+      bg: "primary-glass.500",
+      border: '0'
+    }
   },
   baseStyle: {
     _focusVisible: {

@@ -10,11 +10,10 @@ export const metadata: Metadata = {
       ? "http://localhost:3000"
       : platformInfo.url
   ),
-
   title: "CrowdBucks",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

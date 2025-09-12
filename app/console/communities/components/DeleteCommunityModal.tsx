@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import TrashIcon from "assets/icons/trash.svg?react";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { toast } from "components/Toast";
@@ -21,7 +22,6 @@ import { api } from "lib/api";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
 import { useAuth } from "states/console/user";
 import { Community } from "types/Community";
 import { z } from "zod";
@@ -55,21 +55,19 @@ export const DeleteCommunityModal: FC<CreateCommunityModalProps> = ({
     defaultValues: { name: "" },
     resolver: zodResolver(schema),
   });
-  const { mutate: deleteCommunity, isLoading } = useMutation(
-    () =>
+  const { mutate: deleteCommunity, isPending: isLoading } = useMutation({
+    mutationFn: () =>
       api.removeCommunityByUser({
         id: community.id!,
       }),
-    {
-      onSuccess() {
-        router.push("/console/communities");
-        toast({
-          status: "success",
-          title: `Community was successfully deleted`,
-        });
-      },
-    }
-  );
+    onSuccess() {
+      router.push("/console/communities");
+      toast({
+        status: "success",
+        title: `Community was successfully deleted`,
+      });
+    },
+  });
   return (
     <ResponsiveDialog
       isOpen={isOpen}

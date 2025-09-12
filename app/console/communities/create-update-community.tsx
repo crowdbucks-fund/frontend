@@ -7,7 +7,6 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -15,13 +14,13 @@ import {
   VStack,
   chakra,
 } from "@chakra-ui/react";
-import { AtSymbolIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import CameraIcon from "assets/icons/camera.svg?react";
 import CheckIcon from "assets/icons/tick-circle.svg?react";
 import TrashIcon from "assets/icons/trash.svg?react";
-import defaultAvatar from "assets/images/default-avatar.png";
+import defaultAvatar from "assets/images/default-avatar.svg";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
 import { ApiError, api } from "lib/api";
@@ -37,7 +36,6 @@ import {
 } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useQuery, useQueryClient } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { Community } from "types/Community";
 import { createFilePath } from "utils/files";
@@ -49,7 +47,6 @@ import { DeleteCommunityModal } from "./components/DeleteCommunityModal";
 const DeleteIcon = chakra(TrashIcon);
 const UploadIcon = chakra(CameraIcon);
 const HandleCheckIcon = chakra(CheckIcon);
-const HandleIcon = chakra(AtSymbolIcon);
 
 const requiredString = z.string().min(1);
 
@@ -61,11 +58,11 @@ const handleSchema = z
       .string()
       .trim()
       .min(5, { message: "Username must be at least 5 characters" })
-      .max(16, { message: "Username must be at most 16 characters" })
-      .regex(
-        /^(?=[a-zA-Z0-9._]{5,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
-        "Username is not valid"
-      )
+    // .max(16)
+    // .regex(
+    //   /^(?=[a-zA-Z0-9._]{5,16}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
+    //   "Username is not valid"
+    // )
   );
 export default function CreateUpdateCommunityPage({
   community,
@@ -80,7 +77,7 @@ export default function CreateUpdateCommunityPage({
   const schema = z
     .object({
       id: z.number(),
-      name: requiredString.trim().max(128),
+      name: requiredString.trim().max(75),
       handle: handleSchema,
       summary: requiredString.trim().max(512),
       banner: z.any().nullable(), // TODO: z.instanceof(File)
@@ -144,9 +141,14 @@ export default function CreateUpdateCommunityPage({
     form.setValue<any>("avatar", null);
   };
   const queryClient = useQueryClient();
-  const { mutate: mutate, isLoading } = useMutationWithFile(
+  const {
+    mutate: mutate,
+    isPending: isLoading,
+    isSuccess,
+  } = useMutationWithFile(
     async (data) => {
       toast.closeAll();
+      if (isEditing && community) data.handle = community.handle;
       return await api.addOrUpdateCommunityByUser(data);
     },
     {
@@ -194,10 +196,10 @@ export default function CreateUpdateCommunityPage({
     community
       ? {
           breadcrumb: [
-            {
-              title: "Communities",
-              link: "/console/communities",
-            },
+            // {
+            //   title: "Communities",
+            //   link: "/console/communities",
+            // },
             {
               title: "Edit Community",
               link: pathname,
@@ -205,16 +207,16 @@ export default function CreateUpdateCommunityPage({
           ],
           title: "Edit community",
           back: {
-            title: "Communities",
-            link: "/console/communities",
+            title: "Home",
+            link: "/console",
           },
         }
       : {
           breadcrumb: [
-            {
-              title: "Communities",
-              link: "/console/communities",
-            },
+            // {
+            //   title: "Communities",
+            //   link: "/console/communities",
+            // },
             {
               title: "Create Community",
               link: "/console/communities/create",
@@ -222,8 +224,8 @@ export default function CreateUpdateCommunityPage({
           ],
           title: "Create community",
           back: {
-            title: "Communities",
-            link: "/console/communities",
+            title: "Home",
+            link: "/console",
           },
         }
   );
@@ -250,7 +252,13 @@ export default function CreateUpdateCommunityPage({
 
   return (
     <>
-      <VStack as="form" onSubmit={form.handleSubmit(mutateOnSubmit(mutate))}>
+      <VStack
+        as="form"
+        onSubmit={form.handleSubmit(mutateOnSubmit(mutate))}
+        flexGrow="1"
+        gap="6"
+        height="full"
+      >
         <CenterLayout
           flexGrow={1}
           h="full"
@@ -279,13 +287,13 @@ export default function CreateUpdateCommunityPage({
 
                 {!selectedAvatar ? (
                   <>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="upload image"
                       variant="ghost"
                       colorScheme="blackAlpha"
                     >
                       <UploadIcon width={{ base: "24px", md: "32px" }} />
-                    </IconButton>
+                    </IconButton> */}
                     <Button
                       variant="link"
                       fontWeight="normal"
@@ -344,6 +352,7 @@ export default function CreateUpdateCommunityPage({
                           defaultValue={field.value}
                           onChange={(e) => changeHandle(e.target.value)}
                           // pl={"10 !important"}
+                          isDisabled
                           pr={
                             isCheckingUsername ||
                             (usernameAvailability &&
@@ -389,6 +398,9 @@ export default function CreateUpdateCommunityPage({
                       <VStack w="full">
                         <AutoResizeTextarea {...field} />
                         <HStack justify="end" w="full">
+                          <FormErrorMessage flexGrow="1" mt="0">
+                            {errors.summary?.message}
+                          </FormErrorMessage>
                           <Text
                             fontSize="12px"
                             color={
@@ -404,7 +416,6 @@ export default function CreateUpdateCommunityPage({
                     );
                   }}
                 />
-                <FormErrorMessage>{errors.summary?.message}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.banner}>
                 <FormLabel>Banner</FormLabel>
@@ -420,7 +431,9 @@ export default function CreateUpdateCommunityPage({
               <Button
                 maxW={{ base: "unset", md: "370px" }}
                 isDisabled={
-                  Object.keys(errors).length > 0 || isCheckingUsername
+                  Object.keys(errors).length > 0 ||
+                  isCheckingUsername ||
+                  isSuccess
                 }
                 type="submit"
                 w="full"
@@ -430,7 +443,13 @@ export default function CreateUpdateCommunityPage({
                 isLoading={isLoading}
                 display={{ base: "none", md: "flex" }}
               >
-                {community ? "Update changes" : "Create Community"}
+                {isSuccess
+                  ? community
+                    ? "Changes saved"
+                    : "Community created"
+                  : community
+                  ? "Save changes"
+                  : "Create Community"}
               </Button>
             </VStack>
           </VStack>
@@ -513,7 +532,7 @@ export default function CreateUpdateCommunityPage({
             </VStack>
           )}
           <Button
-            isDisabled={Object.keys(errors).length > 0}
+            isDisabled={Object.keys(errors).length > 0 || isSuccess}
             type="submit"
             w="full"
             size="lg"
@@ -522,7 +541,13 @@ export default function CreateUpdateCommunityPage({
             isLoading={isLoading}
             display={{ base: "flex", md: "none" }}
           >
-            {community ? "Update changes" : "Create Community"}
+            {isSuccess
+              ? community
+                ? "Changes saved"
+                : "Community created"
+              : community
+              ? "Save changes"
+              : "Create Community"}
           </Button>
         </VStack>
       </VStack>

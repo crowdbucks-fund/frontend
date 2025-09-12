@@ -1,20 +1,12 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Image as ChakraImage,
-  Flex,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { Container } from "app/(public-pages)/_components/Container";
 import {
   YellowVector,
   YellowVector2,
 } from "app/(public-pages)/_components/Shapes";
 import ArrowSquareRight from "assets/icons/arrow-square-right.svg?react";
-import Coin from "assets/images/coin.png";
 import MobileMockup from "assets/images/MobileMockup-2.png";
 import { scrollAnimate } from "lib/framerMotion";
 import Image from "next/image";
@@ -47,15 +39,28 @@ export const DemoCTA = () => {
             base: "35px",
             md: "60px",
           }}
+          paddingRight={{
+            md: "0",
+          }}
+          paddingBottom={{
+            base: 0,
+            md: "60px",
+          }}
           position="relative"
           zIndex={99}
         >
-          <VStack gap="2">
+          <VStack
+            gap="2"
+            alignItems={{
+              base: "center",
+              md: "start",
+            }}
+          >
             <Text
               textStyle={{ base: "bold30", md: "bold58" }}
               textAlign={{ base: "center", md: "left" }}
             >
-              Get a demo now
+              Sign up today!
             </Text>
             <Text
               textStyle="regular20"
@@ -64,7 +69,16 @@ export const DemoCTA = () => {
                 md: "left",
               }}
             >
-              Join CrowdBucks and help others grow on Fediverse
+              You build the Fediverse — let your supporters fund it.
+            </Text>
+            <Text
+              textStyle="regular20"
+              textAlign={{
+                base: "center",
+                md: "left",
+              }}
+            >
+              Set up your CrowdBucks page and start receiving donations.
             </Text>
           </VStack>
 
@@ -124,29 +138,6 @@ export const DemoCTA = () => {
             base: "300px",
             md: "500px",
           }}
-        />
-        <ChakraImage
-          src={Coin.src}
-          alt="Coin"
-          width="30px"
-          position="absolute"
-          w={{
-            base: "22px",
-            md: "36px",
-          }}
-          top={{
-            base: "auto",
-            md: "40px",
-          }}
-          bottom={{
-            base: "200px",
-            md: "auto",
-          }}
-          left={{
-            base: "18px",
-            md: "auto",
-          }}
-          right={{ base: "auto", md: "45%" }}
         />
       </Flex>
     </Container>

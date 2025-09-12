@@ -2,13 +2,24 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "crowdbucks-frontend",
-  "compatibility_date": "2024-12-30",
+  "compatibility_date": "2025-05-05",
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public"
   ],
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "OAUTH_KV",
+      "id": "9f1d01b313224362b93d53170e748af7"
+    }
+  ]
 }

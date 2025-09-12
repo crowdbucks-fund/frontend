@@ -4,7 +4,6 @@ import ShareIcon from "assets/icons/Share my community.svg?react";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { TierCard } from "components/TierCard";
 import { toast } from "components/Toast";
-import { useDesktop } from "hooks/useDesktop";
 import { FC, useEffect } from "react";
 import { LocalUserTier } from "types/Tier";
 import { generateCommunityLink } from "utils/community";
@@ -22,7 +21,6 @@ export const FirstTierModal: FC<FirstTierModal> = ({
   tier,
 }) => {
   const community = useCurrentCommunity();
-  const isDesktop = useDesktop();
   const { onCopy, hasCopied } = useClipboard(
     generateCommunityLink(community.handle)
   );
@@ -48,7 +46,7 @@ export const FirstTierModal: FC<FirstTierModal> = ({
             You have your first tier ready!
           </Text>
           <Text fontSize={{ base: "14px", md: "20px" }} color="#343333">
-            you&rsquo;re ready to collect money
+            You&rsquo;re ready to collect money
           </Text>
         </VStack>
         {tier && (
@@ -68,7 +66,7 @@ export const FirstTierModal: FC<FirstTierModal> = ({
           w="full"
           size="lg"
         >
-          Share my community {isDesktop && "to collect money"}
+          Share my community
         </Button>
       </VStack>
     </ResponsiveDialog>

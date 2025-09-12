@@ -1,5 +1,6 @@
 import { Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { EmptyState } from "app/[community]/(community-index)/EmptyState";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import createCommunityImage from "assets/images/amico.svg";
 import Image from "next/image";
@@ -9,6 +10,7 @@ import { FC, ReactNode } from "react";
 export type FirstEntityProps = {
   title: string;
   btnText: string;
+  noEntityTitle?: string;
   link: string;
   mobileButtonText: ReactNode;
   customAction?: ReactNode;
@@ -23,6 +25,7 @@ export const CreateFirstEntity: FC<FirstEntityProps> = ({
   link,
   mobileButtonText,
   customAction,
+  noEntityTitle,
   image,
   icon,
   onClick,
@@ -56,11 +59,14 @@ export const CreateFirstEntity: FC<FirstEntityProps> = ({
         flexGrow={{ base: 1, md: "unset" }}
         justifyContent={{ base: "center", md: "unset" }}
       >
-        <Image
-          alt="create community image"
-          src={image || createCommunityImage}
-          priority
-        />
+        {!!!noEntityTitle && (
+          <Image
+            alt="create community image"
+            src={image || createCommunityImage}
+            priority
+          />
+        )}
+        {!!noEntityTitle && <EmptyState>{noEntityTitle}</EmptyState>}
         <VStack gap={{ md: 8, base: 2 }}>
           <Text fontWeight="bold" fontSize={{ base: "22px", md: "28px" }}>
             {title}
@@ -82,7 +88,11 @@ export const CreateFirstEntity: FC<FirstEntityProps> = ({
           >
             {btnText}
           </Button>
-          <Text display={{ base: "flex", md: "none" }} fontSize="16px">
+          <Text
+            display={{ base: "flex", md: "none" }}
+            fontSize="16px"
+            textAlign="center"
+          >
             {btnText}
           </Text>
         </VStack>

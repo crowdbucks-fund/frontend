@@ -1,6 +1,5 @@
 "use client";
 import {
-  Avatar,
   Box,
   BoxProps,
   Button,
@@ -17,7 +16,7 @@ import {
 import { GetCommunityByUserResult } from "@xeronith/granola/core/spi";
 import ShareSVGIcon from "assets/icons/Share my community.svg?react";
 import UserEditIcon from "assets/icons/user-edit.svg?react";
-import defaultAvatar from "assets/images/default-avatar.png";
+import defaultAvatar from "assets/images/default-avatar.svg";
 import { useCopyCommunityLink } from "hooks/useCopyCommunityLink";
 import NextLink from "next/link";
 import { FC } from "react";
@@ -49,15 +48,21 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
   shareCommunity = false,
   ...props
 }) => {
+  showSummary = false;
+
   const { onCopy, hasCopied } = useCopyCommunityLink(community);
   return (
     <Box {...props} w="full">
       <Box w="full">
         <Box
-          bg="gray.50"
+          bg="#9CA3AF"
           width="100%"
           w="full"
-          aspectRatio={171 / 82}
+          aspectRatio={{
+            base: 171 / 82,
+            lg: 171 / 62,
+            xl: 171 / 52,
+          }}
           rounded="12px"
           border="1px solid"
           borderColor="brand.gray.2"
@@ -66,6 +71,9 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
           {community.banner && (
             <Image
               src={createFilePath(community.banner)}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
               alt={`${community.name}'s banner`}
               rounded="12px"
               objectFit="cover"
@@ -73,33 +81,8 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
               h="full"
             />
           )}
-          {!compact && (
-            <Button
-              display={{
-                base: "none",
-                md: "flex",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onCopy();
-                linkCoppiedCallback(community);
-              }}
-              colorScheme={
-                community.banner?.length ? "whiteAlpha" : "blackAlpha"
-              }
-              leftIcon={<ShareIcon />}
-              bottom={4}
-              right={4}
-              position="absolute"
-              variant="ghost"
-              fontWeight="medium"
-              fontSize="20px"
-            >
-              Share my community
-            </Button>
-          )}
         </Box>
-        <Avatar
+        <Image
           border="3px solid white"
           bg="white"
           src={
@@ -107,6 +90,9 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
               ? defaultAvatar.src
               : createFilePath(community.avatar)
           }
+          zIndex={99}
+          position="relative"
+          rounded="full"
           w={{ base: "80px", md: compact ? "98px" : "130px" }}
           h={{ base: "80px", md: compact ? "98px" : "130px" }}
           mt={{ base: "-40px", md: compact ? "-50px" : "-65px" }}
@@ -120,44 +106,70 @@ export const CommunityPreview: FC<CommunityPreviewProps> = ({
         pt={{ md: "4", base: 1 }}
       >
         <HStack justify="space-between" w="full">
-          <VStack align="start" gap={0}>
-            <HStack gap={1}>
-              {editButton && (
-                <IconButton
-                  display={{ base: "none", md: "flex" }}
-                  as={NextLink}
-                  href={`/console/communities/${community.id}/edit`}
-                  aria-label="edit community"
-                  colorScheme="blackAlpha"
-                  variant="ghost"
-                  color="brand.black.1"
-                  size="sm"
-                >
-                  <UserEditIcon />
-                </IconButton>
-              )}
-              <Text fontWeight="bold" fontSize={{ base: "16px", md: "20px" }}>
-                {community.name}
-              </Text>
-            </HStack>
-            <Link
-              target="_blank"
-              as={NextLink}
-              href={getCommunityLink(community)}
-              fontWeight="normal"
-              fontSize={{ base: "10px", md: "16px" }}
-              color="brand.black.3"
+          <HStack
+            h="full"
+            justifyContent="space-between"
+            flexGrow={1}
+            alignItems="start"
+          >
+            <VStack align="start" gap={0}>
+              <HStack gap={1}>
+                {editButton && (
+                  <IconButton
+                    display={{ base: "none", md: "flex" }}
+                    as={NextLink}
+                    href={`/console/edit`}
+                    aria-label="edit community"
+                    colorScheme="blackAlpha"
+                    variant="ghost"
+                    color="brand.black.1"
+                    size="sm"
+                  >
+                    <UserEditIcon />
+                  </IconButton>
+                )}
+                <Text fontWeight="bold" fontSize={{ base: "16px", md: "20px" }}>
+                  {community.name}
+                </Text>
+              </HStack>
+              <Link
+                target="_blank"
+                as={NextLink}
+                href={getCommunityLink(community)}
+                fontWeight="normal"
+                fontSize={{ base: "10px", md: "16px" }}
+                color="brand.black.3"
+              >
+                {generateCommunityLink(community.handle, false)}
+              </Link>
+            </VStack>
+
+            <Button
+              display={{
+                base: "none",
+                md: "flex",
+                // md: "flex",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onCopy();
+                linkCoppiedCallback(community);
+              }}
+              leftIcon={<ShareIcon />}
+              variant="ghost"
+              fontWeight="medium"
+              fontSize="20px"
             >
-              {generateCommunityLink(community.handle, false)}
-            </Link>
-          </VStack>
+              {!compact && "Share profile"}
+            </Button>
+          </HStack>
 
           <HStack gap={1}>
             {editButton && (
               <IconButton
                 display={{ base: "flex", md: "none" }}
                 as={NextLink}
-                href={`/console/communities/${community.id}/edit`}
+                href={`/console/edit`}
                 aria-label="edit community"
                 colorScheme="blackAlpha"
                 variant="ghost"
@@ -218,12 +230,12 @@ export const CommunityPreviewSlim: FC<{
       <VStack alignItems="start" gap={{ base: 8, md: 8 }}>
         <HStack justifyContent="space-between" w="full">
           <HStack gap={6}>
-            <Avatar src={community.avatar || defaultAvatar.src} />
+            <Image rounded="full" src={community.avatar || defaultAvatar.src} />
             <VStack gap={0} alignItems="start">
               <HStack>
                 <Text textStyle="bold20">{community.name}</Text>
                 <Box w="2.5px" rounded="full" h="18px" bg="secondary.500" />
-                <Text textStyle="regular20">{community.handle}</Text>
+                <Text textStyle="regular20">@{community.handle}</Text>
               </HStack>
               <Text
                 textStyle="hint"
@@ -241,7 +253,7 @@ export const CommunityPreviewSlim: FC<{
           >
             <IconButton
               onClick={copy}
-              aria-label="share community"
+              aria-label="share profile"
               variant="ghost"
               width="24px"
               size="sm"

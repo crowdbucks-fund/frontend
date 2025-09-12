@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Image as ChakraImage,
-  Flex,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Navbar } from "app/(public-pages)/_components/Navbar";
 import {
@@ -17,7 +9,6 @@ import {
   Vector3,
 } from "app/(public-pages)/_components/Shapes";
 import EmojiIcon from "assets/icons/emoji-normal.svg?react";
-import Coin from "assets/images/coin.png";
 import MockupImage from "assets/images/mobile-mockup.png";
 import { scrollAnimate } from "lib/framerMotion";
 import Image from "next/image";
@@ -31,20 +22,24 @@ export const Header = () => {
         <Flex
           justify="space-between"
           w="full"
-          py="8"
+          py={{ base: 8, md: 0 }}
           flexDirection={{
             base: "column",
             md: "row",
           }}
-          gap={{ base: "50px", md: 0 }}
+          gap={{ base: "50px", lg: 0 }}
         >
-          <VStack maxW={{ md: "650px" }} gap="10" w="full">
-            <VStack gap="5" {...scrollAnimate("fadeInBottom", "reset")}>
+          <VStack maxW={{ lg: "650px" }} gap="10" w="full" justify="center">
+            <VStack
+              gap="5"
+              {...scrollAnimate("fadeInBottom", "reset")}
+              alignItems={{ base: "center", md: "start" }}
+            >
               <Text
                 as="h2"
                 textStyle={{
                   base: "bold30",
-                  md: "bold72",
+                  lg: "bold72",
                 }}
                 lineHeight="normal"
                 textAlign={{ base: "center", md: "left" }}
@@ -108,6 +103,15 @@ export const Header = () => {
             display="flex"
             justifyContent="center"
             {...scrollAnimate("fadeInRight", "reset")}
+            __css={{
+              "&>img": {
+                maxWidth: {
+                  base: "500px",
+                  lg: "full",
+                },
+                width: "100%",
+              },
+            }}
           >
             <Image
               alt="CrowdBucks"
@@ -142,37 +146,6 @@ export const Header = () => {
             zIndex="-1"
           >
             <Vector3 />
-          </Box>
-          <Box
-            {...scrollAnimate("fadeInRight", "resetDelayed1")}
-            position="absolute"
-            right="6%"
-            top="50%"
-          >
-            <ChakraImage
-              src={Coin.src}
-              alt="Coin"
-              width={{ base: "24px", md: "36px" }}
-            />
-          </Box>
-          <Box
-            {...scrollAnimate("fadeInRight", "resetDelayed2")}
-            position="absolute"
-            right={{
-              base: "auto",
-              md: "37%",
-            }}
-            left={{
-              base: "10%",
-              md: "auto",
-            }}
-            top="68%"
-          >
-            <ChakraImage
-              src={Coin.src}
-              alt="Coin"
-              width={{ base: "20px", md: "24px" }}
-            />
           </Box>
           <Ellipsis
             position="absolute"

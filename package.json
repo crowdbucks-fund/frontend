@@ -12,40 +12,46 @@
     "start": "next start",
     "lint": "next lint",
     "gen:theme-typings": "chakra-cli tokens theme/chakra.config.ts",
-    "postinstall": "pnpm gen:theme-typings"
+    "postinstall": "pnpm gen:theme-typings && pnpm cf-typegen"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.10.9",
     "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.2.0",
-    "@opennextjs/cloudflare": "^1.3.1",
+    "@opennextjs/cloudflare": "^1.6.2",
+    "@posthog/nextjs-config": "^1.1.2",
     "@stripe/react-stripe-js": "^2.3.1",
     "@stripe/stripe-js": "^2.1.11",
-    "@xeronith/granola": "^0.5.13",
+    "@tanstack/react-query": "^5.83.0",
+    "@xeronith/granola": "^0.5.31",
     "clsx": "^2.0.0",
     "cookie-es": "^2.0.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.5",
-    "jose": "^6.0.11",
     "jotai": "^2.3.1",
     "lodash": "^4.17.21",
-    "next": "15.3.4",
+    "lucide-react": "^0.525.0",
+    "next": "15.3.5",
+    "ohash": "^2.0.11",
+    "posthog-js": "^1.259.0",
+    "posthog-node": "^5.8.1",
     "react": "19.1.0",
     "react-cropper": "^2.3.3",
     "react-dom": "19.1.0",
     "react-dropzone": "^14.2.3",
+    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.45.4",
     "react-query": "^3.39.3",
     "react-responsive-carousel": "^3.2.23",
     "react-textarea-autosize": "^8.5.3",
     "sharp": "^0.33.4",
-    "tiny-invariant": "^1.3.3",
     "typescript": "5.1.6",
     "ufo": "^1.6.1",
     "zod": "^3.21.4"
@@ -61,12 +67,16 @@
     "eslint": "9.29.0",
     "eslint-config-next": "15.3.4",
     "eslint-config-prettier": "^9.0.0",
-    "wrangler": "^4.22.0"
+    "wrangler": "^4.31.0"
   },
   "pnpm": {
     "overrides": {
       "@types/react": "19.1.8",
       "@types/react-dom": "19.1.6"
     }
-  }
+  },
+  "engines": {
+    "node": ">=22.15.0 <23"
+  },
+  "packageManager": "pnpm@10.6.3"
 }

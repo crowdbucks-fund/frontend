@@ -4,16 +4,13 @@ import {
   Box,
   BoxProps,
   HStack,
-  IconButton,
   Portal,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import UserEditIcon from "assets/icons/user-edit.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { ActiveLink } from "components/Link";
 import { mobileSharedLayoutMenu } from "constants/console";
-import { default as Link, default as NextLink } from "next/link";
 import { FC, useMemo } from "react";
 import { useAuth } from "states/console/user";
 
@@ -22,6 +19,7 @@ export const SharedLayout: FC<BoxProps> = (props) => {
   const avatarSrc = useMemo(() => {
     return user?.avatar || defaultAvatar.src;
   }, [user?.avatar]);
+
   return (
     <Box
       {...props}
@@ -46,8 +44,8 @@ export const SharedLayout: FC<BoxProps> = (props) => {
         zIndex={1}
       >
         <Avatar
-          as={NextLink}
-          href="/console/edit-profile"
+          // as={NextLink}
+          // href="/console/edit-profile"
           src={avatarSrc}
           display={{
             base: "block",
@@ -68,8 +66,8 @@ export const SharedLayout: FC<BoxProps> = (props) => {
         />
         <Portal>
           <Avatar
-            as={NextLink}
-            href="/console/edit-profile"
+            // as={NextLink}
+            // href="/console/edit-profile"
             display={{
               base: "none",
               md: "block",
@@ -93,25 +91,25 @@ export const SharedLayout: FC<BoxProps> = (props) => {
         </Portal>
         <VStack display={{ md: "none" }} w="full">
           <HStack justifyContent="center" py="3" gap={{ base: 0, md: 2 }}>
-            <IconButton
+            {/* <IconButton
               as={NextLink}
               href="/console/edit-profile"
               aria-label="edit profile"
               variant="ghost"
             >
               <UserEditIcon />
-            </IconButton>
+            </IconButton> */}
             {user?.displayName ? (
               <Text fontSize="16px" fontWeight="bold">
                 {user?.displayName}
               </Text>
-            ) : (
-              <Link href="/console/edit-profile">
-                <Text fontSize="16px" fontWeight="bold">
-                  What do we call you?
-                </Text>
-              </Link>
-            )}
+            ) : null
+            // <Link href="/console/edit-profile">
+            //   <Text fontSize="16px" fontWeight="bold">
+            //     What do we call you?
+            //   </Text>
+            // </Link>
+            }
           </HStack>
           {/* <CenterLayout> */}
           <HStack w="full" p={1} rounded="md" bg="white">

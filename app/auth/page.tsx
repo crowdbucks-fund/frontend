@@ -1,11 +1,13 @@
+import { serializeOauthStateCookie } from "app/auth/utils";
+import { fetchProfile } from "app/console/components/ConsoleLayout.server";
 import { AUTH_TOKEN_KEY } from "lib/auth";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AuthWizard } from "./components/AuthWizard";
 
 export const setAuthCookie = async (token: string) => {
   "use server";
-
   (await cookies()).set(AUTH_TOKEN_KEY, token, {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 14, // 14 days
@@ -15,9 +17,16 @@ export const setAuthCookie = async (token: string) => {
 };
 
 export default async function Auth() {
+  const { instance } = ((await serializeOauthStateCookie().catch(() => ({
+    instance: null,
+  }))) as { instance: string | null }) || { instance: null };
+
+  const profile = await fetchProfile();
+  if (profile.profile) return redirect("/console");
+
   return (
     <Suspense>
-      <AuthWizard onSignIn={setAuthCookie} />
+      <AuthWizard onSignIn={setAuthCookie} oAuthInstance={instance} />
     </Suspense>
   );
 }

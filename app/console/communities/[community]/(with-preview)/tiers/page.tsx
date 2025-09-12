@@ -1,13 +1,6 @@
 "use client";
-import {
-  Box,
-  Button,
-  Checkbox,
-  CircularProgress,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
 import TierIcon from "assets/icons/dollar-square.svg?react";
 import { CreateFirstEntity } from "components/FirstEntity";
@@ -17,14 +10,12 @@ import { useTiers } from "hooks/useTiers";
 import { api } from "lib/api";
 import { debounce } from "lodash";
 import NextLink from "next/link";
-import { useParams } from "next/navigation";
 import { ChangeEvent, useCallback, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 import { DeleteTierModal } from "../../tiers/components/DeleteTierModal";
 
 export default function TiersPage() {
-  const params = useParams();
   const [deletingTier, setIsDeletingTier] = useState<UserTier | null>(null);
   const community = useCurrentCommunity();
   const queryClient = useQueryClient();
@@ -32,23 +23,34 @@ export default function TiersPage() {
     communityId: community.id,
   });
 
-  const { mutate: enableCustomAmount, isLoading: enableCustomAmountLoading } =
-    useMutation(
-      (enabled: boolean) =>
+  useUpdateBreadcrumb(
+    {
+      breadcrumb: [
+        {
+          title: `${community!.name}`,
+          link: `/console`,
+          startsWith: false,
+        },
+      ],
+      title: `${community!.name}`,
+    },
+    []
+  );
+
+  const { mutate: enableCustomAmount, isPending: enableCustomAmountLoading } =
+    useMutation({
+      mutationFn: (enabled: boolean) =>
         api.addOrUpdateCommunityByUser({
           ...community,
           customAmountsEnabled: enabled,
         }),
-      {
-        onSuccess() {
-          queryClient.invalidateQueries({ queryKey: ["COMMUNITY"] });
-        },
-      }
-    );
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: ["COMMUNITY"] });
+      },
+    });
 
   const onCustomAmountChanged = useCallback(
     debounce((e: ChangeEvent<HTMLInputElement>) => {
-      console.log(!e.target.checked, e.target.value);
       enableCustomAmount(!e.target.checked);
     }, 300),
     []
@@ -58,7 +60,7 @@ export default function TiersPage() {
   if (tiers && !tiers.length && !community.customAmountsEnabled)
     return (
       <Box position="relative">
-        <Checkbox
+        {/* <Checkbox
           isChecked={community.customAmountsEnabled}
           isDisabled={enableCustomAmountLoading || community.isLoading}
           onChange={onCustomAmountChanged}
@@ -71,30 +73,29 @@ export default function TiersPage() {
           zIndex={2}
         >
           <Text as="span" mr="2">
-            {community.customAmountsEnabled ? "Disable" : "Enable"} custom
-            amount
+            Enable custom amount
           </Text>
-        </Checkbox>
+        </Checkbox> */}
         <CreateFirstEntity
           customAction={
-            <Checkbox
-              isIndeterminate={enableCustomAmountLoading || community.isLoading}
-              icon={
-                enableCustomAmountLoading || community.isLoading ? (
-                  <CircularProgress size="12px" />
-                ) : undefined
-              }
-              isChecked={community.customAmountsEnabled}
-              isDisabled={enableCustomAmountLoading || community.isLoading}
-              onChange={onCustomAmountChanged}
-              display={{ base: "flex", md: "none" }}
-              flexGrow={1}
-              w="full"
-              zIndex={2}
-            >
-              {community.customAmountsEnabled ? "Disable" : "Enable"} custom
-              amount
-            </Checkbox>
+            null
+            // <Checkbox
+            //   isIndeterminate={enableCustomAmountLoading || community.isLoading}
+            //   icon={
+            //     enableCustomAmountLoading || community.isLoading ? (
+            //       <CircularProgress size="12px" />
+            //     ) : undefined
+            //   }
+            //   isChecked={community.customAmountsEnabled}
+            //   isDisabled={enableCustomAmountLoading || community.isLoading}
+            //   onChange={onCustomAmountChanged}
+            //   display={{ base: "flex", md: "none" }}
+            //   flexGrow={1}
+            //   w="full"
+            //   zIndex={2}
+            // >
+            //   Enable custom amount
+            // </Checkbox>
           }
           mobileButtonText={
             <HStack>
@@ -102,17 +103,24 @@ export default function TiersPage() {
               <span>Create a tier</span>
             </HStack>
           }
+          noEntityTitle="There’s no tier defined yet!"
           icon={<></>}
           title="Start growing tiers"
           btnText="Create your first tier"
-          link={`/console/communities/${params.community}/tiers/create`}
+          link={`/console/tiers/create`}
         />
       </Box>
     );
+  const customAmount = {
+    helpers: Math.max(community.helpers - community.subscribers, 0),
+    accumulatedFunds: tiers?.reduce((accumulatedFunds, tier) => {
+      return accumulatedFunds - tier.accumulatedFunds;
+    }, community.accumulatedFunds),
+  };
   if (tiers)
     return (
       <Box position="relative">
-        <Checkbox
+        {/* <Checkbox
           isIndeterminate={enableCustomAmountLoading || community.isLoading}
           icon={
             enableCustomAmountLoading || community.isLoading ? (
@@ -130,10 +138,10 @@ export default function TiersPage() {
           pr="0"
           zIndex={2}
         >
-          {community.customAmountsEnabled ? "Disable" : "Enable"} custom amount
-        </Checkbox>
+          Enable custom amount
+        </Checkbox> */}
         <HStack py="4" w="full" display={{ base: "flex", md: "none" }}>
-          <Checkbox
+          {/* <Checkbox
             isIndeterminate={enableCustomAmountLoading || community.isLoading}
             icon={
               enableCustomAmountLoading || community.isLoading ? (
@@ -147,12 +155,11 @@ export default function TiersPage() {
             w="full"
             zIndex={2}
           >
-            {community.customAmountsEnabled ? "Disable" : "Enable"} custom
-            amount
-          </Checkbox>
+            Enable custom amount
+          </Checkbox> */}
           <Button
             as={NextLink}
-            href={`/console/communities/${params.community}/tiers/create`}
+            href={`/console/tiers/create`}
             px="10"
             variant="outline"
             colorScheme="primary-glass"
@@ -163,6 +170,7 @@ export default function TiersPage() {
             borderColor="primary.500"
             size="lg"
             bg="primary-glass.500"
+            w="full"
           >
             Add a tier
           </Button>
@@ -193,6 +201,19 @@ export default function TiersPage() {
                   >
                     Custom amount
                   </Text>
+                  <Text fontSize={{ base: "12px", md: "16px" }}>
+                    {String(customAmount.helpers)} people helping{" "}
+                    <Text
+                      as="span"
+                      ml="2"
+                      pl="2"
+                      borderLeft="2px solid"
+                      borderLeftColor="primary.500"
+                      textTransform="lowercase"
+                    >
+                      ${String(customAmount.accumulatedFunds)} total amount
+                    </Text>
+                  </Text>
                 </VStack>
               </HStack>
             </VStack>
@@ -203,7 +224,7 @@ export default function TiersPage() {
                 key={tier.id}
                 tier={tier}
                 community={community}
-                href={`/console/communities/${community.id}/tiers/${tier.id}`}
+                // href={`/console/communities/${community.id}/tiers/${tier.id}`}
                 onDelete={setIsDeletingTier.bind(null, tier)}
               />
             );

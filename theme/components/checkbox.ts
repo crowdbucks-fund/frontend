@@ -20,7 +20,7 @@ export const Checkbox = defineMultiStyleConfig({
   defaultProps: {
     variant: 'outline',
     size: 'lg',
-    colorScheme: 'black',
+    colorScheme: 'primary',
   },
   variants: {
     outline: baseStyle,

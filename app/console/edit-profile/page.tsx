@@ -7,26 +7,23 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
-  IconButton,
   Input,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CenterLayout } from "app/console/components/CenterLayout";
-import CameraIcon from "assets/icons/camera.svg?react";
-import LogoutIcon from "assets/icons/logout.svg?react";
 import defaultAvatar from "assets/images/default-profile.png";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
 import { ApiError, api } from "lib/api";
 import { mutateOnSubmit, useMutationWithFile } from "lib/file";
-import { queryClient } from "lib/reactQuery";
 import { useRouter } from "next/navigation";
 import { MouseEventHandler, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { useAuth, useUserQueryKey } from "states/console/user";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
+import { useAuth } from "states/console/user";
 import { createFilePath } from "utils/files";
 import { z } from "zod";
 import { LogoutModal } from "./LogoutModal";
@@ -39,8 +36,25 @@ const schema = z.object({
 
 export default function EditProfilePage() {
   const { user } = useAuth();
-
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  useUpdateBreadcrumb({
+    breadcrumb: [
+      {
+        title: `Home`,
+        link: `/console/`,
+      },
+      {
+        title: `Edit profile`,
+        link: "/console/edit-profile",
+      },
+    ],
+    showConsoleMenu: false,
+    title: "Edit profile",
+    back: {
+      link: "/console",
+      title: "Console",
+    },
+  });
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: {
       avatar: null,
@@ -54,7 +68,7 @@ export default function EditProfilePage() {
   const router = useRouter();
   const errors = form.formState.errors;
 
-  const { mutate: updateProfile, isLoading } = useMutationWithFile(
+  const { mutate: updateProfile, isPending: isLoading } = useMutationWithFile(
     (data) => {
       return api.updateProfile({
         ...data,
@@ -67,8 +81,7 @@ export default function EditProfilePage() {
           status: "success",
           title: "Profile updated successfully",
         });
-        queryClient.invalidateQueries(useUserQueryKey);
-        router.push(`/console/`);
+        router.refresh();
       },
       onError(error) {
         const { message } = (error as ApiError) || {};
@@ -135,13 +148,13 @@ export default function EditProfilePage() {
 
             {!selectedAvatar ? (
               <>
-                <IconButton
+                {/* <IconButton
                   aria-label="upload image"
                   variant="ghost"
                   colorScheme="blackAlpha"
                 >
                   <CameraIcon />
-                </IconButton>
+                </IconButton> */}
                 <Button
                   variant="link"
                   fontWeight="normal"
@@ -229,7 +242,7 @@ export default function EditProfilePage() {
             Update profile
           </Button>
 
-          <Button
+          {/* <Button
             size="lg"
             onClick={setIsLoggingOut.bind(null, true)}
             leftIcon={<LogoutIcon />}
@@ -240,7 +253,7 @@ export default function EditProfilePage() {
             textUnderlineOffset="4px"
           >
             Log out
-          </Button>
+          </Button> */}
         </Flex>
       </VStack>
       <LogoutModal

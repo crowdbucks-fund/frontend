@@ -1,7 +1,18 @@
-import { PropsWithChildren } from 'react'
-import ConsoleLayout from './components/ConsoleLayout'
-import './styles.css'
+import { fetchProfile } from "app/console/components/ConsoleLayout.server";
+import { PropsWithChildren } from "react";
+import ConsoleLayout from "./components/ConsoleLayout";
+import "./styles.css";
 
 export default function ConsoleMainLayout({ children }: PropsWithChildren) {
-  return <ConsoleLayout publicPage={false}>{children}</ConsoleLayout>
+  const getProfilePromise = fetchProfile();
+
+  return (
+    <ConsoleLayout
+      publicPage={false}
+      getProfilePromise={getProfilePromise}
+      authRequired
+    >
+      {children}
+    </ConsoleLayout>
+  );
 }

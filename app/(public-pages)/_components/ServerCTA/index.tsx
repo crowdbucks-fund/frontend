@@ -3,7 +3,6 @@
 import {
   Box,
   Button,
-  Image as ChakraImage,
   FormControl,
   FormErrorMessage,
   HStack,
@@ -13,17 +12,16 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
 import ThunderIcon from "assets/icons/Thunder.svg?react";
 import SendIcon from "assets/icons/send.svg?react";
-import Coin from "assets/images/coin.png";
 import { toast } from "components/Toast";
 import { ApiError, api } from "lib/api";
 import { scrollAnimate } from "lib/framerMotion";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
 import { z } from "zod";
 
 const schema = z.object({
@@ -39,26 +37,24 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
     },
     resolver: zodResolver(schema),
   });
-  const { mutate, isLoading } = useMutation(
-    api.addFundraiserRequestByUser.bind(api),
-    {
-      onSuccess() {
-        form.reset();
-        toast({
-          status: "success",
-          title: "We've received your request",
-          description: "Stay tuned, we will contact you soon!",
-        });
-      },
-      onError(error: ApiError) {
-        console.log(error);
-        toast({
-          status: "error",
-          title: error.message,
-        });
-      },
-    }
-  );
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: api.addFundraiserRequestByUser.bind(api),
+    onSuccess() {
+      form.reset();
+      toast({
+        status: "success",
+        title: "We've received your request",
+        description: "Stay tuned, we will contact you soon!",
+      });
+    },
+    onError(error: ApiError) {
+      console.log(error);
+      toast({
+        status: "error",
+        title: error.message,
+      });
+    },
+  });
 
   return (
     <Container py={{ base: "50px", md: "100px" }} pt="50px">
@@ -83,7 +79,7 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
               }}
               textAlign="center"
             >
-              For you, who runs a server all by themselves!
+              Part of the Fediverse? So are we
             </Text>
             <Text
               textStyle={{
@@ -91,10 +87,12 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
                 md: "regular16",
               }}
               textAlign="center"
+              maxW="670px"
             >
-              contact us any time to get CrowdBucks as a fundraiser
+              Join our newsletter for updates, fundraising tips, and inspiring
+              stories from creators, developers, server admins, and communities
+              like yours.
             </Text>
-            V
           </VStack>
           <Box
             {...scrollAnimate("fadeInBottom", "resetDelayed1")}
@@ -187,18 +185,6 @@ export const ServerCTA: FC<{ shapesStyle?: "default" | "custom" }> = ({
                 md: "none",
               }}
             />
-            <Box
-              {...scrollAnimate("fadeInBottom", "resetDelayed1")}
-              position="absolute"
-              top="-40px"
-              left="-50px"
-              display={{
-                base: "none",
-                md: "block",
-              }}
-            >
-              <ChakraImage src={Coin.src} width="23px" />
-            </Box>
           </>
         )}
         {shapesStyle === "custom" && (

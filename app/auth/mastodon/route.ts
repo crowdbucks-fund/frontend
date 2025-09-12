@@ -1,18 +1,32 @@
-import { getRedirectUrl } from 'app/auth/utils';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
+import { getInstanceCredentials, getRedirectUrl, storeInstanceCredentials } from 'app/auth/utils';
+import { captureException } from 'app/posthog-server';
 import { serialize } from 'cookie-es';
-import { encryptCookie } from "lib/cookies";
+import { signCookie } from "lib/cookies";
+import invariant from 'lib/invariant';
 import { headers } from "next/headers";
-import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from "next/server";
 import { platformInfo } from "platform";
-import invariant from "tiny-invariant";
 import { joinURL, stringifyParsedURL, withQuery } from "ufo";
 
-export async function GET(request: NextRequest, res: NextResponse) {
-  try {
 
-    const instance = request.nextUrl.searchParams.get('instance');
+const appendCookie = async (response: NextResponse, name: string, data: Object, signing: boolean = true) => {
+  response.headers.append("Set-Cookie",
+    serialize(name, signing ? await signCookie(data) : JSON.stringify(data), {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    }),
+  );
+}
+
+
+export async function GET(request: NextRequest, res: NextResponse) {
+  const instance = request.nextUrl.searchParams.get('instance');
+  try {
     invariant(!!instance, "Instance is not provided");
+    const redirectUrlAfterLogin = request.nextUrl.searchParams.get('redirect_url');
 
     const instanceUrl = stringifyParsedURL({
       protocol: "https:",
@@ -21,25 +35,61 @@ export async function GET(request: NextRequest, res: NextResponse) {
     // get instance from the request body
     const callbackUrl = getRedirectUrl(
       await headers(),
-      process.env.OAUTH_REDIRECT!,
+      '/auth',
       "mastodon"
     );
 
-    // register app
-    const { client_id: clientId, client_secret: clientSecret } = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
-      method: "POST",
-      body: JSON.stringify({
-        client_name: `${platformInfo.name} (${platformInfo.url})`,
-        redirect_uris: [callbackUrl],
-        scopes: 'profile',
-        website: platformInfo.url,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        accept: 'application/json',
-      },
-    }).then((res) => res.json()).catch(() => { throw new Error('Something went wrong, please try again later.') });
-    invariant(!!clientId && !!clientSecret, "Something went wrong, please try again later.");
+    const credentials = await getInstanceCredentials(instance, callbackUrl);
+    let clientId, clientSecret;
+    if (!credentials) {
+      // register app
+      const credentials = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
+        method: "POST",
+        body: JSON.stringify({
+          client_name: `${platformInfo.name} (${platformInfo.url})`,
+          redirect_uris: [callbackUrl],
+          scopes: 'profile',
+          website: platformInfo.url,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          accept: 'application/json',
+        },
+      }).then(async (res) => {
+        if (res.ok)
+          return await res.json() as { client_id: string, client_secret: string };
+        throw await res.json();
+      }).catch((e) => {
+        throw new Error(`Something went wrong in connecting to "${instance}" instance, please try again later.`, {
+          cause: {
+            errorMessage: e?.message,
+            instance,
+            instanceUrl,
+            callbackUrl
+          }
+        })
+      });
+      invariant(!!credentials.client_id && !!credentials.client_secret, "Something went wrong, please try again later.", {
+        instance,
+        instanceUrl,
+        callbackUrl,
+        credentials
+      });
+      await storeInstanceCredentials(instance, callbackUrl, { client_id: credentials.client_id, client_secret: credentials.client_secret })
+      clientId = credentials.client_id;
+      clientSecret = credentials.client_secret;
+    } else {
+      clientId = credentials.client_id;
+      clientSecret = credentials.client_secret;
+    }
+
+    invariant(!!clientId && !!clientSecret, "Instance negotiation failed. Please try again later.", {
+      instance,
+      instanceUrl,
+      clientId,
+      clientSecret,
+      callbackUrl,
+    });
 
     // redirect to the OAuth URL
     const oauthUrl = withQuery(joinURL(instanceUrl, "oauth/authorize"), {
@@ -50,26 +100,33 @@ export async function GET(request: NextRequest, res: NextResponse) {
     });
 
     const response = NextResponse.redirect(oauthUrl, 302);
-    response.headers.append("Set-Cookie",
-      serialize('oauth_state', await encryptCookie({
-        instance,
-        clientId,
-        clientSecret,
-      }), {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
-      }),
-    );
+    await appendCookie(response, 'oauth_state', {
+      instance
+    });
+    if (redirectUrlAfterLogin)
+      await appendCookie(response, 'redirect_url', {
+        redirectUrl: redirectUrlAfterLogin
+      }, false);
     return response;
   } catch (error: any) {
-    console.error(error);
+    getCloudflareContext().ctx.waitUntil(captureException(error, request))
+
+    error.message = error.message.replace('Invariant failed: ', '').trim();
+    if (!error.message)
+      error.message = 'Something went wrong, please try again later.';
     if (request.headers.get('accept')?.includes('application/json')) {
       return NextResponse.json({ error: error.message }, {
         status: 400
       });
     }
-    return redirect(withQuery('/auth', { error: error.message }))
+    const redirectResponse = NextResponse.redirect(
+      joinURL(request.nextUrl.origin, withQuery('/auth', { error: error.message, step: 'mastodon' })),
+      302
+    );
+    if (instance)
+      await appendCookie(redirectResponse, 'oauth_state', {
+        instance
+      });
+    return redirectResponse;
   }
 }

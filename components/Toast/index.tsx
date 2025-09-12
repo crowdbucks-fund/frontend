@@ -78,7 +78,7 @@ const ToastDrawer = (props: {
               <WarningIcon width="40px" height="40px" />
             )}
           </Text>
-          <Text fontSize="16px" fontWeight="bold">
+          <Text fontSize="16px" fontWeight="bold" textAlign="center">
             {props.title}
           </Text>
           {props.description && (
@@ -96,7 +96,12 @@ const { ToastContainer, toast } = createStandaloneToast({
     render: function Render(props) {
       const isDesktop = useBreakpointValue({ md: true, base: false });
       return isDesktop ? (
-        <Alert status={props.status} variant="brand" maxW="none">
+        <Alert
+          status={props.status}
+          variant="brand"
+          maxW="none"
+          className="animate-slide-top"
+        >
           <AlertIcon>
             {props.status === "success" && <CircleCheckIcon />}
             {props.status === "error" && <ErrorIcon />}

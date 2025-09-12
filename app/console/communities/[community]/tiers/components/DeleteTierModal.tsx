@@ -1,5 +1,6 @@
 "use client";
 import { Button, Text, VStack } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { UserTier } from "@xeronith/granola/core/objects";
 import WarningIcon from "assets/icons/warning.svg?react";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
@@ -8,7 +9,6 @@ import { toast } from "components/Toast";
 import { api } from "lib/api";
 import { queryClient } from "lib/reactQuery";
 import { FC } from "react";
-import { useMutation } from "react-query";
 import { useCurrentCommunity } from "../../components/community-validator-layout";
 
 export type DeletePaymentCardProps = {
@@ -25,7 +25,7 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
   onDeleted,
 }) => {
   const community = useCurrentCommunity();
-  const { mutate: deleteBankInfo, isLoading } = useMutation({
+  const { mutate: deleteBankInfo, isPending: isLoading } = useMutation({
     mutationFn: async () =>
       deletingTier ? api.removeTierByUser({ id: deletingTier.id }) : null,
     onSuccess() {
@@ -34,19 +34,23 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
         status: "success",
         title: deletingTier && `The tier was successfully deleted`,
       });
-      queryClient.invalidateQueries(["findTiersByUser"]);
+      queryClient.invalidateQueries({ queryKey: ["findTiersByUser"] });
       onDeleted && onDeleted();
       onClose();
     },
   });
   return (
     <ResponsiveDialog isOpen={isOpen} onClose={onClose} title="Delete Tier">
-      <VStack gap={6} w="full">
+      <VStack gap={6} w="full" maxW={{ md: "450px" }}>
         <VStack
           w="full"
           justify="center"
           textAlign="center"
           gap={{ base: 1, md: 2 }}
+          minW={{
+            base: "full",
+            md: "400px",
+          }}
         >
           <WarningIcon />
           <Text fontWeight="bold" fontSize={{ base: "18px", md: "24px" }}>
@@ -63,6 +67,7 @@ export const DeleteTierModal: FC<DeletePaymentCardProps> = ({
             tier={deletingTier}
             border="2px solid"
             borderColor={"brand.gray.1"}
+            p={5}
           />
         )}
         <Button

@@ -8,15 +8,27 @@ import { OnboardingState } from "components/Onboarding/OnboardingState";
 import { OnboardingStep } from "components/Onboarding/OnboardingStep";
 import { useCommunities } from "hooks/useCommunities";
 import { useConnectToStripe } from "hooks/useConnectToStripe";
+import { isClient } from "lib/client";
 import { isStripeConnected } from "lib/stripe";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { useAuth } from "states/console/user";
 import { CenterLayout } from "../components/CenterLayout";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { data: communities } = useCommunities({ suspense: true });
+  const { data: communities } = useCommunities({
+    enabled: isClient(),
+  });
+  useUpdateBreadcrumb({
+    breadcrumb: [
+      {
+        title: "Home",
+        link: "/console",
+      },
+    ],
+  });
   const [accordionKeys, setAccordionKeys] = useState<number[]>([]);
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);

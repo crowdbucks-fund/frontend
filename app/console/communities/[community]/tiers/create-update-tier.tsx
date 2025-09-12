@@ -12,6 +12,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { GetTierByUserResult } from "@xeronith/granola/core/spi";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
@@ -23,7 +24,6 @@ import { zodInputStringPipe } from "lib/zod";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useMutation } from "react-query";
 import { useUpdateBreadcrumb } from "states/console/breadcrumb";
 import { z } from "zod";
 import { useCurrentCommunity } from "../components/community-validator-layout";
@@ -37,7 +37,7 @@ export const tierZodSchema = z.object({
     .transform((s) => parseInt(s))
     .or(z.number()),
   recommended: z.boolean(),
-  name: z.string().trim().min(1).max(128),
+  name: z.string().trim().min(1).max(75),
   currencyId: z
     .string()
     .min(1)
@@ -59,6 +59,7 @@ export const tierZodSchema = z.object({
     .object({
       name: z.string(),
       id: z.number(),
+      code: z.string(),
     })
     .optional(),
   tierFrequency: z
@@ -112,14 +113,18 @@ export default function CreateUpdateTier({
     }
   }, [tierFrequencies]);
 
-  const { mutate: createUpdateTier, isLoading } = useMutation({
+  const {
+    mutate: createUpdateTier,
+    isPending: isLoading,
+    isSuccess,
+  } = useMutation({
     mutationFn: api.addOrUpdateTierByUser.bind(api),
     onSuccess() {
       toast({
         status: "success",
-        title: "The tier was successfully updated",
+        title: `The tier was successfully ${isEditing ? "updated" : "created"}`,
       });
-      router.push(`/console/communities/${communityId}/tiers`);
+      router.push(`/console/tiers`);
     },
   });
   const pathname = usePathname();
@@ -129,7 +134,7 @@ export default function CreateUpdateTier({
           breadcrumb: [
             {
               title: `${community!.name} community`,
-              link: `/console/communities/${community!.id}`,
+              link: `/console`,
             },
             {
               title: `Create tier`,
@@ -139,7 +144,7 @@ export default function CreateUpdateTier({
           ],
           back: {
             title: "Tiers",
-            link: `/console/communities/${community!.id}/tiers`,
+            link: `/console/tiers`,
           },
           title: "Create tier",
         }
@@ -147,11 +152,11 @@ export default function CreateUpdateTier({
           breadcrumb: [
             {
               title: `${community!.name} community`,
-              link: `/console/communities/${community!.id}`,
+              link: `/console`,
             },
             {
               title: `Tiers`,
-              link: `/console/communities/${community!.id}/tiers`,
+              link: `/console/tiers`,
             },
             {
               title: `Edit ${tier.name}`,
@@ -160,7 +165,7 @@ export default function CreateUpdateTier({
           ],
           back: {
             title: "Tiers",
-            link: `/console/communities/${community!.id}/tiers`,
+            link: `/console/tiers`,
           },
           title: "Edit tier",
         },
@@ -171,12 +176,12 @@ export default function CreateUpdateTier({
   const handleSubmit = (
     values: Omit<z.infer<typeof tierZodSchema>, "currency" | "tierFrequency">
   ) => {
-    if (isEditing) return createUpdateTier(values);
+    return createUpdateTier(values);
     // reset form to the validated values
-    form.reset(values, {
-      keepValues: false,
-    });
-    router.push(`/console/communities/${community.id}/tiers/create/publish`);
+    // form.reset(values, {
+    //   keepValues: false,
+    // });
+    // router.push(`/console/communities/${community.id}/tiers/create/publish`);
   };
 
   const editButtonIsDisabled = isEditing && !form.formState.isDirty;
@@ -198,6 +203,7 @@ export default function CreateUpdateTier({
         h="full"
         as="form"
         onSubmit={form.handleSubmit(handleSubmit)}
+        gap="6"
       >
         <VStack gap={6} w="full">
           <FormControl isInvalid={!!errors.recommended}>
@@ -233,8 +239,8 @@ export default function CreateUpdateTier({
                     <Input
                       id="currencyId"
                       readOnly
-                      isDisabled={isEditing}
-                      value={field.value?.name}
+                      isDisabled
+                      value={field.value?.code}
                     />
                   );
                 }}
@@ -308,6 +314,9 @@ export default function CreateUpdateTier({
                   <VStack w="full">
                     <AutoResizeTextarea {...field} />
                     <HStack justify="end" w="full">
+                      <FormErrorMessage flexGrow="1" mt="0">
+                        {errors.caption?.message}
+                      </FormErrorMessage>
                       <Text
                         fontSize="12px"
                         color={
@@ -323,7 +332,6 @@ export default function CreateUpdateTier({
                 );
               }}
             />
-            <FormErrorMessage>{errors.caption?.message}</FormErrorMessage>
           </FormControl>
         </VStack>
         <VStack w="full">
@@ -338,9 +346,9 @@ export default function CreateUpdateTier({
             size="lg"
             colorScheme="primary"
             variant="solid"
-            isLoading={isLoading}
+            isLoading={isLoading || isSuccess}
           >
-            {isEditing ? "Update changes" : "Create a tier"}
+            {isEditing ? "Save changes" : "Create a tier"}
           </Button>
           {isEditing && (
             <Button
@@ -361,7 +369,7 @@ export default function CreateUpdateTier({
           deletingTier={tier}
           onClose={setIsDeleting.bind(null, false)}
           onDeleted={() => {
-            router.push(`/console/communities/${communityId}/tiers/`);
+            router.push(`/console/tiers/`);
           }}
         />
       )}

@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Image as ChakraImage,
-  Flex,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { Container } from "app/(public-pages)/_components/Container";
 import {
   Ellipsis,
@@ -15,8 +8,7 @@ import {
   Vector2,
 } from "app/(public-pages)/_components/Shapes";
 import ArrowSquareRight from "assets/icons/arrow-square-right.svg?react";
-import Coin from "assets/images/coin.png";
-import MoneyPocketImage from "assets/images/monkey-pocket.png";
+import MoneyPocketImage from "assets/images/woman looking at a profit chart on her laptop.svg";
 import { scrollAnimate } from "lib/framerMotion";
 import Image from "next/image";
 import Link from "next/link";
@@ -74,7 +66,7 @@ export const AstroSection = () => {
                   md: "400px",
                 }}
               >
-                For everyone, in any planet
+                For everyone, on any planet
               </Text>
             </Box>
             <Box {...scrollAnimate("fadeInBottom", "resetDelayed1")}>
@@ -130,23 +122,6 @@ export const AstroSection = () => {
           </Box>
         </VStack>
         <Box
-          display={{
-            md: "block",
-            base: "none",
-          }}
-          zIndex={-1}
-          {...scrollAnimate("fadeInBottom", "resetDelayed1")}
-          position="absolute"
-          top="10px"
-          right="15%"
-        >
-          <ChakraImage
-            src={Coin.src}
-            alt="Coin"
-            width={{ base: "20px", md: "24px" }}
-          />
-        </Box>
-        <Box
           zIndex={-1}
           {...scrollAnimate("fadeInBottom", "resetDelayed2")}
           position="absolute"
@@ -175,15 +150,6 @@ export const AstroSection = () => {
           <Vector2 w="650px" />
         </Box>
         <Ellipsis zIndex={-1} position="absolute" top="-400px" right="-500px" />
-        <ChakraImage
-          src={Coin.src}
-          alt="Coin"
-          width={{ base: "20px", md: "24px" }}
-          display={{ base: "block", md: "none" }}
-          position="absolute"
-          bottom={-20}
-          left="20px"
-        />
       </Flex>
     </Container>
   );

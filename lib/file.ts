@@ -1,4 +1,4 @@
-import { UseMutateFunction, UseMutationOptions, useMutation } from 'react-query'
+import { UseMutateFunction, UseMutationOptions, useMutation } from "@tanstack/react-query"
 
 export const fileUpload = async (file: File) => {
   var formdata = new FormData()

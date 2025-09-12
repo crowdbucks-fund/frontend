@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   chakra,
-  Image as ChakraImage,
   Divider,
   Flex,
   FormControl,
@@ -16,13 +15,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
-import CallIcon from "assets/icons/call.svg?react";
-import LocationIcon from "assets/icons/location.svg?react";
+import MastodonIcon from "assets/icons/Mastodon-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
-import Coin from "assets/images/coin.png";
-import MoneyBinImage from "assets/images/money-bin.png";
+import MoneyBinImage from "assets/images/woman has a successful contract.svg";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
 import { toast } from "components/Toast";
 import { api } from "lib/api";
@@ -31,54 +29,14 @@ import Image from "next/image";
 import { platformInfo } from "platform";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
 import { z } from "zod";
+
 const ChakraNextImage = chakra(Image);
-
-const data = [
-  {
-    icon: <LocationIcon />,
-    data: (
-      <>
-        Somewhere on a{" "}
-        <Text as="span" color="primary.400">
-          4th
-        </Text>{" "}
-        street
-      </>
-    ),
-  },
-
-  {
-    icon: <CallIcon />,
-    data: (
-      <>
-        <Text as="span" color="primary.400">
-          +89{" "}
-        </Text>
-        5869 1234
-      </>
-    ),
-  },
-
-  {
-    icon: <EnvelopeIcon />,
-    data: (
-      <>
-        crowdbucks
-        <Text as="span" color="primary.400">
-          @
-        </Text>
-        gmail.com
-      </>
-    ),
-  },
-];
 
 const schema = z.object({
   name: z.string().trim().min(1),
   email: z.string().email(),
-  comment: z.string().min(10),
+  comment: z.string().min(10).max(512),
 });
 export const ContactUs: FC<{ showShapes?: boolean }> = ({
   showShapes = false,
@@ -91,7 +49,8 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
     },
     resolver: zodResolver(schema),
   });
-  const { mutate, isLoading } = useMutation(api.addFeedbackByUser.bind(api), {
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: api.addFeedbackByUser.bind(api),
     onSuccess() {
       toast({
         status: "success",
@@ -261,27 +220,63 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                 maxHeight="350px"
                 objectFit="contain"
               />
-              <HStack gap="2.5">
-                <EnvelopeIcon />,
-                <Divider
-                  orientation="vertical"
-                  borderColor="primary.500"
-                  w="1px"
-                  h="20px"
-                />
-                <Text
-                  color="brand.black.1"
-                  textStyle="regular16"
-                  as="a"
-                  href={`mailto:${platformInfo.contact.email}`}
-                >
-                  Support.CrowdBucks
-                  <Text as="span" color="primary.500">
-                    @
+              <VStack align="start">
+                <HStack gap="2.5">
+                  <EnvelopeIcon />,
+                  <Divider
+                    orientation="vertical"
+                    borderColor="primary.500"
+                    w="1px"
+                    h="20px"
+                  />
+                  <Text
+                    color="brand.black.1"
+                    textStyle="regular16"
+                    as="a"
+                    href={`mailto:${platformInfo.contact.email}`}
+                  >
+                    {platformInfo.contact.email}
                   </Text>
-                  gmail.com
-                </Text>
-              </HStack>
+                </HStack>
+                <HStack gap="2.5">
+                  <MastodonIcon />,
+                  <Divider
+                    orientation="vertical"
+                    borderColor="primary.500"
+                    w="1px"
+                    h="20px"
+                  />
+                  <Text
+                    color="brand.black.1"
+                    textStyle="regular16"
+                    as="a"
+                    rel="me"
+                    href={platformInfo.contact.mastodon_support.link}
+                    target="_blank"
+                  >
+                    {platformInfo.contact.mastodon_support.handle}
+                  </Text>
+                </HStack>
+                <HStack gap="2.5">
+                  <MastodonIcon />,
+                  <Divider
+                    orientation="vertical"
+                    borderColor="primary.500"
+                    w="1px"
+                    h="20px"
+                  />
+                  <Text
+                    color="brand.black.1"
+                    textStyle="regular16"
+                    as="a"
+                    rel="me"
+                    href={platformInfo.contact.mastodon.link}
+                    target="_blank"
+                  >
+                    {platformInfo.contact.mastodon.handle}
+                  </Text>
+                </HStack>
+              </VStack>
               {/* <Text
                 pt={{
                   base: "66px",
@@ -305,17 +300,6 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
               md: "none",
             }}
           />
-
-          <ChakraImage
-            src={Coin.src}
-            alt="Coin"
-            display={{ base: "block", md: "none" }}
-            position="absolute"
-            bottom={20}
-            left="20px"
-            width="30px"
-          />
-          {/* <Star display={{ base: 'none', md: 'block' }} position="absolute" bottom="150px" right="140px" zIndex="1" width="23px" /> */}
         </VStack>
 
         {showShapes && (
