@@ -15,6 +15,7 @@
     "postinstall": "pnpm gen:theme-typings && pnpm cf-typegen"
   },
   "dependencies": {
+    "@atproto/oauth-client-node": "^0.3.8",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.10.9",
@@ -35,13 +36,14 @@
     "cookie-es": "^2.0.0",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.5",
+    "jose": "^6.1.0",
     "jotai": "^2.3.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.525.0",
     "next": "15.3.5",
     "ohash": "^2.0.11",
-    "posthog-js": "^1.259.0",
-    "posthog-node": "^5.8.1",
+    "posthog-js": "^1.266.0",
+    "posthog-node": "^5.8.4",
     "react": "19.1.0",
     "react-cropper": "^2.3.3",
     "react-dom": "19.1.0",
@@ -72,11 +74,12 @@
   "pnpm": {
     "overrides": {
       "@types/react": "19.1.8",
-      "@types/react-dom": "19.1.6"
+      "@types/react-dom": "19.1.6",
+      "jose": "^6.0.0"
     }
   },
   "engines": {
-    "node": ">=22.15.0 <23"
+    "node": ">=22.15.0 <25"
   },
   "packageManager": "pnpm@10.6.3"
 }

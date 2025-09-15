@@ -1,10 +1,10 @@
 import { serializeOauthStateCookie } from "app/auth/utils";
 import { fetchProfile } from "app/console/components/ConsoleLayout.server";
+import { AuthWizard } from "components/AuthWizard";
 import { AUTH_TOKEN_KEY } from "lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { AuthWizard } from "./components/AuthWizard";
 
 export const setAuthCookie = async (token: string) => {
   "use server";
@@ -17,16 +17,25 @@ export const setAuthCookie = async (token: string) => {
 };
 
 export default async function Auth() {
-  const { instance } = ((await serializeOauthStateCookie().catch(() => ({
+  const { instance, platform } = ((await serializeOauthStateCookie().catch(
+    () => ({
+      instance: null,
+    })
+  )) as { instance: string | null; platform: string | null }) || {
     instance: null,
-  }))) as { instance: string | null }) || { instance: null };
+    platform: null,
+  };
 
   const profile = await fetchProfile();
   if (profile.profile) return redirect("/console");
 
   return (
     <Suspense>
-      <AuthWizard onSignIn={setAuthCookie} oAuthInstance={instance} />
+      <AuthWizard
+        onSignIn={setAuthCookie}
+        oAuthInstance={instance}
+        oAuthPlatform={platform}
+      />
     </Suspense>
   );
 }

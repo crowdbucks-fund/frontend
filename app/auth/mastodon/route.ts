@@ -1,25 +1,14 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { getInstanceCredentials, getRedirectUrl, storeInstanceCredentials } from 'app/auth/utils';
 import { captureException } from 'app/posthog-server';
-import { serialize } from 'cookie-es';
-import { signCookie } from "lib/cookies";
+import { appendSignedCookie } from 'lib/cookies';
 import invariant from 'lib/invariant';
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { platformInfo } from "platform";
 import { joinURL, stringifyParsedURL, withQuery } from "ufo";
 
 
-const appendCookie = async (response: NextResponse, name: string, data: Object, signing: boolean = true) => {
-  response.headers.append("Set-Cookie",
-    serialize(name, signing ? await signCookie(data) : JSON.stringify(data), {
-      path: '/',
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-    }),
-  );
-}
+
 
 
 export async function GET(request: NextRequest, res: NextResponse) {
@@ -33,11 +22,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
       host: instance,
     })
     // get instance from the request body
-    const callbackUrl = getRedirectUrl(
-      await headers(),
-      '/auth',
-      "mastodon"
-    );
+    const callbackUrl = getRedirectUrl("mastodon");
 
     const credentials = await getInstanceCredentials(instance, callbackUrl);
     let clientId, clientSecret;
@@ -46,7 +31,7 @@ export async function GET(request: NextRequest, res: NextResponse) {
       const credentials = await fetch(joinURL(instanceUrl, "api/v1/apps"), {
         method: "POST",
         body: JSON.stringify({
-          client_name: `${platformInfo.name} (${platformInfo.url})`,
+          client_name: `${platformInfo.name} (${platformInfo.url})`.substring(0, 60),
           redirect_uris: [callbackUrl],
           scopes: 'profile',
           website: platformInfo.url,
@@ -55,6 +40,9 @@ export async function GET(request: NextRequest, res: NextResponse) {
           "Content-Type": "application/json",
           accept: 'application/json',
         },
+        cf: {
+          cacheEverything: true
+        }
       }).then(async (res) => {
         if (res.ok)
           return await res.json() as { client_id: string, client_secret: string };
@@ -100,11 +88,12 @@ export async function GET(request: NextRequest, res: NextResponse) {
     });
 
     const response = NextResponse.redirect(oauthUrl, 302);
-    await appendCookie(response, 'oauth_state', {
-      instance
+    await appendSignedCookie(response, 'oauth_state', {
+      instance,
+      platform: 'mastodon'
     });
     if (redirectUrlAfterLogin)
-      await appendCookie(response, 'redirect_url', {
+      await appendSignedCookie(response, 'redirect_url', {
         redirectUrl: redirectUrlAfterLogin
       }, false);
     return response;
@@ -124,8 +113,9 @@ export async function GET(request: NextRequest, res: NextResponse) {
       302
     );
     if (instance)
-      await appendCookie(redirectResponse, 'oauth_state', {
-        instance
+      await appendSignedCookie(redirectResponse, 'oauth_state', {
+        instance,
+        platform: 'mastodon'
       });
     return redirectResponse;
   }

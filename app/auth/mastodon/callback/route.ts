@@ -2,7 +2,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { deleteOauthStateCookie, getInstanceCredentials, getRedirectUrl, serializeOauthStateCookie } from "app/auth/utils";
 import { captureException } from "app/posthog-server";
 import invariant from "lib/invariant";
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { joinURL, stringifyParsedURL } from "ufo";
 
@@ -10,17 +9,17 @@ import { joinURL, stringifyParsedURL } from "ufo";
 export async function POST(req: Request) {
   try {
     const data = await req.json() as { code: string };
-    const callbackUrl = getRedirectUrl(
-      await headers(),
-      '/auth',
-      "mastodon"
-    );
+    const callbackUrl = getRedirectUrl("mastodon");
     const cookieOAuthState = await serializeOauthStateCookie().catch(() => ({ instance: null }));
-    const { instance } = cookieOAuthState || { instance: null };
+    const { instance, platform } = cookieOAuthState || { instance: null, platform: null };
     invariant(!!instance, "Invalid oauth state", {
       data,
       cookieOAuthState
     });
+    invariant(platform === 'mastodon', "Invalid platform in oauth state", {
+      data,
+      cookieOAuthState
+    })
     await deleteOauthStateCookie()
 
     const credentials = await getInstanceCredentials(instance, callbackUrl);
@@ -51,6 +50,9 @@ export async function POST(req: Request) {
           redirect_uri: callbackUrl,
           code: data.code,
         }),
+        cf: {
+          cacheEverything: true
+        }
       }
     ).catch((e) => {
       throw new Error("Fetch failed on verifying the oAuth code to generate token", {
@@ -82,7 +84,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     getCloudflareContext().ctx.waitUntil(captureException(error, req))
 
-    error.message = error.message.replace('Invariant failed: ', '').trim();
+    error.message = error.message.replace(/^Invariant failed: ?/, '').trim();
     if (!error.message)
       error.message = 'Something went wrong, please try again later.';
 

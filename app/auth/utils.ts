@@ -1,17 +1,17 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { verifyCookie } from "lib/cookies";
 import invariant from "lib/invariant";
-import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
 import { cookies } from "next/headers";
 import { hash } from 'ohash';
-import { stringifyParsedURL, withQuery } from "ufo";
+import { parseURL, stringifyParsedURL, withQuery } from "ufo";
 
-export const getRedirectUrl = (headers: ReadonlyHeaders, oauthCallbackPath: string, step?: string) => {
-  const host = headers.get("host")!
+export const getRedirectUrl = (step?: string, oauthCallbackPath: string = "/auth") => {
+  const appURL = parseURL(process.env.NEXT_PUBLIC_APP_URL);
+  const host = appURL.host
   return withQuery(stringifyParsedURL({
     host,
     pathname: oauthCallbackPath,
-    protocol: (headers.get("x-forwarded-proto") || "https") + ":",
+    protocol: (appURL.protocol || "https:"),
   }), {
     step,
   })

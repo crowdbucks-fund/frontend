@@ -22,6 +22,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { AuthenticateResult } from "@xeronith/granola/core/spi";
+import BskyIconBase from "assets/icons/Bsky.svg?react";
 import FilledCheckMark from "assets/icons/filled-check.svg?react";
 import MastodonIconBase from "assets/icons/Mastodon.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
@@ -37,6 +38,7 @@ import { z } from "zod";
 
 const CheckIcon = chakra(FilledCheckMark);
 const MastodonIcon = chakra(MastodonIconBase);
+const BskyIcon = chakra(BskyIconBase);
 const instances = {
   mastodon: {
     defaultInstances: [
@@ -47,6 +49,11 @@ const instances = {
     ],
     name: "Mastodon",
     Icon: MastodonIcon,
+  },
+  bsky: {
+    defaultInstances: ["bsky.social"],
+    name: "Bluesky",
+    Icon: BskyIcon, // Replace with actual Bluesky icon when available
   },
 };
 
@@ -67,7 +74,10 @@ export const FediverseOauth: FC<{
   onBack: () => void;
   onSignIn: (token: string) => Promise<void>;
   onChangeStep: (step: string) => void;
-  defaultOauthInstance?: string | null;
+  defaultOauthInstance?: {
+    platform: string | null;
+    instance: string | null;
+  };
   compact: boolean;
   changeRouteOnCompleteSteps?: boolean;
 }> = ({
@@ -87,9 +97,14 @@ export const FediverseOauth: FC<{
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentPlatformInstances =
     instances[platformKey]?.defaultInstances || [];
-  const [selectedInstance, setSelectedInstance] = useState(
-    () => defaultOauthInstance || currentPlatformInstances[0]
-  );
+
+  const [selectedInstance, setSelectedInstance] = useState(() => {
+    if (defaultOauthInstance?.platform === platformKey) {
+      return defaultOauthInstance?.instance || currentPlatformInstances[0];
+    }
+    return currentPlatformInstances[0];
+  });
+
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -114,6 +129,8 @@ export const FediverseOauth: FC<{
     queryFn: () => {
       const code = searchParams.get("code");
       const session = searchParams.get("session");
+      const state = searchParams.get("state");
+      const iss = searchParams.get("iss");
       window.history.replaceState(
         {},
         "",
@@ -126,6 +143,8 @@ export const FediverseOauth: FC<{
         body: JSON.stringify({
           code,
           session,
+          state,
+          iss,
         }),
       })
         .then(async (res) => {
@@ -138,7 +157,7 @@ export const FediverseOauth: FC<{
             const credentials = await api
               .authenticate({
                 token,
-                provider: "mastodon",
+                provider: platformKey,
                 server: instance,
               })
               .catch((e: Error) => {
@@ -166,7 +185,11 @@ export const FediverseOauth: FC<{
           throw res;
         });
     },
-    enabled: !!searchParams.get("code") || !!searchParams.get("session"),
+    enabled:
+      !!searchParams.get("code") ||
+      !!searchParams.get("session") ||
+      !!searchParams.get("iss") ||
+      !!searchParams.get("state"),
   });
   const form = useForm({
     resolver: zodResolver(schema),

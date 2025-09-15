@@ -15,15 +15,14 @@ import {
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { FediverseOauth } from "app/auth/components/FediverseOauth";
+import BskyIconBase from "assets/icons/Bsky-outline.svg?react";
 import MastodonIconBase from "assets/icons/Mastodon-outline.svg?react";
 import MisskeyIconBase from "assets/icons/Misskey-outline.svg?react";
 import PeerTubeIconBase from "assets/icons/Peertube-outline.svg?react";
 import PixelfedIconBase from "assets/icons/Pixelfed-outline.svg?react";
-import EnvelopeIcon from "assets/icons/sms.svg?react";
 import CoinGlassJar from "assets/images/coins-glass-jar.webp";
-import Earth from "assets/images/earth.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
+import { FediverseOauth } from "components/FediverseOauth";
 import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { ApiError, api } from "lib/api";
@@ -43,17 +42,17 @@ import { maskEmail } from "utils/strings";
 import { z } from "zod";
 
 const MastodonIcon = chakra(MastodonIconBase);
+const BskyIcon = chakra(BskyIconBase);
 const PixelfedIcon = chakra(PixelfedIconBase);
 const PeerTubeIcon = chakra(PeerTubeIconBase);
 const MisskeyIcon = chakra(MisskeyIconBase);
-const Envelope = chakra(EnvelopeIcon);
-const EarthIcon = chakra(Earth);
 
 export type AuthWizardProps = {
   step?: typeof EMAIL_STEP | typeof VERIFICATION_STEP | typeof INFORMATION_STEP;
   onSignIn?: (token: string) => Promise<void>;
   changeRouteOnCompleteSteps?: boolean;
   oAuthInstance: string | null;
+  oAuthPlatform: string | null;
   content?: {
     [key: string]: {
       title?: string;
@@ -65,12 +64,14 @@ export type AuthWizardProps = {
 const DEFAULT_STEP = "";
 const EMAIL_STEP = "email";
 const MASTODON_STEP = "mastodon";
+const BSKY_STEP = "bsky";
 const VERIFICATION_STEP = "verify";
 const INFORMATION_STEP = "info";
-const oauthSteps = [MASTODON_STEP];
+const oauthSteps = [MASTODON_STEP, BSKY_STEP];
 const steps = [
   DEFAULT_STEP,
   MASTODON_STEP,
+  BSKY_STEP,
   // EMAIL_STEP,
   // VERIFICATION_STEP,
   // INFORMATION_STEP,
@@ -120,11 +121,7 @@ export const AuthWizard: FC<AuthWizardProps> = (props) => {
         minH="full"
         overflow="hidden"
       >
-        <AuthWizardContent
-          {...props}
-          onSignIn={onComplete}
-          oAuthInstance={props.oAuthInstance}
-        />
+        <AuthWizardContent {...props} onSignIn={onComplete} />
       </VStack>
     </VStack>
   );
@@ -135,6 +132,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
   onSignIn,
   changeRouteOnCompleteSteps = true,
   oAuthInstance,
+  oAuthPlatform,
   ...props
 }) => {
   const form = useForm<FormType>({
@@ -204,7 +202,10 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
           onSignIn={onSignIn!}
           changeRouteOnCompleteSteps={changeRouteOnCompleteSteps}
           onChangeStep={handleStepChange}
-          defaultOauthInstance={oAuthInstance}
+          defaultOauthInstance={{
+            platform: oAuthPlatform,
+            instance: oAuthInstance,
+          }}
           compact={props.compact || false}
         />
       )}
@@ -329,6 +330,17 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
           >
             <MastodonIcon />
             Sign in With Mastodon
+          </Button>
+          <Button
+            colorScheme="primary"
+            size="lg"
+            w="full"
+            gap={2}
+            variant="outline"
+            onClick={onChangeStep.bind(null, BSKY_STEP)}
+          >
+            <BskyIcon w="20px" />
+            Sign in With Bluesky
           </Button>
           <Button
             colorScheme="primary"

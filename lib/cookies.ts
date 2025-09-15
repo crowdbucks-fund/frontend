@@ -1,3 +1,6 @@
+import { serialize } from "cookie-es";
+import { NextResponse } from "next/server";
+
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -43,4 +46,16 @@ export async function verifyCookie(cookie: string): Promise<any | null> {
   const ok = await crypto.subtle.verify("HMAC", key, sig as BufferSource, payload as BufferSource);
   if (!ok) return null;
   return JSON.parse(decoder.decode(payload));
+}
+
+
+export const appendSignedCookie = async (response: NextResponse, name: string, data: Object, signing: boolean = true) => {
+  response.headers.append("Set-Cookie",
+    serialize(name, signing ? await signCookie(data) : JSON.stringify(data), {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    }),
+  );
 }
