@@ -62,8 +62,8 @@ importers:
         specifier: ^5.83.0
         version: 5.83.0(react@19.1.0)
       '@xeronith/granola':
-        specifier: ^0.5.31
-        version: 0.5.31
+        specifier: ^0.5.33
+        version: 0.5.33
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -2846,8 +2846,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@xeronith/granola@0.5.31':
-    resolution: {integrity: sha512-XCZa5TcykzuzCsiYLX1lC0EDFAyKPtwQ6Vq/DwO7IQz2L3QF/AkM+hkadRbC7c4sh+6/H4ey5KAO9OmjdDCLJA==}
+  '@xeronith/granola@0.5.33':
+    resolution: {integrity: sha512-QxCbuCHw+TqD1ZAvcIFMlUnZqG9jD+OJBI+LnNl6TEiBZJqB4mgsfvLhr2jdRMT/e+dCOBEeGv1fmZK6TWBbDA==}
 
   '@zag-js/dom-query@0.31.1':
     resolution: {integrity: sha512-oiuohEXAXhBxpzzNm9k2VHGEOLC1SXlXSbRPcfBZ9so5NRQUA++zCE7cyQJqGLTZR0t3itFLlZqDbYEXRrefwg==}
@@ -9291,7 +9291,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.8.1':
     optional: true
 
-  '@xeronith/granola@0.5.31':
+  '@xeronith/granola@0.5.33':
     dependencies:
       long: 5.3.2
       lz-string: 1.5.0
