@@ -1,7 +1,6 @@
-import { withPostHogConfig } from "@posthog/nextjs-config";
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = withPostHogConfig({
+const nextConfig: NextConfig = {
   reactStrictMode: false,
   experimental: {
     serverComponentsHmrCache: false,
@@ -160,11 +159,7 @@ const nextConfig: NextConfig = withPostHogConfig({
       },
     ];
   },
-}, {
-  personalApiKey: process.env.POSTHOG_API_KEY!, // Personal API Key
-  envId: process.env.POSTHOG_ENV_ID!, // Environment ID
-  host: process.env.NEXT_PUBLIC_POSTHOG_HOST, // (optional), defaults to https://us.posthog.com
-});
+};
 
 export default nextConfig;
 
