@@ -23,7 +23,7 @@ export const generateBskyClientMetadata = async (): Promise<Readonly<OAuthClient
     grant_types: ["authorization_code"],
     scope,
     response_types: ["code"],
-    logo_uri: 'https://crowdbucks.fund/logo.png',
+    logo_uri: 'https://skybucks.fund/logo.png',
   }
 }
 

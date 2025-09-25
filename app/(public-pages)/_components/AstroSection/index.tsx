@@ -33,12 +33,7 @@ export const AstroSection = () => {
           w="full"
           {...scrollAnimate("fadeInLeft", "resetDelayed1")}
         >
-          <Image
-            width={470}
-            src={MoneyPocketImage}
-            priority
-            alt="CrowdBucks astronaut"
-          />
+          <Image width={470} src={MoneyPocketImage} priority alt="SkyBucks" />
         </Box>
 
         <VStack align="start" gap="10">
@@ -84,10 +79,9 @@ export const AstroSection = () => {
                   md: "32px",
                 }}
               >
-                CrowdBucks helps Fediverse server operators (sysops),
-                open-source software developers, creators, and others build
-                sustainable revenue streams to help fund their work and
-                services.
+                SkyBucks helps Bluesky server operators (sysops), open-source
+                software developers, creators, and others build sustainable
+                revenue streams to help fund their work and services.
               </Text>
             </Box>
           </VStack>

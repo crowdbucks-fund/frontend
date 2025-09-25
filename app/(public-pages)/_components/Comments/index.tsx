@@ -27,7 +27,7 @@ const comments = [
       link: "#",
     },
     comment:
-      "CrowdBucks is the only crowd-funding service that is Fediverse-native.",
+      "SkyBucks is the only crowd-funding service that is Bluesky-native.",
     stars: 5,
   },
   {
@@ -38,7 +38,7 @@ const comments = [
       link: "#",
     },
     comment:
-      "CrowdBucks is the only crowd-funding service that is Fediverse-native.",
+      "I trust SkyBucks because it was create by well-known members of the Bluesky community.",
     stars: 5,
   },
   {
@@ -49,7 +49,7 @@ const comments = [
       link: "#",
     },
     comment:
-      "CrowdBucks is the only crowd-funding service that is Fediverse-native.",
+      "I trust SkyBucks because it was create by well-known members of the Bluesky community.",
     stars: 5,
   },
 ];
@@ -139,7 +139,7 @@ export const Comments = () => {
                 md: "left",
               }}
             >
-              See others experience with CrowdBucks and make your choice!
+              See others experience with SkyBucks and make your choice!
             </Text>
           </Box>
         </VStack>

@@ -64,7 +64,7 @@ export const SplashLoading: FC = () => {
         <CircularProgress isIndeterminate color="secondary.500" size="25px" />
         {/* <Image src="/logo-standalone.svg" alt="logo" width={100} height={100} /> */}
         {/* <Text fontWeight="bold" fontSize="20px">
-          CrowdBucks
+          SkyBucks
           </Text> */}
       </HStack>
       <Image src="/logo-standalone.svg" alt="logo" width={100} height={100} />
@@ -175,7 +175,7 @@ export default function ConsoleLayoutClient({
           <Image
             priority
             src="/logo.svg"
-            alt="CrowdBucks Logo"
+            alt="SkyBucks Logo"
             width={130}
             height={42}
           />
@@ -205,7 +205,7 @@ export default function ConsoleLayoutClient({
             <Image
               priority
               src="/logo-standalone.svg"
-              alt="CrowdBucks Logo"
+              alt="SkyBucks Logo"
               width={120}
               height={35}
             />
@@ -254,7 +254,7 @@ export default function ConsoleLayoutClient({
                 colorScheme="primary"
                 rounded="10px"
               >
-                {user ? "Get started" : "Join CrowdBucks Now"}
+                {user ? "Get started" : "Join SkyBucks Now"}
               </Button>
             )}
 

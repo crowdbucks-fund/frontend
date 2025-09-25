@@ -1,16 +1,16 @@
 export const platformInfo = {
-  name: 'Crowdbucks',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://crowdbucks.fund',
+  name: 'SkyBucks',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://skybucks.fund',
   communityPrefix: '/',
   contact: {
-    email: 'support@crowdbucks.fund',
-    mastodon_support: {
-      handle: '@crowdbucks_support',
-      link: 'https://mastodon.social/@crowdbucks_support'
+    email: 'support@skybucks.fund',
+    bsky_support: {
+      handle: '@skybucks_support',
+      link: 'https://bsky.app/profile/skybucks_.bsky.social'
     },
-    mastodon: {
-      handle: '@crowdbucks',
-      link: 'https://mastodon.social/@crowdbucks'
+    bsky: {
+      handle: '@skybucks',
+      link: 'https://bsky.app/profile/skybucks.bsky.social'
     }
   },
 }

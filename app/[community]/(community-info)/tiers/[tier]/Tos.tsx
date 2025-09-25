@@ -41,8 +41,8 @@ const content = [
     content: (
       <>
         Questions? Email us at{" "}
-        <Button variant="link" as="a" href="mailto:support@crowdbucks.fund">
-          support@crowdbucks.fund
+        <Button variant="link" as="a" href="mailto:support@skybucks.fund">
+          support@skybucks.fund
         </Button>
       </>
     ),
@@ -60,7 +60,7 @@ export const TOS: FC<{ onAccept: () => void }> = ({ onAccept }) => {
       px={{ base: 1, md: 0 }}
     >
       <Text fontSize="xl" fontWeight="bold" textAlign="center" w="full" pt="4">
-        CrowdBucks Terms Of Services!
+        SkyBucks Terms Of Services!
       </Text>
       <VStack gap="4">
         {content.map((c, i) => {

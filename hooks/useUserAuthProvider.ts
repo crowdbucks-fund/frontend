@@ -11,13 +11,13 @@ export const useUserAuthProvider = () => {
       title: "Email",
       field: "email",
     },
-    MASTODON: {
-      title: "Mastodon",
+    BSKY: {
+      title: "Bsky",
       field: "mastodonUsername",
     },
   };
   const userAuthProvider = (user?.authProvider ||
-    "CROWDBUCKS") as keyof typeof authProviders;
+    "BSKY") as keyof typeof authProviders;
   return {
     provider: authProviders[userAuthProvider].title,
     value: user?.[authProviders[userAuthProvider].field] || "N/A",

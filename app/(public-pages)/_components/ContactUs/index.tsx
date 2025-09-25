@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Container } from "app/(public-pages)/_components/Container";
 import { Vector1, Vector2 } from "app/(public-pages)/_components/Shapes";
-import MastodonIcon from "assets/icons/Mastodon-outline.svg?react";
+import BskyIcon from "assets/icons/Bsky-outline.svg?react";
 import EnvelopeIcon from "assets/icons/sms.svg?react";
 import MoneyBinImage from "assets/images/woman has a successful contract.svg";
 import { AutoResizeTextarea } from "components/AutoResizeTextArea";
@@ -239,7 +239,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                   </Text>
                 </HStack>
                 <HStack gap="2.5">
-                  <MastodonIcon />,
+                  <BskyIcon />,
                   <Divider
                     orientation="vertical"
                     borderColor="primary.500"
@@ -251,14 +251,14 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     textStyle="regular16"
                     as="a"
                     rel="me"
-                    href={platformInfo.contact.mastodon_support.link}
+                    href={platformInfo.contact.bsky_support.link}
                     target="_blank"
                   >
-                    {platformInfo.contact.mastodon_support.handle}
+                    {platformInfo.contact.bsky_support.handle}
                   </Text>
                 </HStack>
                 <HStack gap="2.5">
-                  <MastodonIcon />,
+                  <BskyIcon />,
                   <Divider
                     orientation="vertical"
                     borderColor="primary.500"
@@ -270,10 +270,10 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     textStyle="regular16"
                     as="a"
                     rel="me"
-                    href={platformInfo.contact.mastodon.link}
+                    href={platformInfo.contact.bsky.link}
                     target="_blank"
                   >
-                    {platformInfo.contact.mastodon.handle}
+                    {platformInfo.contact.bsky.handle}
                   </Text>
                 </HStack>
               </VStack>
@@ -285,7 +285,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                 textStyle="regular14"
                 textAlign="center"
               >
-                © {new Date().getFullYear()} CrowdBucks All rights&rsquo;
+                © {new Date().getFullYear()} SkyBucks All rights&rsquo;
                 Reserved
               </Text> */}
             </VStack>

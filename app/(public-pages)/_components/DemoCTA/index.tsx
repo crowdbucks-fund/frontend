@@ -69,7 +69,7 @@ export const DemoCTA = () => {
                 md: "left",
               }}
             >
-              You build the Fediverse — let your supporters fund it.
+              You build the Bluesky — let your supporters fund it.
             </Text>
             <Text
               textStyle="regular20"
@@ -78,7 +78,7 @@ export const DemoCTA = () => {
                 md: "left",
               }}
             >
-              Set up your CrowdBucks page and start receiving donations.
+              Set up your SkyBucks page and start receiving donations.
             </Text>
           </VStack>
 
@@ -120,7 +120,7 @@ export const DemoCTA = () => {
           px="8"
           {...scrollAnimate("fadeInBottom", "resetDelayed2")}
         >
-          <Image alt="CrowdBucks mobile app" src={MobileMockup} priority />
+          <Image alt="Skybucks mobile app" src={MobileMockup} priority />
         </Box>
         <YellowVector position="absolute" right="0" bottom="0" />
         <YellowVector2

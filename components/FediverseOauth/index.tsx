@@ -24,7 +24,6 @@ import { useQuery } from "@tanstack/react-query";
 import { AuthenticateResult } from "@xeronith/granola/core/spi";
 import BskyIconBase from "assets/icons/Bsky.svg?react";
 import FilledCheckMark from "assets/icons/filled-check.svg?react";
-import MastodonIconBase from "assets/icons/Mastodon.svg?react";
 import Logo from "assets/images/logo-xl.svg?react";
 import { api } from "lib/api";
 import { upperFirst } from "lodash";
@@ -37,19 +36,8 @@ import { withoutProtocol, withQuery } from "ufo";
 import { z } from "zod";
 
 const CheckIcon = chakra(FilledCheckMark);
-const MastodonIcon = chakra(MastodonIconBase);
 const BskyIcon = chakra(BskyIconBase);
 const instances = {
-  mastodon: {
-    defaultInstances: [
-      "mastodon.social",
-      "mastodon.online",
-      "mstdn.social",
-      "mas.to",
-    ],
-    name: "Mastodon",
-    Icon: MastodonIcon,
-  },
   bsky: {
     defaultInstances: ["bsky.social"],
     name: "Bluesky",
@@ -164,12 +152,6 @@ export const FediverseOauth: FC<{
                 // throw e.message || "Something went wrong";
                 throw "Something went wrong, please try again later.";
               });
-            // if (credentials.newUser) {
-            //   formContext.setValue("email", "mastodon");
-            //   formContext.setValue("token", token);
-            //   onChangeStep("info");
-            //   return credentials;
-            // } else {
             await onSignIn(credentials.token);
             return credentials;
             // }

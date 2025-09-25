@@ -4,7 +4,7 @@ export const navMenu = [
     link: "/contact-us",
   },
   // {
-  //   title: "About CrowdBucks",
+  //   title: "About SkyBucks",
   //   link: "/about",
   // },
 ];

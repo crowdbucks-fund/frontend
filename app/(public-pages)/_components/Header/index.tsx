@@ -44,7 +44,7 @@ export const Header = () => {
                 lineHeight="normal"
                 textAlign={{ base: "center", md: "left" }}
               >
-                Help fund the Fediverse.
+                Help fund the Bluesky.
               </Text>
               <Text
                 textStyle={{
@@ -53,8 +53,8 @@ export const Header = () => {
                 }}
                 textAlign={{ base: "center", md: "left" }}
               >
-                CrowdBucks is a Fediverse-native crowd-funding, tipping,
-                payments, and membership platform.
+                SkyBucks is a Bluesky-native crowdfunding, tipping, payments,
+                and membership platform.
               </Text>
             </VStack>
             <HStack
@@ -114,7 +114,7 @@ export const Header = () => {
             }}
           >
             <Image
-              alt="CrowdBucks"
+              alt="SkyBucks"
               src={MockupImage}
               priority
               style={{ objectFit: "contain" }}

@@ -15,7 +15,8 @@ export async function POST(req: Request) {
     invariant(sessionData, 'Authentication failed, please try again later.', { session });
     const instance = sessionData?.tokenSet?.iss
     const token = sessionData?.tokenSet?.access_token
-    invariant(sessionData, 'Authentication failed, please try again later.', { instance, token });
+
+    invariant(token, 'Authentication failed, please try again later.', { instance, token });
     return NextResponse.json({
       token,
       instance: parseURL(instance).host,

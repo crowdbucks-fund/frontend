@@ -33,7 +33,7 @@ export default function NotFoundPage() {
         <Image
           priority
           src="/logo.svg"
-          alt="CrowdBucks Logo"
+          alt="SkyBucks Logo"
           width={188}
           height={42}
         />

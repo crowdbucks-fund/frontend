@@ -19,19 +19,19 @@ export type MainPropProps = {
 const props = [
   {
     icon: <FriendlyIcon />,
-    title: "Fediverse friendly",
-    description: "CrowdBucks is (actually will be) part of the Fediverse",
+    title: "Bluesky friendly",
+    description: "SkyBucks is (actually will be) part of the Bluesky",
   },
   {
     icon: <LoveIcon />,
     title: "Made with love",
-    description: "CrowdBucks is created by people who love the Fediverse",
+    description: "SkyBucks is created by people who love the Bluesky",
   },
   {
     icon: <HappyIcon />,
     title: "From people you know",
     description:
-      "CrowdBucks is created by individual people you know, and not a large face-less corporation",
+      "SkyBucks is created by individual people you know, and not a large face-less corporation",
   },
 ];
 
@@ -91,7 +91,7 @@ export const MainProps: FC<{ showShapes?: boolean }> = ({
             }}
             textAlign="center"
           >
-            Built by the Fediverse, for the Fediverse
+            SkyBucks main Pros
           </Text>
           <Text
             textStyle={{
@@ -100,8 +100,8 @@ export const MainProps: FC<{ showShapes?: boolean }> = ({
             }}
             textAlign="center"
           >
-            CrowdBucks is crafted by members of the Fediverse community,
-            ensuring it stays true to the values and needs of its users.
+            SkyBucks is created by people who are from the Bluesky community and
+            not outsiders
           </Text>
         </VStack>
         <Flex

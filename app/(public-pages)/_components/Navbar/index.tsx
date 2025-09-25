@@ -86,7 +86,7 @@ export const Navbar = () => {
               fontSize="16px"
               fontWeight="medium"
             >
-              About CrowdBucks
+              About SkyBucks
             </ActiveLink> */}
           </VStack>
         </Container>
@@ -101,7 +101,7 @@ export const Navbar = () => {
         h="120px"
         alignItems="center"
       >
-        <Link href="/" aria-label="CrowdBucks home page">
+        <Link href="/" aria-label="SkyBucks home page">
           <Logo />
         </Link>
         <HStack gap="14">

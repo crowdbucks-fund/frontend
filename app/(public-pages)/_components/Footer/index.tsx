@@ -20,15 +20,15 @@ export const Footer = () => {
             textStyle={{ base: "medium16", md: "regular14" }}
             color="brand.gray.4"
           >
-            {/* © {new Date().getFullYear()} CrowdBucks All rights&rsquo; Reserved */}
+            {/* © {new Date().getFullYear()} SkyBucks All rights&rsquo; Reserved */}
             ⚡️ Powered By{" "}
             <Text
               as="a"
               textDecor="underline"
               textUnderlineOffset="4px"
-              href="https://crowdbucks.org"
+              href="https://skybucks.org"
             >
-              CrowdBucks
+              SkyBucks
             </Text>
           </Text>
           <HStack gap="4">

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   description:
-    "CrowdBucks is a Fediverse-native crowd-funding, tipping, payments, and membership platform",
+    "SkyBucks is a Bluesky-native crowdfunding, tipping, payments, and membership platform.",
 };
 
 export default function Home() {

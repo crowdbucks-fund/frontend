@@ -30,11 +30,11 @@ const data = {
     steps: [
       {
         icon: <ZoomIcon />,
-        title: "Open a CrowdBucks page",
+        title: "Open a SkyBucks page",
       },
       {
         icon: <UserEdit />,
-        title: "Sign in with your Fediverse account",
+        title: "Sign in with your SkyBucks account",
       },
       {
         icon: <HappyIcon />,
@@ -47,11 +47,11 @@ const data = {
     steps: [
       {
         icon: <UserEdit />,
-        title: "Sign in with your Fediverse account",
+        title: "Sign in with your Bluesky account",
       },
       {
         icon: <Flash />,
-        title: "Share your CrowdBucks page",
+        title: "Share your Bluesky page",
       },
       {
         icon: <UserInfo />,
@@ -197,7 +197,7 @@ export const Steps = () => {
             priority
             objectFit="cover"
             objectPosition="10%"
-            alt="CrowdBucks astronaut"
+            alt="SkyBucks astronaut"
           />
         </Box>
         <Vector2
