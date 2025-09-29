@@ -47,11 +47,11 @@ const data = {
     steps: [
       {
         icon: <UserEdit />,
-        title: "Sign in with your Bluesky account",
+        title: "Sign in with your BlueSky account",
       },
       {
         icon: <Flash />,
-        title: "Share your Bluesky page",
+        title: "Share your BlueSky page",
       },
       {
         icon: <UserInfo />,

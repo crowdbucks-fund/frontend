@@ -19,13 +19,13 @@ export type MainPropProps = {
 const props = [
   {
     icon: <FriendlyIcon />,
-    title: "Bluesky friendly",
-    description: "SkyBucks is (actually will be) part of the Bluesky",
+    title: "BlueSky friendly",
+    description: "SkyBucks is (actually will be) part of the BlueSky",
   },
   {
     icon: <LoveIcon />,
     title: "Made with love",
-    description: "SkyBucks is created by people who love the Bluesky",
+    description: "SkyBucks is created by people who love the BlueSky",
   },
   {
     icon: <HappyIcon />,
@@ -100,7 +100,7 @@ export const MainProps: FC<{ showShapes?: boolean }> = ({
             }}
             textAlign="center"
           >
-            SkyBucks is created by people who are from the Bluesky community and
+            SkyBucks is created by people who are from the BlueSky community and
             not outsiders
           </Text>
         </VStack>

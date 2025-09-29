@@ -69,7 +69,7 @@ export const DemoCTA = () => {
                 md: "left",
               }}
             >
-              You build the Bluesky — let your supporters fund it.
+              You build the BlueSky — let your supporters fund it.
             </Text>
             <Text
               textStyle="regular20"

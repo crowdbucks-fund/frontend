@@ -319,7 +319,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             onClick={onChangeStep.bind(null, BSKY_STEP)}
           >
             <BskyIcon w="20px" />
-            Sign in With Bluesky
+            Sign in With BlueSky
           </Button>
         </VStack>
       </VStack>

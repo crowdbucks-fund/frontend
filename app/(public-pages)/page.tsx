@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   description:
-    "SkyBucks is a Bluesky-native crowdfunding, tipping, payments, and membership platform.",
+    "SkyBucks is a BlueSky-native crowdfunding, tipping, payments, and membership platform.",
 };
 
 export default function Home() {

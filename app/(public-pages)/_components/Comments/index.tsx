@@ -27,7 +27,7 @@ const comments = [
       link: "#",
     },
     comment:
-      "SkyBucks is the only crowd-funding service that is Bluesky-native.",
+      "SkyBucks is the only crowd-funding service that is BlueSky-native.",
     stars: 5,
   },
   {
@@ -38,7 +38,7 @@ const comments = [
       link: "#",
     },
     comment:
-      "I trust SkyBucks because it was create by well-known members of the Bluesky community.",
+      "I trust SkyBucks because it was create by well-known members of the BlueSky community.",
     stars: 5,
   },
   {
@@ -49,7 +49,7 @@ const comments = [
       link: "#",
     },
     comment:
-      "I trust SkyBucks because it was create by well-known members of the Bluesky community.",
+      "I trust SkyBucks because it was create by well-known members of the BlueSky community.",
     stars: 5,
   },
 ];

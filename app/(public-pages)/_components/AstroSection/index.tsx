@@ -79,7 +79,7 @@ export const AstroSection = () => {
                   md: "32px",
                 }}
               >
-                SkyBucks helps Bluesky server operators (sysops), open-source
+                SkyBucks helps BlueSky server operators (sysops), open-source
                 software developers, creators, and others build sustainable
                 revenue streams to help fund their work and services.
               </Text>

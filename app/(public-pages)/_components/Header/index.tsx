@@ -44,7 +44,7 @@ export const Header = () => {
                 lineHeight="normal"
                 textAlign={{ base: "center", md: "left" }}
               >
-                Help fund the Bluesky.
+                Help fund the BlueSky.
               </Text>
               <Text
                 textStyle={{
@@ -53,7 +53,7 @@ export const Header = () => {
                 }}
                 textAlign={{ base: "center", md: "left" }}
               >
-                SkyBucks is a Bluesky-native crowdfunding, tipping, payments,
+                SkyBucks is a BlueSky-native crowdfunding, tipping, payments,
                 and membership platform.
               </Text>
             </VStack>

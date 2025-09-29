@@ -40,8 +40,8 @@ const BskyIcon = chakra(BskyIconBase);
 const instances = {
   bsky: {
     defaultInstances: ["bsky.social"],
-    name: "Bluesky",
-    Icon: BskyIcon, // Replace with actual Bluesky icon when available
+    name: "BlueSky",
+    Icon: BskyIcon, // Replace with actual BlueSky icon when available
   },
 };
 
