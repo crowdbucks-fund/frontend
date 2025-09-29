@@ -5,21 +5,21 @@ const content = [
   {
     title: "Acceptance of Terms",
     content:
-      "By using CrowdBucks, you agree to these Terms of Service. If you don’t agree, please don’t use the platform.",
+      "By using SkyBucks, you agree to these Terms of Service. If you don’t agree, please don’t use the platform.",
   },
   {
     title: "What We Do",
-    content: ` CrowdBucks is a free and open-source platform for raising and donating funds. The hosted version at crowdbucks.fund is operated by CrowdBucks, Inc.`,
+    content: ` SkyBucks is a free and open-source platform for raising and donating funds. The hosted version at SkyBucks.fund is operated by SkyBucks, Inc.`,
   },
   {
     title: "Payments & Fees",
     content:
-      " All payments are processed by Stripe.  Fundraisers must connect a Stripe account.  CrowdBucks charges a X% platform fee, plus Stripe’s own fees.",
+      " All payments are processed by Stripe.  Fundraisers must connect a Stripe account.  SkyBucks charges a X% platform fee, plus Stripe’s own fees.",
   },
   {
     title: "Refunds",
     content:
-      " Refunds are handled by the fundraiser via Stripe. CrowdBucks does not issue refunds directly.",
+      " Refunds are handled by the fundraiser via Stripe. SkyBucks does not issue refunds directly.",
   },
   {
     title: "Data & Privacy",
@@ -29,12 +29,12 @@ const content = [
   {
     title: "Acceptable Use",
     content:
-      "Don’t use CrowdBucks for illegal or abusive purposes. We may suspend accounts that violate these terms or Stripe's rules.",
+      "Don’t use SkyBucks for illegal or abusive purposes. We may suspend accounts that violate these terms or Stripe's rules.",
   },
   {
     title: "Open Source Notice",
     content:
-      " CrowdBucks code is open-source under [Your License, e.g. AGPLv3]. You’re free to self-host or contribute, but using the hosted service is subject to these terms.",
+      " SkyBucks code is open-source under [Your License, e.g. AGPLv3]. You’re free to self-host or contribute, but using the hosted service is subject to these terms.",
   },
   {
     title: "Contact",
