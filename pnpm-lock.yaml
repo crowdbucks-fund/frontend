@@ -13,6 +13,9 @@ importers:
 
   .:
     dependencies:
+      '@atproto/api':
+        specifier: ^0.16.11
+        version: 0.16.11
       '@atproto/oauth-client-node':
         specifier: ^0.3.8
         version: 0.3.8
@@ -62,8 +65,8 @@ importers:
         specifier: ^5.83.0
         version: 5.83.0(react@19.1.0)
       '@xeronith/granola':
-        specifier: ^0.5.33
-        version: 0.5.33
+        specifier: ^0.5.34
+        version: 0.5.34
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -266,6 +269,9 @@ packages:
 
   '@atproto-labs/simple-store@0.3.0':
     resolution: {integrity: sha512-nOb6ONKBRJHRlukW1sVawUkBqReLlLx6hT35VS3imaNPwiXDxLnTK7lxw3Lrl9k5yugSBDQAkZAq3MPTEFSUBQ==}
+
+  '@atproto/api@0.16.11':
+    resolution: {integrity: sha512-1dhfQNHiclb102RW+Ea8Nft5olfqU0Ev/vlQaSX6mWNo1aP5zT+sPODJ8+BTUOYk3vcuvL7QMkqA/rLYy2PMyw==}
 
   '@atproto/common-web@0.4.3':
     resolution: {integrity: sha512-nRDINmSe4VycJzPo6fP/hEltBcULFxt9Kw7fQk6405FyAWZiTluYHlXOnU7GkQfeUK44OENG1qFTBcmCJ7e8pg==}
@@ -2846,8 +2852,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@xeronith/granola@0.5.33':
-    resolution: {integrity: sha512-QxCbuCHw+TqD1ZAvcIFMlUnZqG9jD+OJBI+LnNl6TEiBZJqB4mgsfvLhr2jdRMT/e+dCOBEeGv1fmZK6TWBbDA==}
+  '@xeronith/granola@0.5.34':
+    resolution: {integrity: sha512-W8fn8K07hHSRTu9vfCnAjQJs5N0PdoDEufSFcwwhkHbYwY5+v+iL/HYylutvrEhYzzXKIxmtcMzRtdxpRSNtFw==}
 
   '@zag-js/dom-query@0.31.1':
     resolution: {integrity: sha512-oiuohEXAXhBxpzzNm9k2VHGEOLC1SXlXSbRPcfBZ9so5NRQUA++zCE7cyQJqGLTZR0t3itFLlZqDbYEXRrefwg==}
@@ -2987,6 +2993,9 @@ packages:
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
+
+  await-lock@2.2.2:
+    resolution: {integrity: sha512-aDczADvlvTGajTDjcjpJMqRkOF6Qdz3YbPZm/PyW6tKPkx2hlYBzxMhEywM/tU72HrVZjgl5VCdRuMlA7pZ8Gw==}
 
   aws4fetch@1.0.20:
     resolution: {integrity: sha512-/djoAN709iY65ETD6LKCtyyEI04XIBP5xVvfmNxsEP0uJB5tyaGBztSryRr4HqMStr9R06PisQE7m9zDTXKu6g==}
@@ -5282,6 +5291,10 @@ packages:
     resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
     engines: {node: '>=12.0.0'}
 
+  tlds@1.260.0:
+    resolution: {integrity: sha512-78+28EWBhCEE7qlyaHA9OR3IPvbCLiDh3Ckla593TksfFc9vfTsgvH7eS+dr3o9qr31gwGbogcI16yN91PoRjQ==}
+    hasBin: true
+
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
@@ -5736,6 +5749,17 @@ snapshots:
       lru-cache: 10.4.3
 
   '@atproto-labs/simple-store@0.3.0': {}
+
+  '@atproto/api@0.16.11':
+    dependencies:
+      '@atproto/common-web': 0.4.3
+      '@atproto/lexicon': 0.5.1
+      '@atproto/syntax': 0.4.1
+      '@atproto/xrpc': 0.7.5
+      await-lock: 2.2.2
+      multiformats: 9.9.0
+      tlds: 1.260.0
+      zod: 3.25.61
 
   '@atproto/common-web@0.4.3':
     dependencies:
@@ -9291,7 +9315,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.8.1':
     optional: true
 
-  '@xeronith/granola@0.5.33':
+  '@xeronith/granola@0.5.34':
     dependencies:
       long: 5.3.2
       lz-string: 1.5.0
@@ -9449,6 +9473,8 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
+
+  await-lock@2.2.2: {}
 
   aws4fetch@1.0.20: {}
 
@@ -12046,6 +12072,8 @@ snapshots:
     dependencies:
       fdir: 6.4.6(picomatch@4.0.2)
       picomatch: 4.0.2
+
+  tlds@1.260.0: {}
 
   to-regex-range@5.0.1:
     dependencies:

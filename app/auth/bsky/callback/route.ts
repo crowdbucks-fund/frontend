@@ -8,10 +8,13 @@ import { parseURL } from "ufo";
 export async function POST(req: Request) {
   const sessionStore = new InMemoryStore();
   try {
-    const client = await createBskyOauthClient(undefined, sessionStore);
     const params = new URLSearchParams(await req.json());
+
+    const client = await createBskyOauthClient(undefined, sessionStore);
     const { session } = await client.callback(params)
+
     const sessionData = (await sessionStore.get(session.did));
+
     invariant(sessionData, 'Authentication failed, please try again later.', { session });
     const instance = sessionData?.tokenSet?.iss
     const token = sessionData?.tokenSet?.access_token
@@ -20,6 +23,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       token,
       instance: parseURL(instance).host,
+      sessionData
     })
   } catch (error: any) {
     getCloudflareContext().ctx.waitUntil(captureException(error, req))
