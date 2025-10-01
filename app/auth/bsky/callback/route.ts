@@ -27,9 +27,7 @@ export async function POST(req: Request) {
       delete sessionData.tokenSet?.scope
     }
 
-    sessionData['headers'] = {
-      'dpop-nonce': remoteSession.headers['dpop-nonce']
-    }
+    sessionData['dpopNonce'] = remoteSession.headers['dpop-nonce']
 
     const token = JSON.stringify(sessionData)
 
