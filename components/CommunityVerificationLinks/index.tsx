@@ -4,6 +4,7 @@ export const CommunityMetaTags: FC<{ communityHandle: string }> = ({
   communityHandle,
 }) => {
   const communityParts = communityHandle.split("@");
+  if (communityParts.length <= 1) return null;
   return (
     <>
       <link
