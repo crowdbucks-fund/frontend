@@ -1,3 +1,4 @@
+import { Agent } from '@atproto/api';
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createBskyOauthClient, InMemoryStore } from "app/auth/bsky/client";
 import { captureException } from "app/posthog-server";
@@ -13,17 +14,31 @@ export async function POST(req: Request) {
     const client = await createBskyOauthClient(undefined, sessionStore);
     const { session } = await client.callback(params)
 
+    const agent = new Agent(session);
+
     const sessionData = (await sessionStore.get(session.did));
+    const remoteSession = await agent.com.atproto.server.getSession()
 
     invariant(sessionData, 'Authentication failed, please try again later.', { session });
+
     const instance = sessionData?.tokenSet?.iss
-    const token = sessionData?.tokenSet?.access_token
+    if (sessionData) {
+      delete sessionData.tokenSet?.refresh_token
+      delete sessionData.tokenSet?.scope
+    }
+
+    sessionData['headers'] = {
+      'dpop-nonce': remoteSession.headers['dpop-nonce']
+    }
+
+    const token = JSON.stringify(sessionData)
 
     invariant(token, 'Authentication failed, please try again later.', { instance, token });
     return NextResponse.json({
       token,
       instance: parseURL(instance).host,
-      sessionData
+      email: remoteSession.data.email,
+      username: remoteSession.data.handle
     })
   } catch (error: any) {
     getCloudflareContext().ctx.waitUntil(captureException(error, req))

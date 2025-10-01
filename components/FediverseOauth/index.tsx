@@ -137,20 +137,20 @@ export const FediverseOauth: FC<{
       })
         .then(async (res) => {
           if (res.ok) {
-            const { token, instance, sessionData } = (await res.json()) as {
+            const { token, instance, username, email } = (await res.json()) as {
               token: string;
               instance: string;
-              sessionData: any;
+              email: string;
+              username: string;
             };
-            console.log(sessionData);
             setSelectedInstance(instance);
             const credentials = await api
               .authenticate({
                 token,
                 provider: platformKey,
                 server: instance,
-                email: "",
-                username: "",
+                email,
+                username,
               })
               .catch((e: Error) => {
                 // throw e.message || "Something went wrong";
