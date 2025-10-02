@@ -79,7 +79,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
           border={{
             md: "1px solid",
           }}
-          borderColor="#97D0C9 !important"
+          borderColor="primary-glass.500 !important"
         >
           <Flex
             flexDirection={{
