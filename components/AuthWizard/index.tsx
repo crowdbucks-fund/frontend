@@ -315,7 +315,7 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             size="lg"
             w="full"
             gap={2}
-            variant="outline"
+            variant="solid"
             onClick={onChangeStep.bind(null, BSKY_STEP)}
           >
             <BskyIcon w="20px" />
