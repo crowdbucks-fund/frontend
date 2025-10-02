@@ -5,7 +5,7 @@ export const useUserAuthProvider = () => {
   const { user } = useAuth();
   const authProviders: Record<
     string,
-    { title: string; field: keyof Pick<GetProfileResult, 'email' | 'mastodonUsername'> }
+    { title: string; field: keyof Pick<GetProfileResult, 'email' | 'blueskyUsername'> }
   > = {
     CROWDBUCKS: {
       title: "Email",
@@ -13,7 +13,7 @@ export const useUserAuthProvider = () => {
     },
     BSKY: {
       title: "Bsky",
-      field: "mastodonUsername",
+      field: "blueskyUsername",
     },
   };
   const userAuthProvider = (user?.authProvider ||
