@@ -241,7 +241,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                     {platformInfo.contact.email}
                   </Text>
                 </HStack>
-                <HStack gap="2.5">
+                {/* <HStack gap="2.5">
                   <BskyIcon />,
                   <Divider
                     orientation="vertical"
@@ -259,7 +259,7 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
                   >
                     {platformInfo.contact.bsky_support.handle}
                   </Text>
-                </HStack>
+                </HStack> */}
                 <HStack gap="2.5">
                   <BskyIcon />,
                   <Divider
