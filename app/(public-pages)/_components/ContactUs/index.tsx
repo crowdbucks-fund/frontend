@@ -137,21 +137,24 @@ export const ContactUs: FC<{ showShapes?: boolean }> = ({
               >
                 <FormControl isInvalid={!!form.formState.errors.name}>
                   <FormLabel>Full name</FormLabel>
-                  <Input {...form.register("name")} />
+                  <Input {...form.register("name")} placeholder="Your name" />
                   <FormErrorMessage>
                     {form.formState.errors.name?.message}
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!form.formState.errors.email}>
                   <FormLabel>Email</FormLabel>
-                  <Input {...form.register("email")} />
+                  <Input {...form.register("email")} placeholder="Your email" />
                   <FormErrorMessage>
                     {form.formState.errors.email?.message}
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={!!form.formState.errors.comment}>
                   <FormLabel>Message</FormLabel>
-                  <AutoResizeTextarea {...form.register("comment")} />
+                  <AutoResizeTextarea
+                    {...form.register("comment")}
+                    placeholder="Your message"
+                  />
                   <FormErrorMessage>
                     {form.formState.errors.comment?.message}
                   </FormErrorMessage>
