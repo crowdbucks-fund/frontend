@@ -236,8 +236,8 @@ export default function GoalsPage() {
               }}
             />
           )}
-          <TotalDonationCard community={community} />
           <CreateGoalCard />
+          <TotalDonationCard community={community} />
           <DeleteGoalModal
             isOpen={!!deletingGoal}
             deletingGoal={deletingGoal}
