@@ -23,6 +23,8 @@ export async function GET(request: NextRequest) {
       }, false);
     return response
   } catch (error: any) {
+    if (process.env.NODE_ENV === 'development')
+      console.error(error)
     getCloudflareContext().ctx.waitUntil(captureException(error, request))
     const message = 'Something went wrong, please try again later.';
     const redirectResponse = NextResponse.redirect(

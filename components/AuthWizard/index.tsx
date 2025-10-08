@@ -15,10 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { TOS } from "app/[community]/(community-info)/tiers/[tier]/Tos";
 import BskyIconBase from "assets/icons/Bsky-outline.svg?react";
 import CoinGlassJar from "assets/images/coins-glass-jar.webp";
 import Logo from "assets/images/logo-xl.svg?react";
 import { FediverseOauth } from "components/FediverseOauth";
+import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { toast } from "components/Toast";
 import useTimer from "hooks/useTimer";
 import { ApiError, api } from "lib/api";
@@ -204,6 +206,7 @@ export const AuthWizardContent: FC<AuthWizardProps> = ({
 };
 
 const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
+  const [tosModalOpen, setOpenTosModal] = useState(false);
   return (
     <HStack
       gap={6}
@@ -321,8 +324,27 @@ const SigninList: FC<StepProps> = ({ onChangeStep, compact, content }) => {
             <BskyIcon w="20px" />
             Sign in With BlueSky
           </Button>
+          <Text>
+            By signing in, you agree to our{" "}
+            <Button
+              color="blue.500"
+              onClick={setOpenTosModal.bind(null, true)}
+              textDecoration="underline"
+              variant="link"
+              textUnderlineOffset={3}
+            >
+              Terms of Service
+            </Button>
+          </Text>
         </VStack>
       </VStack>
+      <ResponsiveDialog
+        isOpen={tosModalOpen}
+        onClose={setOpenTosModal.bind(null, false)}
+        title="Terms Of Services"
+      >
+        <TOS onAccept={setOpenTosModal.bind(null, false)} />
+      </ResponsiveDialog>
     </HStack>
   );
 };

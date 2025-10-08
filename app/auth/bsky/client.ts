@@ -7,7 +7,7 @@ import { joinURL } from "ufo";
 export const generateBskyClientMetadata = async (): Promise<Readonly<OAuthClientMetadataInput>> => {
   const isDev = process.env.NODE_ENV !== 'production';
   const redirectUri = getRedirectUrl('bsky');
-  const scope = 'atproto transition:email'
+  const scope = 'atproto transition:email transition:generic'
   const clientUri = process.env.NEXT_PUBLIC_APP_URL
 
   return {

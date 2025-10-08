@@ -9,6 +9,7 @@ import {
 import { EmptyState } from "app/[community]/(community-index)/EmptyState";
 import { CenterLayout } from "app/console/components/CenterLayout";
 import TickSquare from "assets/icons/tick-square.svg?react";
+import { TotalDonationCard } from "components/GoalCard";
 import { ResponsiveDialog } from "components/ResponsiveDialog";
 import { TierCard } from "components/TierCard";
 import { toast } from "components/Toast";
@@ -201,6 +202,7 @@ export default function TiersClientPage({
           />
         );
       })}
+      <TotalDonationCard community={community} />
       <UnsubscribeTierModal
         tier={unSubscribingTier}
         isOpen={isUnsubscribeOpen}

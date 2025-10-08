@@ -17,7 +17,9 @@ export async function POST(req: Request) {
     const agent = new Agent(session);
 
     const sessionData = (await sessionStore.get(session.did));
-    const remoteSession = await agent.com.atproto.server.getSession()
+
+    const remoteSession = await agent.com.atproto.server.getSession();
+    const profile = await agent.app.bsky.actor.getProfile({ actor: session.did })
 
     invariant(sessionData, 'Authentication failed, please try again later.', { session });
 
@@ -26,7 +28,12 @@ export async function POST(req: Request) {
       delete sessionData.tokenSet?.refresh_token
       delete sessionData.tokenSet?.scope
     }
-
+    sessionData['profile'] = {
+      avatar: profile.data.avatar,
+      banner: profile.data.banner,
+      displayName: profile.data.displayName,
+      bio: profile.data.description
+    }
     sessionData['dpopNonce'] = remoteSession.headers['dpop-nonce']
 
     const token = JSON.stringify(sessionData)
@@ -40,7 +47,7 @@ export async function POST(req: Request) {
     })
   } catch (error: any) {
     getCloudflareContext().ctx.waitUntil(captureException(error, req))
-
+    console.error(error)
     error.message = error.message && error.message.startsWith('Invariant failed:') ?
       error.message.replace('Invariant failed: ', '').trim()
       : 'Something went wrong, please try again later.';

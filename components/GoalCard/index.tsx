@@ -359,9 +359,10 @@ export const CreateGoalCard: FC = () => {
   );
 };
 
-export const TotalDonationCard: FC<{ community: GetCommunityByUserResult }> = ({
-  community,
-}) => (
+export const TotalDonationCard: FC<{
+  community: GetCommunityByUserResult;
+  title?: string;
+}> = ({ community, title }) => (
   <VStack
     role="group"
     gap={{ base: 4, md: 7 }}
@@ -379,7 +380,7 @@ export const TotalDonationCard: FC<{ community: GetCommunityByUserResult }> = ({
           isTruncated
           maxW="100%"
         >
-          Total Collected Donation
+          {title || "Total Collected Donation"}
         </Text>
         <Text fontSize={{ base: "12px", md: "16px" }}>
           {String(community.helpers)} people helping{" "}
@@ -402,9 +403,10 @@ export const TotalDonationCard: FC<{ community: GetCommunityByUserResult }> = ({
       noOfLines={3}
       whiteSpace="normal"
       wordBreak="break-word"
+      color="brand.black.3"
       maxW="100%"
     >
-      Total donation amount paid by donors are shown here
+      The amount paid by subscribers and people who paid then unsubscribed
     </Text>
   </VStack>
 );

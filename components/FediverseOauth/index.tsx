@@ -149,8 +149,6 @@ export const FediverseOauth: FC<{
                 token,
                 provider: platformKey,
                 server: instance,
-                email,
-                username,
               })
               .catch((e: Error) => {
                 // throw e.message || "Something went wrong";
