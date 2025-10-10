@@ -1,4 +1,5 @@
 import { Agent } from '@atproto/api';
+import { ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/actor/defs';
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createBskyOauthClient, InMemoryStore } from "app/auth/bsky/client";
 import { captureException } from "app/posthog-server";
@@ -19,7 +20,6 @@ export async function POST(req: Request) {
     const sessionData = (await sessionStore.get(session.did));
 
     const remoteSession = await agent.com.atproto.server.getSession();
-    const profile = await agent.app.bsky.actor.getProfile({ actor: session.did })
 
     invariant(sessionData, 'Authentication failed, please try again later.', { session });
 
@@ -28,11 +28,14 @@ export async function POST(req: Request) {
       delete sessionData.tokenSet?.refresh_token
       delete sessionData.tokenSet?.scope
     }
+
+    const profile = (await fetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${session.did}`).then(r => r.json())) as ProfileViewDetailed
+
     sessionData['profile'] = {
-      avatar: profile.data.avatar,
-      banner: profile.data.banner,
-      displayName: profile.data.displayName,
-      bio: profile.data.description
+      avatar: profile.avatar,
+      banner: profile.banner,
+      displayName: profile.displayName,
+      bio: profile.description
     }
     sessionData['dpopNonce'] = remoteSession.headers['dpop-nonce']
 
